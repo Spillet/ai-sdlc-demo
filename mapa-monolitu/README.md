@@ -26,10 +26,11 @@ XE + Query Store (CSV) ─────────── běh: kdo volá, jak č
      ├─ živé / mrtvé / mimo okno měření / v klientovi nepoužité
      ├─ sdílené („božské“) tabulky a procedury → mimo shlukování
      ├─ label propagation + slučování podle modularity → kandidáti na domény
-     ├─ skóre připravenosti k vyjmutí + doporučené pořadí
+     ├─ skóre připravenosti k vyjmutí + doporučené pořadí + citlivost na váhy
+     ├─ balíček důkazů a stav pruhu core ke každé doméně (+ vlastníci a prahy z politika/pruh-core.json)
      └─ kontextové balíčky pro AI (jen první doména)
                     │
-     out/map.json · out/report.md · out/context/*.md · site/index.html
+     out/map.json · out/report.md · out/evidence/ · out/context/*.md · site/index.html
 ```
 
 | Krok | Kde | Poznámka |
@@ -39,6 +40,8 @@ XE + Query Store (CSV) ─────────── běh: kdo volá, jak č
 | Vrstvy a graf | [`mapa/model.py`](mapa/model.py) | |
 | Kandidáti na domény | [`mapa/cluster.py`](mapa/cluster.py) | |
 | Skóre a pořadí | [`mapa/score.py`](mapa/score.py) | váhy v kódu i v HTML posuvnících |
+| Citlivost vah | [`mapa/sensitivity.py`](mapa/sensitivity.py) | ±20 % po jedné váze, náhodné kombinace, bod zvratu |
+| Důkazy a pruh core | [`mapa/evidence.py`](mapa/evidence.py), [`politika/pruh-core.json`](politika/pruh-core.json) | kontrakt pro bránu v P2, viz „Vazba na P2“ |
 | Výstupy | [`mapa/render.py`](mapa/render.py), [`mapa/template.html`](mapa/template.html) | HTML bez knihoven, data vložená do stránky |
 | AI vrstva | [`ai-vrstva/`](ai-vrstva) | dokumentace, testy a kontrakt pro 3 procedury první domény |
 | Sběr ze skutečné DB | [`sql/collect/`](sql/collect) | 9 dotazů + grep Delphi; nic nespuštěno proti reálné DB |
@@ -51,11 +54,11 @@ Python 3.9+, jen standardní knihovna, nic se neinstaluje.
 python3 analyze.py                 # analýza data/synthetic, ~0,2 s
 python3 analyze.py --regenerate    # nejdřív znovu vygenerovat syntetickou DB
 python3 analyze.py --data cesta    # vlastní vstupy ve stejném formátu (viz sql/collect/)
-python3 -m unittest discover tests # testy parseru na pastech regexu
+python3 -m unittest discover tests # testy parseru, pravidel pruhu core, brány a citlivosti (40 testů)
 open site/index.html               # mapa funguje otevřením z disku
 ```
 
-Stránka má čtyři pohledy: **Domény a pořadí** (skóre, složky, posuvníky vah), **Graf** (procedury a tabulky obarvené podle domény, hrany podle vrstvy; klik = detail), **Slepá místa** a **Objekty** (kód každé procedury, závislosti podle vrstev, provoz).
+Stránka má pět pohledů: **Domény a pořadí** (skóre, složky, posuvníky vah), **Pruh core** (stav pruhu, pokrytí testy, co chybí, citlivost pořadí), **Graf** (procedury a tabulky obarvené podle domény, hrany podle vrstvy; klik = detail), **Slepá místa** a **Objekty** (kód každé procedury, závislosti podle vrstev, provoz).
 
 ## Výsledky na syntetických datech
 
@@ -78,11 +81,49 @@ Stránka má čtyři pohledy: **Domény a pořadí** (skóre, složky, posuvník
 | 5 | Reporting (D:RptDailySales) | 72,3 | 21 / 2 | 0,6 TB | slepé dynamické SQL (`Sales_` + rok) |
 | … | Objednávky (D:OrderNote) | 57,3 | 43 / 0 | 4,7 TB | zapisuje do cizích tabulek, hlavní zapisovatel 3 sdílených tabulek: poslední |
 
+**Je Reklamace před Katalogem jen náhodou vah?** Rozdíl je 1,6 bodu. Analýza citlivosti (`out/report.md`, sekce „Citlivost“) říká: při změně kterékoli jedné váhy o ±20 % zůstává pořadí 1. a 2. místa stejné a ve 2 000 náhodných kombinacích všech vah v pásmu ±20 % je Reklamace první ve 100 %. Prohodit by je musela změna jedné váhy o víc než polovinu: bonus za čtecí cesty +66 % nebo penalizace za volání zvenku −78 %. Poctivý závěr má ale tři části:
+
+1. **Na vahách pořadí 1–2 nevisí, na definici složek ano.** Citlivost zkouší jen váhy. Jak se měří „volání zvenku“ nebo kde je práh sdílené tabulky, netestuje. A data jsou syntetická. Rozdíl 1,6 bodu proto neberu jako důkaz, že Reklamace je lepší, jen že žádná rozumná změna vah to neotočí.
+2. **Místa 3–7 jsou fakticky remíza.** Fakturace, Platby, Reporting, Adresy a Ceníky mají skóre 71,9–73,0 a při ±20 % se mezi sebou přeskupují v rozsahu 3.–7. (Reporting až 8.). Pořadí v tomhle pásmu nic neříká, rozhodnou jiná kritéria.
+3. **Mezi Reklamací a Katalogem nerozhodlo skóre.** Rozhodla věc, kterou skóre nevidí: jádro katalogu `Product` je sdílená tabulka a nejvíc do ní zapisuje sklad, takže Katalog nejde vytáhnout bez rozhodnutí o vlastnictví `Product`. Reklamace takovou překážku nemají a sedí na stejnou doménu jako P2. Skóre slouží jako filtr („tyhle dvě jsou nejlepší kandidáti“), ne jako rozhodčí.
+
 Pět shluků je „úklid“ (většina procedur mrtvá: vypnout a smazat) a tři jsou příliš malé na doménu (infrastruktura). Názvy shluků jsou automatické podle nejcentrálnější tabulky, lidský název doplňuju v závorce.
 
 **Jak se analyzátor trefil.** Generátor si pamatuje, kam co zamýšlel. Proti tomu: čistota shluků 88 %, 18 shluků proti 13 zamýšleným doménám (legacy a infrastruktura se rozpadly na malé kousky, nákup se spojil se skladem). Mrtvé procedury 26 z 26, dynamické SQL 30 z 30. **Tahle čísla nic nedokazují o reálné DB**: data i analyzátor psal stejný autor, takže analyzátor zná pasti, které generátor klade. Ukazují jen, že logika vrstev funguje tak, jak je popsaná.
 
 **AI vrstva** na reklamacích: [`ai-vrstva/README.md`](ai-vrstva/README.md). Model z kontextového balíčku našel souběh při kontrole množství, lhůtu počítanou od objednávky místo od převzetí a přímý odpis skladu s natvrdo daným skladem. Všechno označené k ověření člověkem.
+
+## Vazba na P2: pruh core otevírá důkaz
+
+P2 ([`ai-sdlc-demo`](https://github.com/Spillet/ai-sdlc-demo)) dnes říká „core = jen vlastník“. Zadání ale chce vývoj „demokratizovaný napříč firmou, zejména v core systémech“. P1 dává cestu mezi tím: **v core může záměr zadat kdokoli, agent založí PR, ale o tom, jestli PR jde sloučit, rozhoduje důkaz z mapy, ne model ani skóre.** Pruh se otevírá doménu po doméně, jak přibývají ověřené charakterizační testy.
+
+| Stav pruhu core | Kdy | Kdo spustí agenta | PR | Kdo sloučí |
+|---|---|---|---|---|
+| **zavřený** | doména nemá vlastnický tým (R1), nebo shluk není kandidát, protože je úklidový nebo malý (R2) | nikdo; intake odpoví, co chybí | nevzniká | jen vlastník ručně mimo AI pipeline |
+| **jen draft PR** | R1 a R2 platí, ale chybí ověření | kdokoli | vždy draft; brána jen okomentuje dopad a chybějící důkazy | vlastník po převzetí; první úkol agenta je dopsat charakterizační testy |
+| **otevřený s vlastníkem** | navíc ověřené pokrytí živých procedur ≥ 80 % (R3), všechny zapisující procedury mají zelený test (R4), žádné blokující slepé místo (R5) | kdokoli | jde do review | vlastník, a jen se zelenými charakterizačními testy dotčených procedur |
+
+„Ověřený“ test znamená doložený zelený běh: soubor `ai-vrstva/<procedura>/beh.json` s výsledkem `zelene`. Návrh testu od modelu pruh neotevře. Blokující slepé místo je dynamické SQL se skládaným jménem, u kterého běh nezachytil žádný cíl, zápis do jiné databáze a procedura, jejíž jméno skládá klient (`'usp_Rpt_' + cbReport.Text` blokuje celý Reporting). Vlastníky a prahy určují lidé v [`politika/pruh-core.json`](politika/pruh-core.json), ne analyzátor.
+
+**Stav na syntetických datech:** Reklamace a Katalog jsou „jen draft PR“ (mají vlastníka, ale 0 ověřených testů: tři testy v `ai-vrstva/` jsou jen návrhy). Ostatních 16 shluků je zavřených, protože nemají vlastníka. Žádná doména není otevřená. To je správně: dokud testy nikdo nespustil, nemá kdo říct, že změna procedury nic nerozbila. Aby se pruh u Reklamací otevřel, potřebuje zelený test aspoň 15 z 18 živých procedur (práh 80 %) a mezi nimi všech 13 zapisujících.
+
+### Kontrakt pro bránu v P2 (`mapa-monolitu/dukazy@1`)
+
+Brána v P2 zatím nic z toho nečte. Implementace patří do P2 později, formát je připravený tak, aby stačilo číst dva soubory:
+
+- `out/evidence/index.json`: `snimek` (`datum`, `platne_do`, `vstupy_sha256`, `verze_politiky`), `domeny` (stav, soubor a vlastnický tým pro každou doménu), `objekty` (jméno procedury, funkce, triggeru, tabulky nebo pohledu → doména, sdílené objekty → `"sdílené"`), `vychozi_stav: "zavreny"` a `pravidla_brany`.
+- `out/evidence/<doména>.json`: `pruh_core` (`stav`, `pravidla` s `splneno` a `detail`, `chybi_k_dalsimu_stavu`, `brana`), `vlastnik`, `pripravenost` (skóre a složky, jen informativně), `pokryti`, `slepa_mista` (s příznakem `blokujici`), `procedury` (pro každou: `pokryti` = `overeno` / `navrh` / `chybi`, testy a jejich běh, zápisy do cizích tabulek), `tabulky`, `objekty`.
+- Vedle každého `.json` je `.md` pro člověka (stejný obsah, tabulky).
+
+Jak má brána rozhodnout (referenční implementace `gate_decision` v [`mapa/evidence.py`](mapa/evidence.py), pokrytá testy):
+
+1. Z diffu PR zjistí změněné objekty (v P2 by to byla složka `db/` s jedním souborem na objekt).
+2. Objekt, který v indexu není, sdílený objekt, nebo index po `platne_do` → **zavřený** (fail-closed).
+3. Jinak stav domény z indexu. PR přes víc domén dostane nejpřísnější stav.
+4. Procedura bez zeleného testu sníží výsledek na **jen draft PR** i v otevřené doméně.
+5. Výsledek se mapuje na P2 takto: zavřený = preflight zastaví běh s vysvětlením, jen draft PR = `gh pr create --draft` a brána nesloučí, otevřený = běžná brána úrovně high (code owner review a povinné testy).
+
+Výstupy nemají časové razítko běhu, takže stejné vstupy dají bajtově stejné soubory a brána může ověřit `vstupy_sha256`. Snímek má platnost 30 dní: mapa nad starými daty z Query Store nesmí otevírat pruh.
 
 ## Skóre připravenosti
 
@@ -100,7 +141,7 @@ Skóre = 100 − penalizace + bonusy. Každá složka je podíl 0–1 krát váh
 | čtecí cesty | +10 | podíl procedur bez zápisu: levný parallel run |
 | mrtvý kód | +5 | vypnout je levnější než přepsat |
 
-Váhy jsou můj předpoklad, ne kalibrovaný model. Ve stránce jdou posuvníky změnit a pořadí se přepočítá. Diskuse o vahách s architekty je cennější než číslo samotné.
+Váhy jsou můj předpoklad, ne kalibrovaný model. Ve stránce jdou posuvníky změnit a pořadí se přepočítá. Diskuse o vahách s architekty je cennější než číslo samotné. Jak moc na vahách pořadí visí, ukazuje sekce citlivosti v `out/report.md` a v pohledu „Pruh core“ (shrnutí výše u výsledků).
 
 ## Co nefunguje nebo je zjednodušené
 
@@ -109,10 +150,15 @@ Váhy jsou můj předpoklad, ne kalibrovaný model. Ve stránce jdou posuvníky 
 - **Runtime vrstva je simulovaná.** CSV mají tvar, jaký by vrátily dotazy v `sql/collect/`, ale čísla vymyslel generátor. Skutečný sběr potřebuje 4–6 týdnů včetně konce měsíce a pozor na objem událostí. Nejméně ověřený je sběr cílů dynamického SQL přes `tsql_stack` (`08_xe_dynamicke_sql.sql`).
 - **Shlukování není doménový model.** Label propagation a modularita najdou, co spolu sdílí tabulky. Nevědí nic o byznysových schopnostech, vlastnictví týmů ani o tom, že „reklamace“ a „vratky“ jsou možná dvě domény. Výstup je návrh pro event storming, ne jeho náhrada.
 - **Sdílené tabulky se vyřazují prahem** (≥ 8 % živých procedur, fan-in procedury ≥ 8). Práh je ruční; na jiné DB vyjde jinak.
+- **Citlivost testuje jen váhy, ne definice složek.** Pásmo ±20 % je moje volba. Jiný práh sdílené tabulky nebo jiná normalizace „volání zvenku“ by mohly pořadí změnit víc než váhy; to analýza nezkouší.
+- **Pruh core stojí na vstupech, které jsem vymyslel.** Vlastníci dvou domén v `politika/pruh-core.json` jsou fiktivní a prahy (80 %, všechny zapisující procedury, nula blokujících slepých míst) jsou návrh k diskusi s architekty a vlastníky, ne ověřená hodnota.
+- **Pokrytí testy se pozná podle souborů, ne podle běhu.** Analyzátor nic nespouští. Věří `beh.json`, který by v reálu měla zapsat CI po běhu tSQLt nebo golden masteru proti kopii DB. Ručně zapsaný `beh.json` by pruh otevřel; v produkci by ho musela podepsat pipeline, ne člověk ani agent.
+- **Pokrytí počítá procedury, ne cesty v nich.** Jeden zelený test na proceduru se počítá jako „ověřeno“, i když procedura má deset větví. Kvalitu testů musí posoudit vlastník.
+- **Brána v P2 kontrakt zatím nečte.** `gate_decision` je referenční implementace v Pythonu s testy, napojení do `risk_gate.py` v P2 není hotové.
 - **Skóre nezná změnovost ani byznysovou hodnotu.** Chybí historie změn procedur (v syntetické DB žádná není) a plán byznysu. V reálu by vstupovala změnovost z gitu nebo DDL auditu.
 - **Mrtvý kód v okně 6 týdnů** je kandidát, ne důkaz. Ruční zásahy a výjimečné procesy okno nezachytí.
-- **HTML jsem neověřil v prohlížeči.** JavaScript prošel kontrolou syntaxe a během nad stubem DOM (všechny pohledy se vykreslí bez chyby), vizuální podoba grafu je neověřená.
-- **AI vrstva**: výstupy modelu nejsou spuštěné; tSQLt testy jsou kostry, kontrakt se nekompiloval.
+- **HTML jsem neověřil v prohlížeči.** JavaScript prošel kontrolou syntaxe a během nad stubem DOM (všechny pohledy včetně „Pruh core“ se vykreslí bez chyby), vizuální podoba grafu a nového pohledu je neověřená.
+- **AI vrstva**: výstupy modelu nejsou spuštěné; tSQLt testy jsou kostry, kontrakt se nekompiloval. Proto mají v balíčku důkazů stav „návrh“ a žádnou doménu neotevírají.
 
 ## Jak by to škálovalo na 5 000 procedur (výpočet od boku)
 
@@ -141,6 +187,7 @@ MCP server (Model Context Protocol, standardní rozhraní, přes které agent vo
 | `domain(name)` | hranice, skóre, složky, cizí hrany | plánování vlny |
 | `blind_spots(name)` | dynamické SQL, cross-DB, volání jen za běhu | upozornění „tohle katalog nevidí“ |
 | `context_pack(name)` | stejný balíček jako `out/context/*.md` | vstup pro dokumentaci a testy |
+| `evidence(domain)` | balíček důkazů a stav pruhu core (`out/evidence/*.json`) | než agent založí PR v core |
 
 Pravidla: snímek s datem a verzí vstupů (agent ví, jak stará data čte); žádné spojení do DB a žádná produkční data, jen metadata a kód; kód procedur je interní know-how, server běží jen uvnitř firmy; každé volání se loguje. V pipeline z části A by stejný server dal deterministické bráně signál: „PR mění proceduru, která zapisuje do tabulky jiné domény“ → vyšší rizikový pruh. Implementace je ~200 řádků nad `map.json`; v prototypu není, protože by potřebovala instalaci MCP SDK.
 
@@ -150,8 +197,9 @@ Pravidla: snímek s datem a verzí vstupů (agent ví, jak stará data čte); ž
 - `mapa/` – parser, graf, shlukování, skóre, výstupy, HTML šablona
 - `generator/` – generátor syntetické DB
 - `data/synthetic/` – vygenerované vstupy (`db/` T-SQL, `catalog/`, `client/`, `scheduler/`, `runtime/`)
-- `out/` – `map.json`, `report.md`, `context/` (kontextové balíčky pro AI)
+- `out/` – `map.json`, `report.md`, `context/` (kontextové balíčky pro AI), `evidence/` (balíčky důkazů a stav pruhu core, `index.json` pro bránu)
+- `politika/` – vlastníci domén a prahy pro pruh core (vstup od lidí)
 - `site/index.html` – statická mapa
 - `ai-vrstva/` – prompt a výstupy modelu pro 3 procedury reklamací
 - `sql/collect/` – sběr vstupů ze skutečné MS SQL (neověřeno na reálné DB)
-- `tests/` – testy parseru
+- `tests/` – testy parseru, pravidel pruhu core, referenční brány a citlivosti
