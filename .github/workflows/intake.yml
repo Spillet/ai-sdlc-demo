@@ -1,19 +1,28 @@
 name: Intake – požadavek na specifikaci
 
+# Spouští se štítkem `pozadavek`. Issue založené ze šablony dostane štítek hned a GitHub
+# pošle i událost `labeled`, takže `opened` není potřeba (jinak by intake běžel dvakrát).
+# Opakovaný intake po úpravě zadání: štítek odebrat a přidat znovu.
 on:
   issues:
-    types: [opened]
+    types: [labeled]
+
+env:
+  CLAUDE_CODE_VERSION: 2.1.308
+  MODEL: claude-sonnet-5-5
 
 jobs:
   spec:
-    if: contains(github.event.issue.labels.*.name, 'pozadavek')
+    if: github.event.label.name == 'pozadavek'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       issues: read
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: '22'
       - name: Zadání pro analytika
@@ -24,10 +33,10 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          npm install -g @anthropic-ai/claude-code > /dev/null
-          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model sonnet --max-turns 15 \
+          npm install -g "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" > /dev/null
+          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model "$MODEL" --max-turns 15 \
             --allowedTools "Read,Glob,Grep" --output-format json > "$RUNNER_TEMP/agent.json"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: intake-output
           path: ${{ runner.temp }}/agent.json
@@ -39,8 +48,10 @@ jobs:
       contents: read
       issues: write
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           name: intake-output
           path: ${{ runner.temp }}/out
