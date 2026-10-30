@@ -12,9 +12,27 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
         with:
           dotnet-version: '10.0.x'
       - name: Test
         run: dotnet test tests/Claims.Tests/Claims.Tests.csproj --logger "console;verbosity=normal"
+
+  gate-tests:
+    # Testy brány a regresní sada scénářů (evals/gate-cases.yml). Bez sítě k modelu, bez secrets.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pyyaml==6.0.2
+      - name: Unit testy brány
+        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
+      - name: Regresní scénáře brány
+        run: python3 .github/scripts/run_gate_evals.py
