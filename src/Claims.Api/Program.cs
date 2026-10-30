@@ -1,4 +1,5 @@
 using Claims.Api.Domain;
+using Claims.Api.Refunds;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -13,8 +14,13 @@ app.MapPost("/claims/evaluate", (ClaimRequest request) =>
         withinWarranty ? ClaimPolicy.ResolutionDeadline(request.ClaimedOn) : null));
 });
 
+app.MapPost("/claims/refund", (RefundRequest request) =>
+    Results.Ok(new { amount = RefundCalculator.Calculate(request.Price, request.Outcome, request.PartialRate) }));
+
 app.Run();
 
 public record ClaimRequest(DateOnly PurchasedOn, DateOnly ClaimedOn);
 
 public record ClaimEvaluation(bool WithinWarranty, DateOnly? ResolveBy);
+
+public record RefundRequest(decimal Price, ClaimOutcome Outcome, decimal PartialRate = 0m);

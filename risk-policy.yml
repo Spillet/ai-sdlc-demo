@@ -1,0 +1,46 @@
+# Riziková politika: kdo smí sloučit změnu.
+# Čte ji brána (.github/scripts/risk_gate.py). Platí první pravidlo, které cestu zachytí;
+# výsledná úroveň PR je nejvyšší úroveň ze všech změněných souborů a signálů.
+#
+#   low    -> sloučí se automaticky, když projdou testy a AI review
+#   medium -> sloučení schvaluje člověk
+#   high   -> měnit smí jen vlastnický tým (agent připraví návrh, nic nesloučí)
+
+owners:
+  default: Spillet
+  refunds: Spillet
+
+rules:
+  - paths: [".github/*", "risk-policy.yml", "AGENTS.md", "CODEOWNERS"]
+    tier: high
+    owner: default
+    reason: Pipeline a mantinely. Agent nesmí měnit pravidla, podle kterých se kontroluje.
+  - paths: ["src/Claims.Api/Refunds/*"]
+    tier: high
+    owner: refunds
+    reason: Peníze zákazníků (vracení peněz).
+  - paths: ["src/Claims.Api/Domain/*"]
+    tier: medium
+    owner: default
+    reason: Zákonná pravidla reklamací.
+  - paths: ["src/*"]
+    tier: medium
+    owner: default
+    reason: Produkční kód služby.
+  - paths: ["tests/*", "docs/*", "*.md"]
+    tier: low
+    owner: default
+    reason: Testy a dokumentace.
+
+default_tier: medium
+
+limits:
+  # Velké změny se hůř kontrolují. Nad limitem se úroveň zvedá.
+  low_max_changed_lines: 150
+  medium_max_changed_lines: 400
+
+signals:
+  # Změna produkčního kódu bez změny testů zvedá úroveň alespoň na medium.
+  require_tests_for_src: true
+  # Nesouhlas AI review zvedá úroveň alespoň na medium.
+  review_request_changes_min_tier: medium

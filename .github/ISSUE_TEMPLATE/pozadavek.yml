@@ -1,0 +1,19 @@
+name: Požadavek na změnu
+description: Popiš, co potřebuješ. Agent z toho připraví specifikaci k potvrzení.
+labels: [pozadavek]
+body:
+  - type: textarea
+    id: co
+    attributes:
+      label: Co potřebuješ?
+      description: Vlastními slovy, klidně bez technických detailů.
+    validations:
+      required: true
+  - type: textarea
+    id: proc
+    attributes:
+      label: Proč? Komu to pomůže?
+  - type: textarea
+    id: hotovo
+    attributes:
+      label: Jak poznáš, že je hotovo?
