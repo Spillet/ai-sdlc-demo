@@ -23,7 +23,7 @@ Toto PR připravil kódovací agent podle potvrzené specifikace v issue. O slou
 
 ## Ověření
 
-- Testy: {'✅ prošly' if tests_ok else '❌ neprošly'}
+- Testy v jobu agenta: {'✅ prošly' if tests_ok else '❌ neprošly'} (informativní; brána bere výsledek z čistého jobu `verify` bez secrets)
 
 ```
 {tail}

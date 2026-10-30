@@ -2,7 +2,11 @@ name: Agent – od specifikace k PR
 
 # Spouští ho člověk štítkem `ai:implement` na issue s potvrzenou specifikací.
 # Princip nejmenších oprávnění: agent běží v jobu, který smí jen číst. Větev, PR,
-# komentáře a sloučení dělají další joby deterministickými skripty.
+# komentáře a sloučení dělají další joby deterministickými skripty. Výsledek testů,
+# kterému brána věří, vzniká v samostatném jobu bez secrets nad čistým checkoutem.
+#
+# Akce jsou připnuté na SHA (komentář = verze), Claude Code na konkrétní verzi a model
+# na celé ID. Změna verze je vědomá změna přes PR, ne tichá aktualizace.
 
 on:
   issues:
@@ -13,26 +17,38 @@ concurrency:
 
 env:
   ISSUE: ${{ github.event.issue.number }}
+  BRANCH: ai/issue-${{ github.event.issue.number }}
+  CLAUDE_CODE_VERSION: 2.1.308
+  MODEL: claude-sonnet-5-5
+  # Cesty, na které agent nesmí sáhnout (grep -Ei nad seznamem souborů z gitu, oddělených NUL).
+  # Musí odpovídat prvnímu pravidlu v risk-policy.yml; hlídá to test_risk_gate.py.
+  PROTECTED_PATHS: '(^|/)(\.github/|\.claude/|\.mcp\.json$|[^/]*(agents|claude)(\.local)?\.md$)|^(risk-policy\.yml|codeowners)$'
 
 jobs:
   preflight:
     if: github.event.label.name == 'ai:implement'
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       issues: write
+    outputs:
+      draft: ${{ steps.check.outputs.draft }}
     steps:
-      - name: Pruh 3 smí spustit jen vlastník
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pyyaml==6.0.2
+      - name: Kdo spouští a kam změna míří
+        id: check
         env:
           GH_TOKEN: ${{ github.token }}
           LABELS: ${{ toJSON(github.event.issue.labels.*.name) }}
           SENDER: ${{ github.event.sender.login }}
           OWNER: ${{ github.repository_owner }}
-        run: |
-          if echo "$LABELS" | grep -q 'pruh:3-core' && [ "$SENDER" != "$OWNER" ]; then
-            gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" \
-              --body "Pruh 3 (core): agenta smí spustit jen vlastnický tým. Spuštění od @$SENDER zamítnuto."
-            exit 1
-          fi
+        run: python3 .github/scripts/preflight.py "$ISSUE"
 
   implement:
     needs: preflight
@@ -43,11 +59,13 @@ jobs:
     outputs:
       changed: ${{ steps.diff.outputs.changed }}
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
         with:
           dotnet-version: '10.0.x'
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: '22'
       - name: Specifikace z issue
@@ -58,11 +76,11 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          npm install -g @anthropic-ai/claude-code > /dev/null
-          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model sonnet --max-turns 40 \
+          npm install -g "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" > /dev/null
+          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model "$MODEL" --max-turns 40 \
             --allowedTools "Read,Edit,Write,Glob,Grep,Bash(dotnet build:*),Bash(dotnet test:*)" \
             --output-format json > "$RUNNER_TEMP/agent.json"
-      - name: Ověření – build a testy
+      - name: Testy pro popis PR (informativní, bráně se nepředávají)
         run: |
           set +e
           dotnet test tests/Claims.Tests/Claims.Tests.csproj > "$RUNNER_TEMP/tests.log" 2>&1
@@ -72,13 +90,13 @@ jobs:
         id: diff
         run: |
           git add -A
-          if git diff --cached --name-only | grep -E '^(\.github/|risk-policy\.yml$|AGENTS\.md$|CODEOWNERS$)'; then
-            echo "::error::Agent změnil pipeline nebo pravidla. Změna se zahazuje."
+          if git diff --cached --name-only -z | grep -zEi "$PROTECTED_PATHS" | tr '\0' '\n' | grep .; then
+            echo "::error::Agent změnil pipeline, pravidla nebo kontext agentů (výpis výše). Změna se zahazuje."
             exit 1
           fi
-          git diff --cached > "$RUNNER_TEMP/change.patch"
+          git diff --cached --binary > "$RUNNER_TEMP/change.patch"
           if [ -s "$RUNNER_TEMP/change.patch" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; else echo "changed=false" >> "$GITHUB_OUTPUT"; fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: agent-output
           path: |
@@ -88,7 +106,7 @@ jobs:
             ${{ runner.temp }}/tests_exit.txt
 
   publish:
-    needs: implement
+    needs: [preflight, implement]
     if: needs.implement.outputs.changed == 'true'
     runs-on: ubuntu-latest
     permissions:
@@ -97,8 +115,8 @@ jobs:
     outputs:
       pr: ${{ steps.pr.outputs.number }}
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           name: agent-output
           path: ${{ runner.temp }}/out
@@ -107,8 +125,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TITLE: ${{ github.event.issue.title }}
+          DRAFT: ${{ needs.preflight.outputs.draft }}
         run: |
-          BRANCH="ai/issue-$ISSUE"
           git config user.name "ai-sdlc-agent"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
@@ -118,12 +136,39 @@ jobs:
           python3 .github/scripts/pr_body.py "$RUNNER_TEMP/out" "$ISSUE" > "$RUNNER_TEMP/body.md"
           NUMBER=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --json number --jq '.[0].number')
           if [ -z "$NUMBER" ]; then
-            URL=$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$BRANCH" --title "AI: $TITLE" --body-file "$RUNNER_TEMP/body.md")
+            DRAFT_FLAG=""
+            if [ "$DRAFT" = "true" ]; then DRAFT_FLAG="--draft"; fi
+            URL=$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$BRANCH" $DRAFT_FLAG --title "AI: $TITLE" --body-file "$RUNNER_TEMP/body.md")
             NUMBER="${URL##*/}"
           else
             gh pr edit "$NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/body.md"
           fi
           echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+
+  verify:
+    # Nezávislé ověření: čistý checkout větve PR, bez secrets a bez tokenu se zápisem.
+    # Agentův kód (testy, MSBuild) se tu spouští znovu, ale nemá k čemu se dostat.
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          ref: ${{ env.BRANCH }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Mantinely znovu, nad větví PR
+        run: |
+          if git diff --name-only -z origin/main...HEAD | grep -zEi "$PROTECTED_PATHS" | tr '\0' '\n' | grep .; then
+            echo "::error::Větev PR mění pipeline, pravidla nebo kontext agentů."
+            exit 1
+          fi
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build a testy
+        run: dotnet test tests/Claims.Tests/Claims.Tests.csproj
 
   review:
     needs: publish
@@ -132,13 +177,15 @@ jobs:
       contents: read
       issues: read
     steps:
-      - uses: actions/checkout@v5
+      # Checkout main, ne větve agenta: reviewer nesmí načíst CLAUDE.md nebo .claude/ od toho,
+      # koho recenzuje. Diff dostane jen jako data v zadání.
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
-          ref: ai/issue-${{ github.event.issue.number }}
-      - uses: actions/setup-node@v5
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: '22'
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           name: agent-output
           path: ${{ runner.temp }}/out
@@ -150,32 +197,42 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          npm install -g @anthropic-ai/claude-code > /dev/null
-          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model sonnet --max-turns 15 \
+          npm install -g "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" > /dev/null
+          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model "$MODEL" --max-turns 15 \
             --allowedTools "Read,Glob,Grep" --output-format json > "$RUNNER_TEMP/review.json"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: review-output
           path: ${{ runner.temp }}/review.json
 
   gate:
-    needs: [publish, review]
+    # Běží i když review nebo verify selže (fail-closed: chybějící review = nesouhlas,
+    # neúspěšné ověření = zablokováno). Skripty brány jsou z main, ne z větve agenta.
+    needs: [publish, verify, review]
+    if: always() && needs.publish.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
       issues: write
+      statuses: write
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: '3.12'
-      - run: pip install --quiet pyyaml
-      - uses: actions/download-artifact@v5
+      - run: pip install --quiet pyyaml==6.0.2
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           path: ${{ runner.temp }}/out
           merge-multiple: true
       - name: Brána podle rizika
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/risk_gate.py "${{ needs.publish.outputs.pr }}" "$RUNNER_TEMP/out"
+        run: |
+          python3 .github/scripts/risk_gate.py "${{ needs.publish.outputs.pr }}" "$RUNNER_TEMP/out" \
+            --verify "${{ needs.verify.result }}" --base origin/main --head "origin/$BRANCH"
