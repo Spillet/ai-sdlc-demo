@@ -14,7 +14,7 @@ public enum ClaimOutcome
 public static class RefundCalculator
 {
     /// <summary>Nejvyšší sleva z ceny při přiměřené slevě (sleva místo opravy).</summary>
-    public const decimal MaxPartialRefundRate = 0.5m;
+    public const decimal MaxPartialRefundRate = 0.6m;
 
     public static decimal Calculate(decimal price, ClaimOutcome outcome, decimal partialRate = 0m)
     {
