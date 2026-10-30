@@ -1,0 +1,974 @@
+{
+ "domena": "D:OrderNote",
+ "nazev": null,
+ "objekty": [
+  "Cart",
+  "CartItem",
+  "Invoice",
+  "OrderEvent",
+  "OrderNote",
+  "OrderStatusHistory",
+  "StockReservation",
+  "Voucher",
+  "VoucherUse",
+  "fn_OrderTotal",
+  "fn_ProductAvailableQty",
+  "spSklad_Warehouse_Update",
+  "trg_Orders_Audit",
+  "trg_Payment_OrderPaid",
+  "tvf_OrderItems",
+  "usp_Inv_Invoice_SetStatus",
+  "usp_Inv_Invoice_Update",
+  "usp_Order_Cancel",
+  "usp_Order_CartItem_Archive",
+  "usp_Order_CartItem_Cleanup",
+  "usp_Order_CartItem_Merge",
+  "usp_Order_CartItem_Update",
+  "usp_Order_Cart_Get",
+  "usp_Order_Cart_GetByCode",
+  "usp_Order_Cart_GetDetail",
+  "usp_Order_Cart_List",
+  "usp_Order_Cart_Search",
+  "usp_Order_Create",
+  "usp_Order_Delete",
+  "usp_Order_Dispatch",
+  "usp_Order_Export",
+  "usp_Order_OrderEvent_Cancel",
+  "usp_Order_OrderEvent_Find",
+  "usp_Order_OrderEvent_MonthClose",
+  "usp_Order_OrderEvent_Save",
+  "usp_Order_OrderEvent_Sync",
+  "usp_Order_OrderItem_GetByCode",
+  "usp_Order_OrderItem_Nightly",
+  "usp_Order_OrderNote_Check",
+  "usp_Order_OrderNote_Insert",
+  "usp_Order_OrderNote_Nightly",
+  "usp_Order_OrderNote_Rebuild",
+  "usp_Order_OrderNote_Save",
+  "usp_Order_OrderNote_SetStatus",
+  "usp_Order_OrderStatusHistory_Archive",
+  "usp_Order_OrderStatusHistory_List",
+  "usp_Order_OrderStatusHistory_Search",
+  "usp_Order_Recalc",
+  "usp_Order_Sync",
+  "usp_Order_Update",
+  "usp_Pay_Payment_Delete",
+  "usp_Ship_Shipment_Approve",
+  "OrderItem",
+  "Orders",
+  "Payment"
+ ],
+ "pokryti": {
+  "chybi": 38,
+  "navrh": 0,
+  "overene_pokryti": 0.0,
+  "overeno": 0,
+  "zapisujici": 28,
+  "zapisujici_neoverene": [
+   "spSklad_Warehouse_Update",
+   "usp_Inv_Invoice_SetStatus",
+   "usp_Inv_Invoice_Update",
+   "usp_Order_Cancel",
+   "usp_Order_CartItem_Archive",
+   "usp_Order_CartItem_Cleanup",
+   "usp_Order_CartItem_Merge",
+   "usp_Order_CartItem_Update",
+   "usp_Order_Create",
+   "usp_Order_Delete",
+   "usp_Order_Dispatch",
+   "usp_Order_Export",
+   "usp_Order_OrderEvent_Cancel",
+   "usp_Order_OrderEvent_MonthClose",
+   "usp_Order_OrderEvent_Save",
+   "usp_Order_OrderEvent_Sync",
+   "usp_Order_OrderItem_Nightly",
+   "usp_Order_OrderNote_Insert",
+   "usp_Order_OrderNote_Nightly",
+   "usp_Order_OrderNote_Rebuild",
+   "usp_Order_OrderNote_Save",
+   "usp_Order_OrderNote_SetStatus",
+   "usp_Order_OrderStatusHistory_Archive",
+   "usp_Order_Recalc",
+   "usp_Order_Sync",
+   "usp_Order_Update",
+   "usp_Pay_Payment_Delete",
+   "usp_Ship_Shipment_Approve"
+  ],
+  "zive_procedury": 38
+ },
+ "pripravenost": {
+  "poradi": 10,
+  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
+  "prispevky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 2.3,
+   "data_size": -9.2,
+   "dynamic_sql": -4.9,
+   "external_calls": -5.0,
+   "foreign_reads": -6.0,
+   "foreign_writes": -11.0,
+   "inbound_reads": -6.2,
+   "inbound_writes": -2.9
+  },
+  "skore": 57.3,
+  "slozky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 0.233,
+   "data_size": 0.919,
+   "dynamic_sql": 0.488,
+   "external_calls": 0.496,
+   "foreign_reads": 0.602,
+   "foreign_writes": 0.438,
+   "inbound_reads": 0.615,
+   "inbound_writes": 0.192
+  }
+ },
+ "procedury": [
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "spSklad_Warehouse_Update",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1,
+   "zapisuje": [
+    "Orders",
+    "Warehouse"
+   ],
+   "zapisuje_cizi": [
+    "Orders",
+    "Warehouse"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_SetStatus",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 97,
+   "zapisuje": [
+    "Invoice"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_Update",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 149,
+   "zapisuje": [
+    "ExchangeRate",
+    "Invoice",
+    "Orders"
+   ],
+   "zapisuje_cizi": [
+    "ExchangeRate",
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Cancel",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 151,
+   "zapisuje": [
+    "OrderItem",
+    "OrderNote",
+    "Payment"
+   ],
+   "zapisuje_cizi": [
+    "OrderItem",
+    "Payment"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_CartItem_Archive",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2,
+   "zapisuje": [
+    "Cart",
+    "CartItem",
+    "OrderStatusHistory",
+    "StockLevel"
+   ],
+   "zapisuje_cizi": [
+    "StockLevel"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_CartItem_Cleanup",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 42,
+   "zapisuje": [
+    "OrderStatusHistory"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_CartItem_Merge",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 91,
+   "zapisuje": [
+    "Cart",
+    "CartItem"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_CartItem_Update",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 910,
+   "zapisuje": [
+    "CartItem"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Cart_Get",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Cart_GetByCode",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1504,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Cart_GetDetail",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 110,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Cart_List",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 14417,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Cart_Search",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 917,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Create",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 46301,
+   "zapisuje": [
+    "OrderItem",
+    "OrderStatusHistory",
+    "Orders",
+    "StockReservation",
+    "VoucherUse"
+   ],
+   "zapisuje_cizi": [
+    "OrderItem",
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Delete",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 785,
+   "zapisuje": [
+    "Customer",
+    "OrderNote",
+    "Orders"
+   ],
+   "zapisuje_cizi": [
+    "Customer",
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Dispatch",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 198,
+   "zapisuje": [
+    "OrderEvent",
+    "OrderStatusHistory",
+    "VoucherUse"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Export",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2,
+   "zapisuje": [
+    "OrderItem",
+    "Orders",
+    "Payment"
+   ],
+   "zapisuje_cizi": [
+    "OrderItem",
+    "Orders",
+    "Payment"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderEvent_Cancel",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 25,
+   "zapisuje": [
+    "CartItem",
+    "Customer",
+    "OrderNote",
+    "Orders"
+   ],
+   "zapisuje_cizi": [
+    "Customer",
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderEvent_Find",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 130,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderEvent_MonthClose",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 42,
+   "zapisuje": [
+    "Cart",
+    "Invoice",
+    "OrderNote",
+    "Orders"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderEvent_Save",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 26,
+   "zapisuje": [
+    "Cart",
+    "OrderEvent",
+    "StockLevel"
+   ],
+   "zapisuje_cizi": [
+    "StockLevel"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderEvent_Sync",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 308,
+   "zapisuje": [
+    "CartItem",
+    "LoyaltyTransaction",
+    "OrderItem"
+   ],
+   "zapisuje_cizi": [
+    "LoyaltyTransaction",
+    "OrderItem"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderItem_GetByCode",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 146,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderItem_Nightly",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1008,
+   "zapisuje": [
+    "Customer",
+    "OrderEvent",
+    "OrderNote",
+    "OrderStatusHistory"
+   ],
+   "zapisuje_cizi": [
+    "Customer"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderNote_Check",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 993,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderNote_Insert",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1715,
+   "zapisuje": [
+    "OrderNote"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderNote_Nightly",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 42,
+   "zapisuje": [
+    "Cart",
+    "Invoice",
+    "Orders"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderNote_Rebuild",
+   "pokryti": "chybi",
+   "stav": "v klientovi, nepoužitá",
+   "volani_6_tydnu": 0,
+   "zapisuje": [
+    "CartItem",
+    "Orders",
+    "StockReservation"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderNote_Save",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 4526,
+   "zapisuje": [
+    "OrderNote",
+    "OrderStatusHistory",
+    "VoucherUse"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderNote_SetStatus",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 33093,
+   "zapisuje": [
+    "StockReservation"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderStatusHistory_Archive",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2,
+   "zapisuje": [
+    "OrderEvent",
+    "OrderNote",
+    "Orders"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderStatusHistory_List",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_OrderStatusHistory_Search",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 324,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Recalc",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 187,
+   "zapisuje": [
+    "Orders"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Sync",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 143,
+   "zapisuje": [
+    "OrderItem",
+    "Orders",
+    "VoucherUse"
+   ],
+   "zapisuje_cizi": [
+    "OrderItem",
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Order_Update",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 205,
+   "zapisuje": [
+    "Orders"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Payment_Delete",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 9939,
+   "zapisuje": [
+    "Invoice",
+    "Payment"
+   ],
+   "zapisuje_cizi": [
+    "Payment"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Ship_Shipment_Approve",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 730,
+   "zapisuje": [
+    "Shipment"
+   ],
+   "zapisuje_cizi": [
+    "Shipment"
+   ]
+  }
+ ],
+ "pruh_core": {
+  "brana": {
+   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
+   "pr": "nevzniká"
+  },
+  "chybi_k_dalsimu_stavu": [
+   "doména má vlastnický tým (vlastník není určen)"
+  ],
+  "popis": "zavřený",
+  "pravidla": [
+   {
+    "detail": "vlastník není určen",
+    "id": "R1",
+    "pravidlo": "doména má vlastnický tým",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "ano",
+    "id": "R2",
+    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+    "pro": "jen_draft_pr",
+    "splneno": true
+   },
+   {
+    "detail": "0 z 38 (0 %)",
+    "id": "R3",
+    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "chybí 28: spSklad_Warehouse_Update, usp_Inv_Invoice_SetStatus, usp_Inv_Invoice_Update, usp_Order_Cancel, usp_Order_CartItem_Archive, usp_Order_CartItem_Cleanup …",
+    "id": "R4",
+    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "usp_Order_Export, usp_Order_OrderEvent_MonthClose, usp_Order_OrderNote_Nightly, usp_Order_OrderStatusHistory_Archive",
+    "id": "R5",
+    "pravidlo": "blokujících slepých míst ≤ 0",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   }
+  ],
+  "stav": "zavreny"
+ },
+ "schema": "mapa-monolitu/dukazy@1",
+ "slepa_mista": [
+  {
+   "blokujici": true,
+   "objekt": "usp_Order_Export",
+   "popis": "zápis do Archive.dbo.Orders (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": true,
+   "objekt": "usp_Order_OrderEvent_MonthClose",
+   "popis": "zápis do Accounting.dbo.OrderEvent_Archive (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": true,
+   "objekt": "usp_Order_OrderNote_Nightly",
+   "popis": "zápis do Accounting.dbo.OrderNote_Archive (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": true,
+   "objekt": "usp_Order_OrderStatusHistory_Archive",
+   "popis": "zápis do DWH.dbo.OrderStatusHistory_Archive (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_Invoice_Update",
+   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: ExchangeRate (jen v okně měření)",
+   "typ": "dynamicke_sql_slepe"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderEvent_Cancel",
+   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: OrderNote (jen v okně měření)",
+   "typ": "dynamicke_sql_slepe"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Cart_Get",
+   "popis": "dynamické SQL, cíle jdou vyčíst z literálů",
+   "typ": "dynamicke_sql_z_literalu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderEvent_Find",
+   "popis": "dynamické SQL, cíle jdou vyčíst z literálů",
+   "typ": "dynamicke_sql_z_literalu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderNote_Check",
+   "popis": "dynamické SQL, cíle jdou vyčíst z literálů",
+   "typ": "dynamicke_sql_z_literalu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Cancel",
+   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_CartItem_Cleanup",
+   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Create",
+   "popis": "volá spSklad_StockMovement_Update bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Create",
+   "popis": "volá usp_Cust_LoyaltyAccount_Merge bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Recalc",
+   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Cancel",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_CartItem_Archive",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_CartItem_Cleanup",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Create",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Dispatch",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Export",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderEvent_Cancel",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderEvent_MonthClose",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderEvent_Sync",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderItem_Nightly",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderNote_Check",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderNote_Nightly",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_OrderStatusHistory_Archive",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Order_Sync",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  }
+ ],
+ "snimek": {
+  "datum": "2026-10-31",
+  "platne_do": "2026-11-30",
+  "verze_politiky": 1,
+  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
+ },
+ "tabulky": [
+  "Cart",
+  "CartItem",
+  "Invoice",
+  "OrderEvent",
+  "OrderItem",
+  "OrderNote",
+  "OrderStatusHistory",
+  "Orders",
+  "Payment",
+  "StockReservation",
+  "Voucher",
+  "VoucherUse"
+ ],
+ "vlastnik": null
+}

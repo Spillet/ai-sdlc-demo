@@ -1,0 +1,610 @@
+{
+ "domena": "D:Category",
+ "nazev": "Katalog",
+ "objekty": [
+  "AttributeDef",
+  "Brand",
+  "Category",
+  "PriceListItem",
+  "ProductAttribute",
+  "ProductCategory",
+  "ProductImage",
+  "ProductText",
+  "usp_Price_PriceListItem_List",
+  "usp_Price_Promo_GetDetail",
+  "usp_Product_AttributeDef_Check",
+  "usp_Product_AttributeDef_Overview",
+  "usp_Product_AttributeDef_Process",
+  "usp_Product_Brand_Cleanup",
+  "usp_Product_Brand_GetByCode",
+  "usp_Product_Brand_Insert",
+  "usp_Product_Brand_List",
+  "usp_Product_Category_Nightly",
+  "usp_Product_Category_Update",
+  "usp_Product_ProductAttribute_Approve",
+  "usp_Product_ProductAttribute_Cleanup",
+  "usp_Product_ProductAttribute_Process",
+  "usp_Product_ProductCategory_GetByCode",
+  "usp_Product_ProductImage_GetByCode",
+  "usp_Product_Product_Cancel",
+  "usp_Product_Product_Check",
+  "usp_Product_Product_Confirm",
+  "usp_Product_Product_Dispatch",
+  "usp_Product_Product_Find",
+  "usp_Product_Product_GetByCode",
+  "usp_Product_Product_Import",
+  "usp_Product_Product_Rebuild",
+  "usp_Product_Product_Search"
+ ],
+ "pokryti": {
+  "chybi": 25,
+  "navrh": 0,
+  "overene_pokryti": 0.0,
+  "overeno": 0,
+  "zapisujici": 13,
+  "zapisujici_neoverene": [
+   "usp_Product_AttributeDef_Process",
+   "usp_Product_Brand_Cleanup",
+   "usp_Product_Brand_Insert",
+   "usp_Product_Category_Nightly",
+   "usp_Product_Category_Update",
+   "usp_Product_ProductAttribute_Approve",
+   "usp_Product_ProductAttribute_Cleanup",
+   "usp_Product_ProductAttribute_Process",
+   "usp_Product_Product_Cancel",
+   "usp_Product_Product_Confirm",
+   "usp_Product_Product_Dispatch",
+   "usp_Product_Product_Import",
+   "usp_Product_Product_Rebuild"
+  ],
+  "zive_procedury": 25
+ },
+ "pripravenost": {
+  "poradi": 2,
+  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
+  "prispevky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 4.8,
+   "data_size": -5.3,
+   "dynamic_sql": -2.4,
+   "external_calls": -5.9,
+   "foreign_reads": -3.6,
+   "foreign_writes": -3.7,
+   "inbound_reads": -1.8,
+   "inbound_writes": -0.6
+  },
+  "skore": 81.6,
+  "slozky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 0.48,
+   "data_size": 0.529,
+   "dynamic_sql": 0.24,
+   "external_calls": 0.587,
+   "foreign_reads": 0.357,
+   "foreign_writes": 0.148,
+   "inbound_reads": 0.176,
+   "inbound_writes": 0.042
+  }
+ },
+ "procedury": [
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Price_PriceListItem_List",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 216869,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Price_Promo_GetDetail",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 131968,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_AttributeDef_Check",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 110771,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_AttributeDef_Overview",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 327622,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_AttributeDef_Process",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 51,
+   "zapisuje": [
+    "Brand",
+    "Product"
+   ],
+   "zapisuje_cizi": [
+    "Product"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Brand_Cleanup",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2,
+   "zapisuje": [
+    "Category",
+    "ProductCategory",
+    "ProductImage"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Brand_GetByCode",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 672868,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Brand_Insert",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 357665,
+   "zapisuje": [
+    "Brand"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Brand_List",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 3170,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Category_Nightly",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2,
+   "zapisuje": [
+    "Category",
+    "ProductCategory",
+    "ProductText"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Category_Update",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 61524,
+   "zapisuje": [
+    "Category"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_ProductAttribute_Approve",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 558652,
+   "zapisuje": [
+    "ProductAttribute",
+    "ProductImage"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_ProductAttribute_Cleanup",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2,
+   "zapisuje": [
+    "ProductImage",
+    "ProductText"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_ProductAttribute_Process",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 371144,
+   "zapisuje": [
+    "Category",
+    "ProductImage"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_ProductCategory_GetByCode",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 29102,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_ProductImage_GetByCode",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 545702,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_Cancel",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 3959,
+   "zapisuje": [
+    "AttributeDef",
+    "ProductText"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_Check",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 292754,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_Confirm",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 260,
+   "zapisuje": [
+    "Product",
+    "ProductText"
+   ],
+   "zapisuje_cizi": [
+    "Product"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_Dispatch",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 535083,
+   "zapisuje": [
+    "AttributeDef",
+    "ProductCategory"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_Find",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 389172,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_GetByCode",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 8707,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_Import",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 7992,
+   "zapisuje": [
+    "Product"
+   ],
+   "zapisuje_cizi": [
+    "Product"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_Rebuild",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 181616,
+   "zapisuje": [
+    "Brand",
+    "Category",
+    "ProductText",
+    "StockLevel"
+   ],
+   "zapisuje_cizi": [
+    "StockLevel"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Product_Search",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 177,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  }
+ ],
+ "pruh_core": {
+  "brana": {
+   "kdo_slouci": "vlastník po převzetí PR; první úkol agenta je doplnit charakterizační testy",
+   "kdo_spusti_agenta": "kdokoli (záměr a akceptační kritéria)",
+   "pr": "vždy draft; brána jen okomentuje dopad a chybějící důkazy"
+  },
+  "chybi_k_dalsimu_stavu": [
+   "ověřené pokrytí živých procedur ≥ 80 % (0 z 25 (0 %))",
+   "všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …)",
+   "blokujících slepých míst ≤ 0 (usp_Product_ProductAttribute_Cleanup)"
+  ],
+  "popis": "jen draft PR",
+  "pravidla": [
+   {
+    "detail": "Katalog a obsah (fiktivní)",
+    "id": "R1",
+    "pravidlo": "doména má vlastnický tým",
+    "pro": "jen_draft_pr",
+    "splneno": true
+   },
+   {
+    "detail": "ano",
+    "id": "R2",
+    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+    "pro": "jen_draft_pr",
+    "splneno": true
+   },
+   {
+    "detail": "0 z 25 (0 %)",
+    "id": "R3",
+    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …",
+    "id": "R4",
+    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "usp_Product_ProductAttribute_Cleanup",
+    "id": "R5",
+    "pravidlo": "blokujících slepých míst ≤ 0",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   }
+  ],
+  "stav": "jen_draft_pr"
+ },
+ "schema": "mapa-monolitu/dukazy@1",
+ "slepa_mista": [
+  {
+   "blokujici": true,
+   "objekt": "usp_Product_ProductAttribute_Cleanup",
+   "popis": "zápis do Archive.dbo.ProductAttribute_Archive (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Product_Rebuild",
+   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: Category (jen v okně měření)",
+   "typ": "dynamicke_sql_slepe"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_ProductAttribute_Process",
+   "popis": "volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví",
+   "typ": "jen_za_behu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Product_Dispatch",
+   "popis": "volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví",
+   "typ": "jen_za_behu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Product_Find",
+   "popis": "volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví",
+   "typ": "jen_za_behu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Product_Rebuild",
+   "popis": "volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví",
+   "typ": "jen_za_behu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Brand_Insert",
+   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Product_Cancel",
+   "popis": "volá usp_Product_Brand_List bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Product_Dispatch",
+   "popis": "volá usp_Product_Brand_GetByCode bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_AttributeDef_Process",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Brand_Cleanup",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Category_Nightly",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_ProductAttribute_Cleanup",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_ProductCategory_GetByCode",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Product_Cancel",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Product_Product_Confirm",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  }
+ ],
+ "snimek": {
+  "datum": "2026-10-31",
+  "platne_do": "2026-11-30",
+  "verze_politiky": 1,
+  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
+ },
+ "tabulky": [
+  "AttributeDef",
+  "Brand",
+  "Category",
+  "PriceListItem",
+  "ProductAttribute",
+  "ProductCategory",
+  "ProductImage",
+  "ProductText"
+ ],
+ "vlastnik": {
+  "github_tym": "kompas/katalog",
+  "nazev": "Katalog",
+  "tym": "Katalog a obsah (fiktivní)"
+ }
+}

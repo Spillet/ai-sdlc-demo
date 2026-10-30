@@ -1,0 +1,496 @@
+{
+ "domena": "D:CreditNote",
+ "nazev": null,
+ "objekty": [
+  "AccountingExport",
+  "CreditNote",
+  "ExchangeRate",
+  "InvoiceItem",
+  "LedgerEntry",
+  "VatRate",
+  "fn_ExchangeRate",
+  "fn_VatRateFor",
+  "tvf_InvoiceLines",
+  "usp_Inv_AccountingExport_Insert",
+  "usp_Inv_AccountingExport_List",
+  "usp_Inv_AccountingExport_MonthClose",
+  "usp_Inv_CreditNote_Recalc",
+  "usp_Inv_ExchangeRate_Approve",
+  "usp_Inv_ExchangeRate_Insert",
+  "usp_Inv_ExchangeRate_List",
+  "usp_Inv_Invoice_Check",
+  "usp_Inv_Invoice_Confirm",
+  "usp_Inv_Invoice_Get",
+  "usp_Inv_Invoice_GetDetail",
+  "usp_Inv_Invoice_Hourly",
+  "usp_Inv_Invoice_Rebuild",
+  "usp_Inv_Invoice_Sync",
+  "usp_Inv_LedgerEntry_Find",
+  "usp_Inv_LedgerEntry_MonthClose",
+  "usp_Inv_LedgerEntry_Rebuild",
+  "usp_Inv_VatRate_Dispatch",
+  "usp_Inv_YearClose"
+ ],
+ "pokryti": {
+  "chybi": 18,
+  "navrh": 0,
+  "overene_pokryti": 0.0,
+  "overeno": 0,
+  "zapisujici": 12,
+  "zapisujici_neoverene": [
+   "usp_Inv_AccountingExport_Insert",
+   "usp_Inv_AccountingExport_MonthClose",
+   "usp_Inv_CreditNote_Recalc",
+   "usp_Inv_ExchangeRate_Approve",
+   "usp_Inv_ExchangeRate_Insert",
+   "usp_Inv_Invoice_Confirm",
+   "usp_Inv_Invoice_Hourly",
+   "usp_Inv_Invoice_Rebuild",
+   "usp_Inv_Invoice_Sync",
+   "usp_Inv_LedgerEntry_MonthClose",
+   "usp_Inv_VatRate_Dispatch",
+   "usp_Inv_YearClose"
+  ],
+  "zive_procedury": 18
+ },
+ "pripravenost": {
+  "poradi": 3,
+  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
+  "prispevky": {
+   "bonus_dead": 0.9,
+   "bonus_readonly": 3.3,
+   "data_size": -7.3,
+   "dynamic_sql": -10.0,
+   "external_calls": -5.6,
+   "foreign_reads": -5.5,
+   "foreign_writes": -2.2,
+   "inbound_reads": -0.0,
+   "inbound_writes": -0.7
+  },
+  "skore": 73.0,
+  "slozky": {
+   "bonus_dead": 0.182,
+   "bonus_readonly": 0.333,
+   "data_size": 0.735,
+   "dynamic_sql": 1.0,
+   "external_calls": 0.556,
+   "foreign_reads": 0.547,
+   "foreign_writes": 0.087,
+   "inbound_reads": 0.0,
+   "inbound_writes": 0.045
+  }
+ },
+ "procedury": [
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_AccountingExport_Insert",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 58,
+   "zapisuje": [
+    "AccountingExport",
+    "InvoiceItem"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_AccountingExport_List",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 9167,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_AccountingExport_MonthClose",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 42,
+   "zapisuje": [
+    "InvoiceItem",
+    "LedgerEntry",
+    "VatRate"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_CreditNote_Recalc",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 13657,
+   "zapisuje": [
+    "CreditNote"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_ExchangeRate_Approve",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 12701,
+   "zapisuje": [
+    "CreditNote",
+    "ExchangeRate"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_ExchangeRate_Insert",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 298,
+   "zapisuje": [
+    "ExchangeRate"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_ExchangeRate_List",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 5065,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_Check",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 99,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_Confirm",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 69,
+   "zapisuje": [
+    "CreditNote",
+    "LedgerEntry"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_Get",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2852,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_GetDetail",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 469,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_Hourly",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 4032,
+   "zapisuje": [
+    "CreditNote"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_Rebuild",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 22,
+   "zapisuje": [
+    "AccountingExport",
+    "ExchangeRate"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_Invoice_Sync",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 23085,
+   "zapisuje": [
+    "ExchangeRate",
+    "Invoice",
+    "InvoiceItem"
+   ],
+   "zapisuje_cizi": [
+    "Invoice"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_LedgerEntry_Find",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 14493,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_LedgerEntry_MonthClose",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1008,
+   "zapisuje": [
+    "ExchangeRate",
+    "Invoice"
+   ],
+   "zapisuje_cizi": [
+    "Invoice"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_LedgerEntry_Rebuild",
+   "pokryti": "chybi",
+   "stav": "mrtvá",
+   "volani_6_tydnu": 0,
+   "zapisuje": [
+    "Invoice",
+    "LedgerEntry"
+   ],
+   "zapisuje_cizi": [
+    "Invoice"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_VatRate_Dispatch",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 312,
+   "zapisuje": [
+    "CreditNote",
+    "VatRate"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Inv_YearClose",
+   "pokryti": "chybi",
+   "stav": "mimo okno měření",
+   "volani_6_tydnu": 0,
+   "zapisuje": [
+    "AccountingExport",
+    "LedgerEntry"
+   ],
+   "zapisuje_cizi": []
+  }
+ ],
+ "pruh_core": {
+  "brana": {
+   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
+   "pr": "nevzniká"
+  },
+  "chybi_k_dalsimu_stavu": [
+   "doména má vlastnický tým (vlastník není určen)"
+  ],
+  "popis": "zavřený",
+  "pravidla": [
+   {
+    "detail": "vlastník není určen",
+    "id": "R1",
+    "pravidlo": "doména má vlastnický tým",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "ano",
+    "id": "R2",
+    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+    "pro": "jen_draft_pr",
+    "splneno": true
+   },
+   {
+    "detail": "0 z 18 (0 %)",
+    "id": "R3",
+    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "chybí 12: usp_Inv_AccountingExport_Insert, usp_Inv_AccountingExport_MonthClose, usp_Inv_CreditNote_Recalc, usp_Inv_ExchangeRate_Approve, usp_Inv_ExchangeRate_Insert, usp_Inv_Invoice_Confirm …",
+    "id": "R4",
+    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "usp_Inv_Invoice_Hourly, usp_Inv_YearClose",
+    "id": "R5",
+    "pravidlo": "blokujících slepých míst ≤ 0",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   }
+  ],
+  "stav": "zavreny"
+ },
+ "schema": "mapa-monolitu/dukazy@1",
+ "slepa_mista": [
+  {
+   "blokujici": true,
+   "objekt": "usp_Inv_Invoice_Hourly",
+   "popis": "zápis do Accounting.dbo.Invoice_Archive (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": true,
+   "objekt": "usp_Inv_YearClose",
+   "popis": "zápis do Accounting.dbo.YearBalance (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_AccountingExport_MonthClose",
+   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: LedgerEntry (jen v okně měření)",
+   "typ": "dynamicke_sql_slepe"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_ExchangeRate_Approve",
+   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: CreditNote (jen v okně měření)",
+   "typ": "dynamicke_sql_slepe"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_Invoice_Sync",
+   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: ExchangeRate (jen v okně měření)",
+   "typ": "dynamicke_sql_slepe"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_AccountingExport_MonthClose",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_Invoice_Confirm",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_Invoice_Hourly",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_Invoice_Rebuild",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_Invoice_Sync",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_LedgerEntry_MonthClose",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Inv_VatRate_Dispatch",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  }
+ ],
+ "snimek": {
+  "datum": "2026-10-31",
+  "platne_do": "2026-11-30",
+  "verze_politiky": 1,
+  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
+ },
+ "tabulky": [
+  "AccountingExport",
+  "CreditNote",
+  "ExchangeRate",
+  "InvoiceItem",
+  "LedgerEntry",
+  "VatRate"
+ ],
+ "vlastnik": null
+}

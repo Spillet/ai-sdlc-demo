@@ -1,0 +1,192 @@
+{
+ "domena": "D:Product_bak2019",
+ "nazev": null,
+ "objekty": [
+  "Product_bak2019",
+  "fn_OldPriceCalc",
+  "sp_Test_Order",
+  "usp_Migr2019_Customer",
+  "usp_Old_InvoicePrint",
+  "usp_Product_Bak_Restore",
+  "usp_Tmp_Recalc"
+ ],
+ "pokryti": {
+  "chybi": 0,
+  "navrh": 0,
+  "overene_pokryti": 0.0,
+  "overeno": 0,
+  "zapisujici": 0,
+  "zapisujici_neoverene": [],
+  "zive_procedury": 0
+ },
+ "pripravenost": {
+  "poradi": null,
+  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
+  "prispevky": {
+   "bonus_dead": 5.0,
+   "bonus_readonly": 0.0,
+   "data_size": -3.9,
+   "dynamic_sql": -0.0,
+   "external_calls": -0.0,
+   "foreign_reads": -0.0,
+   "foreign_writes": -0.0,
+   "inbound_reads": -0.0,
+   "inbound_writes": -0.0
+  },
+  "skore": 100.0,
+  "slozky": {
+   "bonus_dead": 1.0,
+   "bonus_readonly": 0.0,
+   "data_size": 0.389,
+   "dynamic_sql": 0.0,
+   "external_calls": 0.0,
+   "foreign_reads": 0.0,
+   "foreign_writes": 0.0,
+   "inbound_reads": 0.0,
+   "inbound_writes": 0.0
+  }
+ },
+ "procedury": [
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "sp_Test_Order",
+   "pokryti": "chybi",
+   "stav": "mrtvá",
+   "volani_6_tydnu": 0,
+   "zapisuje": [
+    "Customer",
+    "Product_bak2019"
+   ],
+   "zapisuje_cizi": [
+    "Customer"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Migr2019_Customer",
+   "pokryti": "chybi",
+   "stav": "mrtvá",
+   "volani_6_tydnu": 0,
+   "zapisuje": [
+    "Product_bak2019",
+    "StockLevel"
+   ],
+   "zapisuje_cizi": [
+    "StockLevel"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Old_InvoicePrint",
+   "pokryti": "chybi",
+   "stav": "mrtvá",
+   "volani_6_tydnu": 0,
+   "zapisuje": [
+    "Product_bak2019"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Product_Bak_Restore",
+   "pokryti": "chybi",
+   "stav": "mrtvá",
+   "volani_6_tydnu": 0,
+   "zapisuje": [
+    "Product_bak2019"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Tmp_Recalc",
+   "pokryti": "chybi",
+   "stav": "mrtvá",
+   "volani_6_tydnu": 0,
+   "zapisuje": [
+    "Orders",
+    "Product_bak2019"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  }
+ ],
+ "pruh_core": {
+  "brana": {
+   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
+   "pr": "nevzniká"
+  },
+  "chybi_k_dalsimu_stavu": [
+   "doména má vlastnický tým (vlastník není určen)",
+   "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+  ],
+  "popis": "zavřený",
+  "pravidla": [
+   {
+    "detail": "vlastník není určen",
+    "id": "R1",
+    "pravidlo": "doména má vlastnický tým",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
+    "id": "R2",
+    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "0 z 0 (0 %)",
+    "id": "R3",
+    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "ano",
+    "id": "R4",
+    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": true
+   },
+   {
+    "detail": "žádné",
+    "id": "R5",
+    "pravidlo": "blokujících slepých míst ≤ 0",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": true
+   }
+  ],
+  "stav": "zavreny"
+ },
+ "schema": "mapa-monolitu/dukazy@1",
+ "slepa_mista": [],
+ "snimek": {
+  "datum": "2026-10-31",
+  "platne_do": "2026-11-30",
+  "verze_politiky": 1,
+  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
+ },
+ "tabulky": [
+  "Product_bak2019"
+ ],
+ "vlastnik": null
+}

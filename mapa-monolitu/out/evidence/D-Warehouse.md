@@ -1,0 +1,111 @@
+# Balíček důkazů: D:Warehouse
+
+Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `3a31a99461f1…`). Strojová verze: `D-Warehouse.json` (schéma `mapa-monolitu/dukazy@1`).
+
+## Pruh core: **zavřený**
+
+- Kdo spustí agenta: nikdo; intake odpoví, co chybí
+- PR: nevzniká
+- Kdo sloučí: jen vlastník ručně mimo AI pipeline (pokud existuje)
+- Vlastník: neurčen
+
+| Pravidlo | Pro stav | Splněno | Detail |
+|---|---|---|---|
+| R1 doména má vlastnický tým | jen draft PR | **ne** | vlastník není určen |
+| R2 doména je kandidát na vyjmutí (ne úklid, ne malý shluk) | jen draft PR | ano | ano |
+| R3 ověřené pokrytí živých procedur ≥ 80 % | otevřený s vlastníkem | **ne** | 0 z 41 (0 %) |
+| R4 všechny zapisující procedury mají zelený charakterizační test | otevřený s vlastníkem | **ne** | chybí 27: spSklad_InventoryCount_Cancel, spSklad_InventoryCount_Merge, spSklad_InventoryCount_Nightly, spSklad_StockLevel_Close, spSklad_StockLevel_Delete, spSklad_StockLevel_Save … |
+| R5 blokujících slepých míst ≤ 0 | otevřený s vlastníkem | **ne** | usp_Import_Stock |
+
+**Co chybí k dalšímu stavu:**
+
+- doména má vlastnický tým (vlastník není určen)
+
+## Připravenost k vyjmutí
+
+Skóre 69.5, pořadí 8. Skóre řadí domény k vyjmutí, stav pruhu neurčuje.
+
+## Pokrytí charakterizačními testy
+
+Živých procedur 41: ověřeno 0, jen návrh 0, chybí 41. Zapisujících 27, z toho bez ověřeného testu 27.
+
+Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh pruh neotevře.
+
+| Procedura | Stav | Golden master | tSQLt | Zapisuje | Volání / 6 týdnů |
+|---|---|---|---|---|---:|
+| `spSklad_InventoryCount_Cancel` | živá | – | – | **StockLevel**, **StockReservation** | 19 428 |
+| `spSklad_InventoryCount_Check` | živá | – | – | – | 27 383 |
+| `spSklad_InventoryCount_Merge` | živá | – | – | InventoryCount | 4 029 |
+| `spSklad_InventoryCount_Nightly` | živá | – | – | InventoryCountItem, Location, **Product** | 2 |
+| `spSklad_Location_Get` | živá | – | – | – | 45 123 |
+| `spSklad_Location_Update` | mrtvá | – | – | Location | 0 |
+| `spSklad_StockLevel_Close` | živá | – | – | **StockLevel** | 8 152 |
+| `spSklad_StockLevel_Delete` | živá | – | – | Location, **StockLevel** | 899 |
+| `spSklad_StockLevel_Get` | živá | – | – | – | 1 |
+| `spSklad_StockLevel_GetByCode` | živá | – | – | – | 1 |
+| `spSklad_StockLevel_List` | živá | – | – | – | 18 271 |
+| `spSklad_StockLevel_Overview` | živá | – | – | – | 566 |
+| `spSklad_StockLevel_Save` | živá | – | – | **Product**, **StockLevel** | 3 653 |
+| `spSklad_StockLevel_Update` | živá | – | – | **StockLevel** | 6 177 |
+| `spSklad_StockMovement_Update` | živá | – | – | StockMovement | 32 530 |
+| `spSklad_StockReservation_Export` | živá | – | – | PurchaseOrder, StockMovement | 4 032 |
+| `spSklad_Warehouse_Approve` | živá | – | – | StockMovement, Warehouse | 8 923 |
+| `spSklad_Warehouse_Cancel` | mrtvá | – | – | **Orders**, **StockLevel**, Warehouse | 0 |
+| `spSklad_Warehouse_Check` | živá | – | – | – | 2 741 |
+| `spSklad_Warehouse_Delete` | živá | – | – | StockMovement, Warehouse | 3 217 |
+| `spSklad_Warehouse_Export` | živá | – | – | InventoryCountItem, Location, **Product** | 2 |
+| `spSklad_Warehouse_GetByCode` | živá | – | – | – | 715 |
+| `spSklad_Warehouse_Import` | živá | – | – | PurchaseOrder, Warehouse | 14 622 |
+| `spSklad_Warehouse_Overview` | živá | – | – | – | 1 |
+| `spSklad_Warehouse_Process` | mrtvá | – | – | PurchaseOrder, **StockLevel**, **StockReservation** | 0 |
+| `spSklad_Warehouse_Save` | živá | – | – | Warehouse | 6 974 |
+| `spSklad_Warehouse_SetStatus` | živá | – | – | InventoryCountItem, Warehouse | 27 941 |
+| `usp_Import_Product` | mrtvá | – | – | ImportPrice | 0 |
+| `usp_Import_Stock` | živá | – | – | ImportPrice, **StockLevel** | 1 008 |
+| `usp_Migr2019_Product` | mrtvá | – | – | ImportPrice | 0 |
+| `usp_Old_CustomerMerge` | mrtvá | – | – | ImportStock, **Product** | 0 |
+| `usp_Po_GoodsReceiptItem_Close` | živá | – | – | GoodsReceiptItem | 2 669 |
+| `usp_Po_GoodsReceipt_Get` | živá | – | – | – | 197 |
+| `usp_Po_GoodsReceipt_GetDetail` | živá | – | – | – | 9 369 |
+| `usp_Po_GoodsReceipt_Sync` | živá | – | – | **Product**, PurchaseOrder, SupplierProduct | 26 501 |
+| `usp_Po_PurchaseOrderItem_Delete` | živá | – | – | **Product**, PurchaseOrderItem, Supplier | 2 820 |
+| `usp_Po_PurchaseOrderItem_Insert` | živá | – | – | **Product**, PurchaseOrderItem | 4 064 |
+| `usp_Po_PurchaseOrder_List` | živá | – | – | – | 8 031 |
+| `usp_Po_SupplierProduct_Delete` | živá | – | – | GoodsReceipt, **Product**, SupplierProduct | 23 461 |
+| `usp_Po_SupplierProduct_GetDetail` | živá | – | – | – | 15 146 |
+| `usp_Po_Supplier_Cancel` | živá | – | – | PurchaseOrder, **StockLevel**, SupplierProduct | 317 |
+| `usp_Po_Supplier_Close` | živá | – | – | Supplier, SupplierProduct | 31 058 |
+| `usp_Po_Supplier_Dispatch` | živá | – | – | PurchaseOrder, Supplier | 2 178 |
+| `usp_Po_Supplier_GetDetail` | živá | – | – | – | 17 973 |
+| `usp_Po_Supplier_Hourly` | živá | – | – | PurchaseOrder, **StockLevel**, SupplierProduct | 4 032 |
+| `usp_Po_Supplier_Recalc` | živá | – | – | Supplier | 758 |
+| `usp_Po_Supplier_SetStatus` | živá | – | – | PurchaseOrderItem, Supplier | 18 212 |
+
+## Slepá místa
+
+| Objekt | Typ | Blokuje otevření | Popis |
+|---|---|---|---|
+| `usp_Import_Stock` | dynamicke_sql_slepe | **ano** | jméno objektu se skládá za běhu a běh žádný cíl nezachytil |
+| `spSklad_Warehouse_SetStatus` | dynamicke_sql_z_literalu | ne | dynamické SQL, cíle jdou vyčíst z literálů |
+| `spSklad_Warehouse_Delete` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `spSklad_InventoryCount_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_InventoryCount_Check` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_InventoryCount_Nightly` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
+| `spSklad_StockLevel_Close` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_StockLevel_Delete` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_StockReservation_Export` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
+| `spSklad_Warehouse_Approve` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_Warehouse_Delete` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_Warehouse_Export` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
+| `spSklad_Warehouse_SetStatus` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Import_Stock` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Po_GoodsReceipt_Get` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_GoodsReceipt_GetDetail` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_GoodsReceipt_Sync` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_Supplier_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_Supplier_Close` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_Supplier_Dispatch` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_Supplier_Hourly` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Po_Supplier_SetStatus` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+
+Tučně v tabulce procedur = zápis do tabulky jiné domény nebo sdílené tabulky.

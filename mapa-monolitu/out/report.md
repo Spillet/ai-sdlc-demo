@@ -1,6 +1,6 @@
 # Mapa monolitu: výsledky
 
-Vygenerováno `analyze.py` (0.3 s). Syntetická DB fiktivního e-shopu, žádná reálná data.
+Vygenerováno `analyze.py` (0.1 s). Syntetická DB fiktivního e-shopu, žádná reálná data.
 
 ## Rozsah
 
@@ -106,3 +106,88 @@ Pravá doména je to, co generátor zamýšlel. U skutečné DB žádná pravda 
 | velikost dat | −10 |
 | čtecí cesty (levné ověření) | +10 |
 | mrtvý kód k vypnutí | +5 |
+
+## Citlivost pořadí na váhy (±20 %)
+
+Váhy jsou ruční předpoklad. Tady je, jak moc na nich pořadí visí. Výchozí pořadí: 1. D:Claim, 2. D:Category, 3. D:CreditNote, 4. D:GatewayLog, 5. D:RptDailySales.
+
+### Jedna váha po druhé
+
+| Váha | Změna | 1. místo | 2. místo | Rozdíl 1–2 (b.) | Změněných pozic | Top 3 beze změny |
+|---|---:|---|---|---:|---:|---|
+| zápisy do cizích tabulek | -20 % | D:Claim | D:Category | 1.49 | 5 | **ne** |
+| zápisy do cizích tabulek | +20 % | D:Claim | D:Category | 1.72 | 2 | ano |
+| cizí zápisy do tabulek domény | -20 % | D:Claim | D:Category | 1.48 | 0 | ano |
+| cizí zápisy do tabulek domény | +20 % | D:Claim | D:Category | 1.74 | 2 | ano |
+| cizí čtení tabulek domény | -20 % | D:Claim | D:Category | 1.26 | 5 | **ne** |
+| cizí čtení tabulek domény | +20 % | D:Claim | D:Category | 1.96 | 2 | ano |
+| čtení cizích a sdílených tabulek | -20 % | D:Claim | D:Category | 1.67 | 2 | ano |
+| čtení cizích a sdílených tabulek | +20 % | D:Claim | D:Category | 1.55 | 0 | ano |
+| dynamické SQL | -20 % | D:Claim | D:Category | 1.70 | 2 | ano |
+| dynamické SQL | +20 % | D:Claim | D:Category | 1.52 | 5 | **ne** |
+| volání zvenku | -20 % | D:Claim | D:Category | 1.20 | 4 | **ne** |
+| volání zvenku | +20 % | D:Claim | D:Category | 2.02 | 0 | ano |
+| velikost dat | -20 % | D:Claim | D:Category | 1.70 | 2 | ano |
+| velikost dat | +20 % | D:Claim | D:Category | 1.52 | 0 | ano |
+| čtecí cesty (levné ověření) | -20 % | D:Claim | D:Category | 2.09 | 2 | **ne** |
+| čtecí cesty (levné ověření) | +20 % | D:Claim | D:Category | 1.13 | 2 | ano |
+| mrtvý kód k vypnutí | -20 % | D:Claim | D:Category | 1.57 | 2 | **ne** |
+| mrtvý kód k vypnutí | +20 % | D:Claim | D:Category | 1.66 | 0 | ano |
+
+### Všechny váhy najednou, náhodně v pásmu ±20 % (2000 kombinací, semínko 7)
+
+| Doména | Podíl běhů na 1. místě | Rozsah pořadí |
+|---|---:|---|
+| D:Claim | 100.0 % | 1.–1. |
+| D:Category | 0.0 % | 2.–2. |
+| D:CreditNote | 0.0 % | 3.–7. |
+| D:GatewayLog | 0.0 % | 3.–7. |
+| D:RptDailySales | 0.0 % | 3.–8. |
+| D:CustomerAddress | 0.0 % | 3.–7. |
+| D:PriceList | 0.0 % | 3.–7. |
+| D:Warehouse | 0.0 % | 6.–8. |
+| D:ShipmentTracking | 0.0 % | 9.–9. |
+| D:OrderNote | 0.0 % | 10.–10. |
+
+D:Claim je před D:Category v 100.0 % kombinací.
+
+### Bod zvratu mezi 1. a 2. místem
+
+Rozdíl D:Claim − D:Category je 1.61 b. O kolik by se musela změnit jediná váha, aby se pořadí prohodilo:
+
+| Váha | Potřebná změna |
+|---|---:|
+| čtecí cesty (levné ověření) | +66 % |
+| volání zvenku | -78 % |
+| cizí čtení tabulek domény | -92 % |
+| cizí zápisy do tabulek domény | -256 % (váha by byla záporná) |
+| zápisy do cizích tabulek | -280 % (váha by byla záporná) |
+| dynamické SQL | +350 % |
+| velikost dat | +350 % |
+| čtení cizích a sdílených tabulek | +537 % |
+| mrtvý kód k vypnutí | -716 % (váha by byla záporná) |
+
+## Pruh core po doménách
+
+Stav určují pravidla v `mapa/evidence.py` a vstup `politika/pruh-core.json` (vlastníci, prahy), ne skóre. Podrobnosti a co chybí: `out/evidence/<doména>.md`, pro bránu `out/evidence/<doména>.json` a `index.json`.
+
+| Doména | Pruh core | Vlastník | Ověřeno / návrh / živé | Zapisující bez ověření | Blokující slepá místa | Co chybí k dalšímu stavu |
+|---|---|---|---|---:|---|---|
+| D:Claim (Reklamace) | **jen draft PR** | Poprodej (fiktivní) | 0 / 3 / 18 | 13 | – | ověřené pokrytí živých procedur ≥ 80 % (0 z 18 (0 %)); všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …) |
+| D:Category (Katalog) | **jen draft PR** | Katalog a obsah (fiktivní) | 0 / 0 / 25 | 13 | usp_Product_ProductAttribute_Cleanup | ověřené pokrytí živých procedur ≥ 80 % (0 z 25 (0 %)); všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …); blokujících slepých míst ≤ 0 (usp_Product_ProductAttribute_Cleanup) |
+| D:CreditNote | **zavřený** | – | 0 / 0 / 18 | 12 | usp_Inv_Invoice_Hourly, usp_Inv_YearClose | doména má vlastnický tým (vlastník není určen) |
+| D:GatewayLog | **zavřený** | – | 0 / 0 / 18 | 15 | usp_Pay_Payment_Cleanup | doména má vlastnický tým (vlastník není určen) |
+| D:RptDailySales | **zavřený** | – | 0 / 0 / 21 | 19 | usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka … (21) | doména má vlastnický tým (vlastník není určen) |
+| D:CustomerAddress | **zavřený** | – | 0 / 0 / 19 | 15 | usp_Cust_Customer_Nightly | doména má vlastnický tým (vlastník není určen) |
+| D:PriceList | **zavřený** | – | 0 / 0 / 17 | 12 | usp_Price_PriceHistory_MonthClose | doména má vlastnický tým (vlastník není určen) |
+| D:Warehouse | **zavřený** | – | 0 / 0 / 41 | 27 | usp_Import_Stock | doména má vlastnický tým (vlastník není určen) |
+| D:ShipmentTracking | **zavřený** | – | 0 / 0 / 23 | 19 | – | doména má vlastnický tým (vlastník není určen) |
+| D:OrderNote | **zavřený** | – | 0 / 0 / 38 | 28 | usp_Order_Export, usp_Order_OrderEvent_MonthClose, usp_Order_OrderNote_Nightly, usp_Order_OrderStatusHistory_Archive | doména má vlastnický tým (vlastník není určen) |
+| D:SysParam | **zavřený** | – | 0 / 0 / 2 | 2 | usp_AuditLog_Purge | doména má vlastnický tým (vlastník není určen); doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény) |
+| D:Users | **zavřený** | – | 0 / 0 / 2 | 1 | – | doména má vlastnický tým (vlastník není určen); doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény) |
+| D:Translation | **zavřený** | – | 0 / 0 / 1 | 0 | – | doména má vlastnický tým (vlastník není určen); doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény) |
+| D:Product_bak2019 | **zavřený** | – | 0 / 0 / 0 | 0 | – | doména má vlastnický tým (vlastník není určen); doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit) |
+| D:TmpRecalc | **zavřený** | – | 0 / 0 / 0 | 0 | – | doména má vlastnický tým (vlastník není určen); doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit) |
+| D:ImportProduct | **zavřený** | – | 0 / 0 / 0 | 0 | – | doména má vlastnický tým (vlastník není určen); doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit) |
+| D:OldOrders | **zavřený** | – | 0 / 0 / 0 | 0 | – | doména má vlastnický tým (vlastník není určen); doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit) |
+| D:X_Migr_Customer | **zavřený** | – | 0 / 0 / 0 | 0 | – | doména má vlastnický tým (vlastník není určen); doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit) |

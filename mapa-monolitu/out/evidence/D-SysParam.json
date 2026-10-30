@@ -1,0 +1,161 @@
+{
+ "domena": "D:SysParam",
+ "nazev": null,
+ "objekty": [
+  "SysParam",
+  "usp_AuditLog_Purge",
+  "usp_SysParam_Set"
+ ],
+ "pokryti": {
+  "chybi": 2,
+  "navrh": 0,
+  "overene_pokryti": 0.0,
+  "overeno": 0,
+  "zapisujici": 2,
+  "zapisujici_neoverene": [
+   "usp_AuditLog_Purge",
+   "usp_SysParam_Set"
+  ],
+  "zive_procedury": 2
+ },
+ "pripravenost": {
+  "poradi": null,
+  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
+  "prispevky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 0.0,
+   "data_size": -3.2,
+   "dynamic_sql": -0.0,
+   "external_calls": -6.7,
+   "foreign_reads": -3.3,
+   "foreign_writes": -12.5,
+   "inbound_reads": -8.2,
+   "inbound_writes": -0.0
+  },
+  "skore": 66.2,
+  "slozky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 0.0,
+   "data_size": 0.317,
+   "dynamic_sql": 0.0,
+   "external_calls": 0.667,
+   "foreign_reads": 0.333,
+   "foreign_writes": 0.5,
+   "inbound_reads": 0.818,
+   "inbound_writes": 0.0
+  }
+ },
+ "procedury": [
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_AuditLog_Purge",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 42,
+   "zapisuje": [
+    "AuditLog"
+   ],
+   "zapisuje_cizi": [
+    "AuditLog"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_SysParam_Set",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 6839,
+   "zapisuje": [
+    "SysParam"
+   ],
+   "zapisuje_cizi": []
+  }
+ ],
+ "pruh_core": {
+  "brana": {
+   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
+   "pr": "nevzniká"
+  },
+  "chybi_k_dalsimu_stavu": [
+   "doména má vlastnický tým (vlastník není určen)",
+   "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+  ],
+  "popis": "zavřený",
+  "pravidla": [
+   {
+    "detail": "vlastník není určen",
+    "id": "R1",
+    "pravidlo": "doména má vlastnický tým",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "malý shluk: posoudit jako součást sousední domény",
+    "id": "R2",
+    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "0 z 2 (0 %)",
+    "id": "R3",
+    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "chybí 2: usp_AuditLog_Purge, usp_SysParam_Set",
+    "id": "R4",
+    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "usp_AuditLog_Purge",
+    "id": "R5",
+    "pravidlo": "blokujících slepých míst ≤ 0",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   }
+  ],
+  "stav": "zavreny"
+ },
+ "schema": "mapa-monolitu/dukazy@1",
+ "slepa_mista": [
+  {
+   "blokujici": true,
+   "objekt": "usp_AuditLog_Purge",
+   "popis": "zápis do Archive.dbo.AuditLog_Archive (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_AuditLog_Purge",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_SysParam_Set",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  }
+ ],
+ "snimek": {
+  "datum": "2026-10-31",
+  "platne_do": "2026-11-30",
+  "verze_politiky": 1,
+  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
+ },
+ "tabulky": [
+  "SysParam"
+ ],
+ "vlastnik": null
+}

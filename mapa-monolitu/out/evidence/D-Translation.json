@@ -1,0 +1,127 @@
+{
+ "domena": "D:Translation",
+ "nazev": null,
+ "objekty": [
+  "Translation",
+  "usp_Translation_Get"
+ ],
+ "pokryti": {
+  "chybi": 1,
+  "navrh": 0,
+  "overene_pokryti": 0.0,
+  "overeno": 0,
+  "zapisujici": 0,
+  "zapisujici_neoverene": [],
+  "zive_procedury": 1
+ },
+ "pripravenost": {
+  "poradi": null,
+  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
+  "prispevky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 10.0,
+   "data_size": -1.1,
+   "dynamic_sql": -0.0,
+   "external_calls": -6.7,
+   "foreign_reads": -0.0,
+   "foreign_writes": -0.0,
+   "inbound_reads": -5.0,
+   "inbound_writes": -0.0
+  },
+  "skore": 97.2,
+  "slozky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 1.0,
+   "data_size": 0.112,
+   "dynamic_sql": 0.0,
+   "external_calls": 0.667,
+   "foreign_reads": 0.0,
+   "foreign_writes": 0.0,
+   "inbound_reads": 0.5,
+   "inbound_writes": 0.0
+  }
+ },
+ "procedury": [
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Translation_Get",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 38149,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  }
+ ],
+ "pruh_core": {
+  "brana": {
+   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
+   "pr": "nevzniká"
+  },
+  "chybi_k_dalsimu_stavu": [
+   "doména má vlastnický tým (vlastník není určen)",
+   "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+  ],
+  "popis": "zavřený",
+  "pravidla": [
+   {
+    "detail": "vlastník není určen",
+    "id": "R1",
+    "pravidlo": "doména má vlastnický tým",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "malý shluk: posoudit jako součást sousední domény",
+    "id": "R2",
+    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "0 z 1 (0 %)",
+    "id": "R3",
+    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "ano",
+    "id": "R4",
+    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": true
+   },
+   {
+    "detail": "žádné",
+    "id": "R5",
+    "pravidlo": "blokujících slepých míst ≤ 0",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": true
+   }
+  ],
+  "stav": "zavreny"
+ },
+ "schema": "mapa-monolitu/dukazy@1",
+ "slepa_mista": [
+  {
+   "blokujici": false,
+   "objekt": "usp_Translation_Get",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  }
+ ],
+ "snimek": {
+  "datum": "2026-10-31",
+  "platne_do": "2026-11-30",
+  "verze_politiky": 1,
+  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
+ },
+ "tabulky": [
+  "Translation"
+ ],
+ "vlastnik": null
+}

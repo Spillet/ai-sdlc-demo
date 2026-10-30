@@ -1,0 +1,479 @@
+{
+ "domena": "D:GatewayLog",
+ "nazev": null,
+ "objekty": [
+  "GatewayLog",
+  "Installment",
+  "PaymentMethod",
+  "PaymentTransaction",
+  "Refund",
+  "fn_PaymentIsSettled",
+  "usp_Pay_GatewayLog_Merge",
+  "usp_Pay_GatewayLog_Recalc",
+  "usp_Pay_GatewayLog_Update",
+  "usp_Pay_Installment_Delete",
+  "usp_Pay_Installment_Save",
+  "usp_Pay_PaymentMethod_Close",
+  "usp_Pay_PaymentMethod_SetStatus",
+  "usp_Pay_PaymentTransaction_Dispatch",
+  "usp_Pay_PaymentTransaction_Sync",
+  "usp_Pay_PaymentTransaction_Update",
+  "usp_Pay_Payment_Cancel",
+  "usp_Pay_Payment_Cleanup",
+  "usp_Pay_Payment_Get",
+  "usp_Pay_Payment_GetByCode",
+  "usp_Pay_Payment_List",
+  "usp_Pay_Payment_Search",
+  "usp_Pay_Refund_Insert",
+  "usp_Refund_Create"
+ ],
+ "pokryti": {
+  "chybi": 18,
+  "navrh": 0,
+  "overene_pokryti": 0.0,
+  "overeno": 0,
+  "zapisujici": 15,
+  "zapisujici_neoverene": [
+   "usp_Pay_GatewayLog_Merge",
+   "usp_Pay_GatewayLog_Recalc",
+   "usp_Pay_GatewayLog_Update",
+   "usp_Pay_Installment_Delete",
+   "usp_Pay_Installment_Save",
+   "usp_Pay_PaymentMethod_Close",
+   "usp_Pay_PaymentMethod_SetStatus",
+   "usp_Pay_PaymentTransaction_Dispatch",
+   "usp_Pay_PaymentTransaction_Sync",
+   "usp_Pay_PaymentTransaction_Update",
+   "usp_Pay_Payment_Cancel",
+   "usp_Pay_Payment_Cleanup",
+   "usp_Pay_Payment_Search",
+   "usp_Pay_Refund_Insert",
+   "usp_Refund_Create"
+  ],
+  "zive_procedury": 18
+ },
+ "pripravenost": {
+  "poradi": 4,
+  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
+  "prispevky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 1.6,
+   "data_size": -7.8,
+   "dynamic_sql": -3.2,
+   "external_calls": -7.7,
+   "foreign_reads": -5.5,
+   "foreign_writes": -4.5,
+   "inbound_reads": -0.0,
+   "inbound_writes": -0.0
+  },
+  "skore": 72.9,
+  "slozky": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 0.158,
+   "data_size": 0.781,
+   "dynamic_sql": 0.316,
+   "external_calls": 0.772,
+   "foreign_reads": 0.554,
+   "foreign_writes": 0.179,
+   "inbound_reads": 0.0,
+   "inbound_writes": 0.0
+  }
+ },
+ "procedury": [
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_GatewayLog_Merge",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 20304,
+   "zapisuje": [
+    "GatewayLog",
+    "PaymentTransaction"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_GatewayLog_Recalc",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 16390,
+   "zapisuje": [
+    "GatewayLog",
+    "Refund"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_GatewayLog_Update",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 35518,
+   "zapisuje": [
+    "GatewayLog",
+    "Installment"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Installment_Delete",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2842,
+   "zapisuje": [
+    "Installment",
+    "Payment"
+   ],
+   "zapisuje_cizi": [
+    "Payment"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Installment_Save",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 101,
+   "zapisuje": [
+    "Installment"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_PaymentMethod_Close",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 2014,
+   "zapisuje": [
+    "Orders",
+    "PaymentMethod"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_PaymentMethod_SetStatus",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1386,
+   "zapisuje": [
+    "PaymentMethod"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_PaymentTransaction_Dispatch",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 1421,
+   "zapisuje": [
+    "PaymentTransaction",
+    "Refund"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_PaymentTransaction_Sync",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 4130,
+   "zapisuje": [
+    "GatewayLog",
+    "Orders",
+    "PaymentMethod"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_PaymentTransaction_Update",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 7696,
+   "zapisuje": [
+    "Orders",
+    "PaymentTransaction"
+   ],
+   "zapisuje_cizi": [
+    "Orders"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Payment_Cancel",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 260,
+   "zapisuje": [
+    "GatewayLog",
+    "Payment"
+   ],
+   "zapisuje_cizi": [
+    "Payment"
+   ]
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Payment_Cleanup",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 42,
+   "zapisuje": [
+    "GatewayLog",
+    "Installment",
+    "Refund"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Payment_Get",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 259,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Payment_GetByCode",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 5585,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Payment_List",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 8307,
+   "zapisuje": [],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Payment_Search",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 17925,
+   "zapisuje": [
+    "PaymentMethod"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Pay_Refund_Insert",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 22,
+   "zapisuje": [
+    "Refund"
+   ],
+   "zapisuje_cizi": []
+  },
+  {
+   "charakterizace": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "nazev": "usp_Refund_Create",
+   "pokryti": "chybi",
+   "stav": "živá",
+   "volani_6_tydnu": 19,
+   "zapisuje": [
+    "PaymentTransaction",
+    "Refund"
+   ],
+   "zapisuje_cizi": []
+  }
+ ],
+ "pruh_core": {
+  "brana": {
+   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
+   "pr": "nevzniká"
+  },
+  "chybi_k_dalsimu_stavu": [
+   "doména má vlastnický tým (vlastník není určen)"
+  ],
+  "popis": "zavřený",
+  "pravidla": [
+   {
+    "detail": "vlastník není určen",
+    "id": "R1",
+    "pravidlo": "doména má vlastnický tým",
+    "pro": "jen_draft_pr",
+    "splneno": false
+   },
+   {
+    "detail": "ano",
+    "id": "R2",
+    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+    "pro": "jen_draft_pr",
+    "splneno": true
+   },
+   {
+    "detail": "0 z 18 (0 %)",
+    "id": "R3",
+    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "chybí 15: usp_Pay_GatewayLog_Merge, usp_Pay_GatewayLog_Recalc, usp_Pay_GatewayLog_Update, usp_Pay_Installment_Delete, usp_Pay_Installment_Save, usp_Pay_PaymentMethod_Close …",
+    "id": "R4",
+    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   },
+   {
+    "detail": "usp_Pay_Payment_Cleanup",
+    "id": "R5",
+    "pravidlo": "blokujících slepých míst ≤ 0",
+    "pro": "otevreny_s_vlastnikem",
+    "splneno": false
+   }
+  ],
+  "stav": "zavreny"
+ },
+ "schema": "mapa-monolitu/dukazy@1",
+ "slepa_mista": [
+  {
+   "blokujici": true,
+   "objekt": "usp_Pay_Payment_Cleanup",
+   "popis": "zápis do Accounting.dbo.Payment_Archive (katalog nemá ID)",
+   "typ": "jina_databaze"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_Payment_Search",
+   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: PaymentMethod (jen v okně měření)",
+   "typ": "dynamicke_sql_slepe"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_GatewayLog_Update",
+   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_GatewayLog_Update",
+   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "typ": "volani_bez_schematu"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_Installment_Delete",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_PaymentTransaction_Dispatch",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_PaymentTransaction_Sync",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_Payment_Cancel",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_Payment_Cleanup",
+   "popis": "vstupní bod mimo katalog (agent)",
+   "typ": "vstup_mimo_katalog"
+  },
+  {
+   "blokujici": false,
+   "objekt": "usp_Pay_Payment_List",
+   "popis": "vstupní bod mimo katalog (client)",
+   "typ": "vstup_mimo_katalog"
+  }
+ ],
+ "snimek": {
+  "datum": "2026-10-31",
+  "platne_do": "2026-11-30",
+  "verze_politiky": 1,
+  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
+ },
+ "tabulky": [
+  "GatewayLog",
+  "Installment",
+  "PaymentMethod",
+  "PaymentTransaction",
+  "Refund"
+ ],
+ "vlastnik": null
+}
