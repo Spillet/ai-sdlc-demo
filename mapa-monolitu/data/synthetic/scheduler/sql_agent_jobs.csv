@@ -1,0 +1,51 @@
+job_name,step_id,step_name,subsystem,database_name,command,schedule,enabled
+KOMPAS - AuditLog Purge,1,run,TSQL,Kompas,EXEC dbo.usp_AuditLog_Purge,denně 02:00,1
+KOMPAS - Claim OverdueCheck,1,run,TSQL,Kompas,EXEC dbo.usp_Claim_OverdueCheck,denně 06:00,1
+KOMPAS - Product Category Nightly,1,run,TSQL,Kompas,"SET DEADLOCK_PRIORITY LOW;
+EXEC usp_Product_Category_Nightly;",1. den v měsíci 04:00,1
+KOMPAS - Product Brand Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Product_Brand_Cleanup,1. den v měsíci 04:00,1
+KOMPAS - Product ProductAttribute Cleanup,1,run,TSQL,Kompas,"SET DEADLOCK_PRIORITY LOW;
+EXEC usp_Product_ProductAttribute_Cleanup;",1. den v měsíci 04:00,1
+KOMPAS - Price PriceList MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Price_PriceList_MonthClose,denně 01:00,1
+KOMPAS - Price PriceHistory MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Price_PriceHistory_MonthClose,denně 01:00,1
+KOMPAS - Cust Customer MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Cust_Customer_MonthClose,denně 03:30,1
+KOMPAS - Cust CustomerContact MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Cust_CustomerContact_MonthClose,každou hodinu,1
+KOMPAS - Cust Customer Nightly,1,run,TSQL,Kompas,EXEC dbo.usp_Cust_Customer_Nightly,každou hodinu,1
+KOMPAS - Order CartItem Archive,1,run,TSQL,Kompas,EXEC dbo.usp_Order_CartItem_Archive,1. den v měsíci 04:00,1
+KOMPAS - Order OrderStatusHistory Archive,1,run,TSQL,Kompas,EXEC dbo.usp_Order_OrderStatusHistory_Archive,1. den v měsíci 04:00,1
+KOMPAS - Order OrderEvent MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Order_OrderEvent_MonthClose,denně 01:00,1
+KOMPAS - Order Export,1,run,TSQL,Kompas,EXEC dbo.usp_Order_Export,1. den v měsíci 04:00,1
+KOMPAS - Order CartItem Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Order_CartItem_Cleanup,denně 01:00,1
+KOMPAS - Order OrderItem Nightly,1,run,TSQL,Kompas,EXEC dbo.usp_Order_OrderItem_Nightly,každou hodinu,1
+KOMPAS - Order OrderNote Nightly,1,run,TSQL,Kompas,EXEC dbo.usp_Order_OrderNote_Nightly,denně 01:00,1
+KOMPAS - spSklad StockReservation Export,1,run,TSQL,Kompas,EXEC dbo.spSklad_StockReservation_Export,každých 15 min,1
+KOMPAS - spSklad Warehouse Export,1,run,TSQL,Kompas,"SET DEADLOCK_PRIORITY LOW;
+EXEC spSklad_Warehouse_Export;",1. den v měsíci 04:00,1
+KOMPAS - spSklad InventoryCount Nightly,1,run,TSQL,Kompas,EXEC dbo.spSklad_InventoryCount_Nightly,1. den v měsíci 04:00,1
+KOMPAS - Po Supplier Hourly,1,run,TSQL,Kompas,EXEC dbo.usp_Po_Supplier_Hourly,každých 15 min,1
+KOMPAS - Ship ShipmentItem Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Ship_ShipmentItem_Cleanup,denně 01:00,1
+KOMPAS - Ship DeliverySlot Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Ship_DeliverySlot_Cleanup,denně 01:00,1
+KOMPAS - Ship Shipment Nightly,1,run,TSQL,Kompas,EXEC dbo.usp_Ship_Shipment_Nightly,denně 03:30,1
+KOMPAS - Pay Payment Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Pay_Payment_Cleanup,denně 01:00,1
+KOMPAS - Inv LedgerEntry MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Inv_LedgerEntry_MonthClose,každou hodinu,1
+KOMPAS - Inv AccountingExport MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Inv_AccountingExport_MonthClose,denně 01:00,1
+KOMPAS - Inv Invoice Hourly,1,run,TSQL,Kompas,EXEC dbo.usp_Inv_Invoice_Hourly,každých 15 min,1
+KOMPAS - Claim ClaimStatusHistory Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Claim_ClaimStatusHistory_Cleanup,denně 03:30,1
+KOMPAS - Claim Claim Archive,1,run,TSQL,Kompas,"SET DEADLOCK_PRIORITY LOW;
+EXEC usp_Claim_Claim_Archive;",každých 15 min,1
+KOMPAS - Claim ClaimReason Hourly,1,run,TSQL,Kompas,EXEC dbo.usp_Claim_ClaimReason_Hourly,denně 03:30,1
+KOMPAS - Claim ClaimReason Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Claim_ClaimReason_Cleanup,denně 01:00,1
+KOMPAS - Rpt RptStockSnapshot MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Rpt_RptStockSnapshot_MonthClose,každých 15 min,1
+KOMPAS - Rpt Sales 2024 Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Rpt_Sales_2024_Cleanup,denně 01:00,1
+KOMPAS - Rpt Sales 2026 MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Rpt_Sales_2026_MonthClose,1. den v měsíci 04:00,1
+KOMPAS - Rpt RptStockSnapshot Cleanup,1,run,TSQL,Kompas,EXEC dbo.usp_Rpt_RptStockSnapshot_Cleanup,denně 03:30,1
+KOMPAS - Rpt RptDailySales Export,1,run,TSQL,Kompas,"SET DEADLOCK_PRIORITY LOW;
+EXEC usp_Rpt_RptDailySales_Export;",každých 15 min,1
+KOMPAS - Rpt RptDailySales MonthClose,1,run,TSQL,Kompas,EXEC dbo.usp_Rpt_RptDailySales_MonthClose,každou hodinu,1
+KOMPAS - Rpt RptDailySales Cleanup,1,run,TSQL,Kompas,"SET DEADLOCK_PRIORITY LOW;
+EXEC usp_Rpt_RptDailySales_Cleanup;",1. den v měsíci 04:00,1
+KOMPAS - Inv YearClose,1,run,TSQL,Kompas,EXEC dbo.usp_Inv_YearClose,ročně 2. 1. 01:00,1
+KOMPAS - Rpt Dispatch,1,run,TSQL,Kompas,EXEC dbo.usp_Rpt_Dispatch,každých 5 min,1
+KOMPAS - Import Stock,1,run,TSQL,Kompas,EXEC dbo.usp_Import_Stock,každou hodinu,1
+KOMPAS - Old Order Export,1,run,TSQL,Kompas,EXEC dbo.usp_Old_OrderExport,denně 05:00,0
+KOMPAS - Feed Heureka,1,ps,PowerShell,,"Invoke-Sqlcmd -Query ""EXEC dbo.usp_Rpt_Export_Heureka"" -ServerInstance KOMPAS-SQL01",každou hodinu,1

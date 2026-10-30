@@ -1,0 +1,34 @@
+parent_object,statement_sample,event_count
+dbo.usp_Claim_Search,SELECT TOP (500) * FROM dbo.Claim WHERE 1 = 1 ...,11069
+dbo.usp_Claim_Search,SELECT TOP (500) * FROM dbo.Customer WHERE 1 = 1 ...,9024
+dbo.usp_Claim_Search,SELECT TOP (500) * FROM dbo.Orders WHERE 1 = 1 ...,9871
+dbo.usp_Product_Product_Rebuild,UPDATE dbo.[Category] SET ModifiedAt = GETDATE() WHERE Status = 0,67839
+dbo.usp_Order_OrderNote_Check,SELECT TOP (500) * FROM dbo.Cart WHERE 1 = 1 ...,910
+dbo.usp_Order_Cart_Get,SELECT TOP (500) * FROM dbo.Cart WHERE 1 = 1 ...,1
+dbo.usp_Order_OrderEvent_Find,SELECT TOP (500) * FROM dbo.Cart WHERE 1 = 1 ...,91
+dbo.usp_Order_OrderEvent_Cancel,UPDATE dbo.[OrderNote] SET ModifiedAt = GETDATE() WHERE Status = 0,9
+dbo.spSklad_Warehouse_SetStatus,SELECT TOP (500) * FROM dbo.StockReservation WHERE 1 = 1 ...,22161
+dbo.usp_Ship_ShipmentTracking_Delete,UPDATE dbo.[ShipmentItem] SET ModifiedAt = GETDATE() WHERE Status = 0,635
+dbo.usp_Ship_Shipment_Save,SELECT TOP (500) * FROM dbo.ShipmentItem WHERE 1 = 1 ...,1048
+dbo.usp_Ship_Shipment_Nightly,UPDATE dbo.[ShipmentTracking] SET ModifiedAt = GETDATE() WHERE Status = 0,35
+dbo.usp_Pay_Payment_Search,UPDATE dbo.[PaymentMethod] SET ModifiedAt = GETDATE() WHERE Status = 0,11750
+dbo.usp_Inv_AccountingExport_MonthClose,UPDATE dbo.[LedgerEntry] SET ModifiedAt = GETDATE() WHERE Status = 0,9
+dbo.usp_Inv_Invoice_Sync,UPDATE dbo.[ExchangeRate] SET ModifiedAt = GETDATE() WHERE Status = 0,15161
+dbo.usp_Inv_Invoice_Update,UPDATE dbo.[ExchangeRate] SET ModifiedAt = GETDATE() WHERE Status = 0,70
+dbo.usp_Inv_ExchangeRate_Approve,UPDATE dbo.[CreditNote] SET ModifiedAt = GETDATE() WHERE Status = 0,4647
+dbo.usp_Claim_ClaimItem_GetByCode,SELECT TOP (500) * FROM dbo.ClaimReason WHERE 1 = 1 ...,311
+dbo.usp_Rpt_Customers_RptDailySales,SELECT TOP (500) * FROM dbo.Sales_2025 WHERE 1 = 1 ...,72
+dbo.usp_Rpt_Margin_Sales_2024,"INSERT INTO dbo.Sales_2025 (OrderId, Amount, Status, CreatedAt) SELECT o.OrderId, o.TotalAmount, 1, GETDATE() FROM dbo.Orders o WHERE YEAR(o.CreatedAt) = @y",5555
+dbo.usp_Rpt_Margin_Sales_2024,"INSERT INTO dbo.Sales_2026 (OrderId, Amount, Status, CreatedAt) SELECT o.OrderId, o.TotalAmount, 1, GETDATE() FROM dbo.Orders o WHERE YEAR(o.CreatedAt) = @y",4669
+dbo.usp_Rpt_Margin_RptDailySales,"INSERT INTO dbo.Sales_2025 (OrderId, Amount, Status, CreatedAt) SELECT o.OrderId, o.TotalAmount, 1, GETDATE() FROM dbo.Orders o WHERE YEAR(o.CreatedAt) = @y",28901
+dbo.usp_Rpt_Margin_RptDailySales,"INSERT INTO dbo.Sales_2026 (OrderId, Amount, Status, CreatedAt) SELECT o.OrderId, o.TotalAmount, 1, GETDATE() FROM dbo.Orders o WHERE YEAR(o.CreatedAt) = @y",35505
+dbo.usp_Rpt_RptDailySales_MonthClose,"INSERT INTO dbo.Sales_2025 (OrderId, Amount, Status, CreatedAt) SELECT o.OrderId, o.TotalAmount, 1, GETDATE() FROM dbo.Orders o WHERE YEAR(o.CreatedAt) = @y",974
+dbo.usp_Rpt_RptDailySales_MonthClose,"INSERT INTO dbo.Sales_2026 (OrderId, Amount, Status, CreatedAt) SELECT o.OrderId, o.TotalAmount, 1, GETDATE() FROM dbo.Orders o WHERE YEAR(o.CreatedAt) = @y",718
+dbo.usp_Rpt_RptDailySales_GetByCode,SELECT TOP (500) * FROM dbo.Sales_2023 WHERE 1 = 1 ...,6365
+dbo.usp_Rpt_Dispatch,EXEC dbo.[usp_Rpt_Export_Accounting] @Id = ...,5851
+dbo.usp_Rpt_Dispatch,EXEC dbo.[usp_Rpt_Export_Email] @Id = ...,2050
+dbo.usp_Rpt_Dispatch,EXEC dbo.[usp_Rpt_Export_Heureka] @Id = ...,3499
+dbo.usp_Ship_SendToCarrier,EXEC dbo.[usp_Ship_Carrier_CeskaPosta] @Id = ...,4928
+dbo.usp_Ship_SendToCarrier,EXEC dbo.[usp_Ship_Carrier_DPD] @Id = ...,1178
+dbo.usp_Ship_SendToCarrier,EXEC dbo.[usp_Ship_Carrier_PPL] @Id = ...,539
+dbo.usp_Ship_SendToCarrier,EXEC dbo.[usp_Ship_Carrier_Zasilkovna] @Id = ...,180

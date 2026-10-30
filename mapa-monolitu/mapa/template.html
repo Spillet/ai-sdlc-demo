@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa monolitu</title>
+<style>
+:root{
+  --bg:#f7f7f5;--panel:#ffffff;--ink:#1d1d1b;--muted:#6b6b66;--line:#e2e1dc;--accent:#2b5fd9;
+  --good:#2f8a4c;--warn:#b7791f;--bad:#c0392b;--chip:#efeee9;--code:#f3f2ee;
+  --l-static:#6b7280;--l-dynamic:#d97706;--l-runtime:#7c3aed;--l-client:#0891b2;--l-agent:#db2777;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#7aa2ff;
+  --good:#5cc27f;--warn:#e0a93f;--bad:#ef6b5b;--chip:#2a2a27;--code:#232320;
+  --l-static:#9ca3af;--l-dynamic:#f59e0b;--l-runtime:#a78bfa;--l-client:#22d3ee;--l-agent:#f472b6;}}
+:root[data-theme="dark"]{
+  --bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#7aa2ff;
+  --good:#5cc27f;--warn:#e0a93f;--bad:#ef6b5b;--chip:#2a2a27;--code:#232320;
+  --l-static:#9ca3af;--l-dynamic:#f59e0b;--l-runtime:#a78bfa;--l-client:#22d3ee;--l-agent:#f472b6;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:18px 16px 8px;max-width:1400px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0}
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:120px}
+.kpi b{display:block;font-size:20px}
+.kpi span{color:var(--muted);font-size:12px}
+nav{max-width:1400px;margin:0 auto;padding:0 16px;display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+nav button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 12px;color:var(--muted);font:inherit;cursor:pointer;white-space:nowrap}
+nav button.on{color:var(--ink);border-color:var(--accent)}
+main{max-width:1400px;margin:0 auto;padding:16px}
+.tab{display:none}.tab.on{display:block}
+table{border-collapse:collapse;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;background:var(--chip)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.click{cursor:pointer}tr.click:hover{background:var(--chip)}
+.wrap{overflow-x:auto}
+.bar{height:8px;border-radius:4px;background:var(--chip);position:relative;min-width:80px}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--good)}
+.chip{display:inline-block;background:var(--chip);border-radius:10px;padding:1px 8px;margin:1px 2px;font-size:12px}
+.lay{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px}
+canvas{width:100%;height:640px;display:block;background:var(--panel);border:1px solid var(--line);border-radius:8px;touch-action:none}
+@media (max-width:600px){canvas{height:420px}}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+select,input[type=search]{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);max-width:100%}
+label{font-size:13px;color:var(--muted)}
+pre{background:var(--code);padding:10px;border-radius:6px;overflow:auto;font-size:12px;max-height:420px}
+.muted{color:var(--muted)}
+h2{font-size:16px;margin:18px 0 8px}h3{font-size:14px;margin:14px 0 6px}
+.weights{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 16px;margin:8px 0 12px}
+.weights label{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.weights input{width:110px}
+.note{border-left:3px solid var(--warn);padding:6px 10px;background:var(--panel);margin:8px 0}
+ul{padding-left:18px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Mapa monolitu</h1>
+  <p class="sub">Syntetická DB fiktivního e-shopu „Kompas“. Závislosti ze 4 vrstev, kandidáti na domény a skóre připravenosti k vyjmutí. Žádná reálná data.</p>
+  <div class="kpis" id="kpis"></div>
+</header>
+<nav id="nav">
+  <button data-t="domeny" class="on">Domény a pořadí</button>
+  <button data-t="graf">Graf</button>
+  <button data-t="slepa">Slepá místa</button>
+  <button data-t="objekty">Objekty</button>
+</nav>
+<main>
+  <section class="tab on" id="domeny">
+    <p class="muted">Skóre 0–100: čím víc, tím snáz jde doména vyjmout jako první. Váhy jsou předpoklad k diskusi; posunem posuvníků se pořadí přepočítá. Kliknutím na řádek se otevře detail.</p>
+    <div class="weights" id="weights"></div>
+    <div class="wrap"><table id="domtab"></table></div>
+    <div id="domdetail"></div>
+  </section>
+  <section class="tab" id="graf">
+    <div class="controls">
+      <label>Doména <select id="fdom"><option value="">všechny</option></select></label>
+      <label><input type="checkbox" id="fshared" checked> sdílené uzly</label>
+      <label><input type="checkbox" id="fdead"> mrtvé</label>
+      <input type="search" id="fsearch" placeholder="hledat objekt…">
+      <span id="legend"></span>
+    </div>
+    <div class="grid">
+      <canvas id="cv"></canvas>
+      <div class="panel" id="detail"><p class="muted">Klikni na uzel. Kolečka = procedury a funkce, čtverce = tabulky (velikost podle dat). Barva hrany = vrstva, která ji viděla.</p></div>
+    </div>
+  </section>
+  <section class="tab" id="slepa"></section>
+  <section class="tab" id="objekty">
+    <div class="controls"><input type="search" id="osearch" placeholder="filtr…"><select id="otype"><option value="">všechny typy</option><option>P</option><option>FN</option><option>TR</option><option>U</option><option>V</option></select></div>
+    <div class="grid"><div class="wrap"><table id="otab"></table></div><div class="panel" id="odetail"><p class="muted">Vyber objekt.</p></div></div>
+  </section>
+</main>
+<script>
+const DATA = /*__DATA__*/null;
+const S = DATA.summary;
+const N = new Map(DATA.nodes.map(n => [n.id, n]));
+const OUT = new Map(), IN = new Map();
+for (const e of DATA.edges) {
+  if (!OUT.has(e.src)) OUT.set(e.src, []); OUT.get(e.src).push(e);
+  if (!IN.has(e.dst)) IN.set(e.dst, []); IN.get(e.dst).push(e);
+}
+const LAYERS = ["static","dynamic","runtime","client","agent"];
+const LNAME = {static:"statická",dynamic:"dynamické SQL",runtime:"běh (XE)",client:"Delphi klient",agent:"plánovač"};
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = n => n == null ? "–" : Number(n).toLocaleString("cs-CZ");
+const TYPE = {P:"procedura",FN:"funkce",TR:"trigger",U:"tabulka",V:"pohled"};
+
+// ---------- KPI
+(function(){
+  const sb = S.static_dead_but_alive.length;
+  const k = [
+    [S.procedures, "procedur"], [S.functions + S.triggers, "funkcí a triggerů"], [S.tables, "tabulek"], [S.views, "pohledů"],
+    [(S.total_size_gb/1000).toFixed(1).replace(".",",") + " TB", "dat (fiktivně)"],
+    [sb + " / " + S.live_procs, "živých procedur bez volajícího v katalogu"],
+    [S.layers.not_in_catalog_pct.toString().replace(".",",") + " %", "hran mezi objekty mimo katalog"],
+    [(S.status["mrtvá"]||0), "mrtvých procedur"],
+  ];
+  document.getElementById("kpis").innerHTML = k.map(([b,s]) => `<div class="kpi"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join("");
+})();
+
+// ---------- taby
+document.getElementById("nav").addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x.id === b.dataset.t));
+  try { localStorage.setItem("mapa-tab", b.dataset.t); } catch(e) {}
+  if (b.dataset.t === "graf") startGraph();
+});
+try { const t = localStorage.getItem("mapa-tab"); if (t) { const b = document.querySelector(`nav button[data-t="${t}"]`); if (b) b.click(); } } catch(e) {}
+
+// ---------- domény a váhy
+const W = Object.assign({}, S.weights);
+function wbox(){
+  document.getElementById("weights").innerHTML = Object.keys(W).map(k =>
+    `<label>${esc(S.weight_labels[k])} ${k.startsWith("bonus")?"(+)":"(−)"} <input type="range" min="0" max="40" value="${W[k]}" data-k="${k}"><b id="wv-${k}">${W[k]}</b></label>`).join("");
+  document.getElementById("weights").addEventListener("input", ev => {
+    const k = ev.target.dataset.k; if (!k) return;
+    W[k] = +ev.target.value; document.getElementById("wv-"+k).textContent = W[k]; domTable();
+  });
+}
+function scoreOf(d){
+  let s = 100;
+  for (const k in W) { const v = d.components[k] || 0; s += (k.startsWith("bonus") ? 1 : -1) * W[k] * v; }
+  return Math.max(0, Math.min(100, s));
+}
+function domTable(){
+  const ranked = DATA.domains.filter(d => !d.cleanup_only && !d.too_small).map(d => ({d, s: scoreOf(d)}))
+    .sort((a,b) => b.s - a.s);
+  const rest = DATA.domains.filter(d => d.cleanup_only || d.too_small).map(d => ({d, s: scoreOf(d)}));
+  const rows = ranked.map((x,i) => [i+1, x]).concat(rest.map(x => [x.d.cleanup_only ? "úklid" : "malý", x]));
+  const t = document.getElementById("domtab");
+  t.innerHTML = `<tr><th>#</th><th>Kandidát na doménu</th><th>Skóre</th><th></th><th class="n">Procedury<br>živé / mrtvé</th><th class="n">Tabulky</th><th class="n">Data</th><th class="n">CPU (QS)</th><th>Hlavní důvody</th></tr>` +
+    rows.map(([o,x]) => { const d = x.d; const col = x.s >= 75 ? "var(--good)" : x.s >= 60 ? "var(--warn)" : "var(--bad)";
+      return `<tr class="click" data-d="${esc(d.domain)}"><td>${o}</td><td><b>${esc(d.domain)}</b><br><span class="muted">${esc(d.tables.slice(0,4).join(", "))}${d.tables.length>4?" …":""}</span></td>
+      <td class="n"><b>${x.s.toFixed(1).replace(".",",")}</b></td><td><div class="bar"><i style="width:${x.s}%;background:${col}"></i></div></td>
+      <td class="n">${d.n_live} / ${d.n_dead}</td><td class="n">${d.n_tables}</td><td class="n">${(d.size_gb/1000).toFixed(2).replace(".",",")} TB</td>
+      <td class="n">${fmt(Math.round(d.cpu_ms/1000))} s</td><td>${d.why.map(esc).join("<br>")}</td></tr>`; }).join("");
+}
+document.getElementById("domtab").addEventListener("click", ev => {
+  const tr = ev.target.closest("tr[data-d]"); if (!tr) return;
+  const d = DATA.domains.find(x => x.domain === tr.dataset.d);
+  const procs = DATA.nodes.filter(n => n.domain === d.domain && n.type !== "U").sort((a,b) => a.id.localeCompare(b.id));
+  const comp = Object.keys(W).map(k => `<tr><td>${esc(S.weight_labels[k])}</td><td class="n">${(d.components[k]*100).toFixed(0)} %</td><td class="n">${k.startsWith("bonus")?"+":"−"}${(W[k]*d.components[k]).toFixed(1).replace(".",",")}</td></tr>`).join("");
+  document.getElementById("domdetail").innerHTML = `<h2>${esc(d.domain)}</h2>
+   <div class="grid"><div>
+    <h3>Složky skóre</h3><table><tr><th>Složka</th><th class="n">Podíl</th><th class="n">Body</th></tr>${comp}</table>
+    <h3>Zapisuje do cizích tabulek</h3><p>${Object.entries(d.foreign_write_targets).map(([k,v]) => `<span class="chip">${esc(k)} ×${v}</span>`).join("") || "<span class='muted'>nic</span>"}</p>
+    <h3>Čte cizí a sdílené tabulky</h3><p>${Object.entries(d.foreign_read_targets).map(([k,v]) => `<span class="chip">${esc(k)} ×${v}</span>`).join("") || "<span class='muted'>nic</span>"}</p>
+    <h3>Do jejích tabulek zapisuje</h3><p>${Object.entries(d.inbound_writers).map(([k,v]) => `<span class="chip">${esc(k)} ×${v}</span>`).join("") || "<span class='muted'>jen ona</span>"}</p>
+    <h3>Vstupy zvenku</h3><p>${Object.entries(d.external).map(([k,v]) => `<span class="chip">${esc(k)} ${v}</span>`).join("")}</p>
+   </div><div class="panel"><h3>Procedury a funkce (${procs.length})</h3>${procs.map(n => `<div><a href="#" data-o="${esc(n.id)}">${esc(n.id)}</a> <span class="muted">${esc(n.status||"")}</span></div>`).join("")}</div></div>`;
+  document.getElementById("domdetail").scrollIntoView({behavior:"smooth"});
+});
+document.addEventListener("click", ev => {
+  const a = ev.target.closest("a[data-o]"); if (!a) return; ev.preventDefault();
+  document.querySelector('nav button[data-t="objekty"]').click(); showObject(a.dataset.o, "odetail");
+});
+wbox(); domTable();
+
+// ---------- detail objektu
+function edgeList(list, dir){
+  if (!list.length) return "<p class='muted'>nic</p>";
+  return "<ul>" + list.sort((a,b) => (a.type+a[dir]).localeCompare(b.type+b[dir])).map(e => {
+    const other = e[dir]; const n = N.get(other);
+    return `<li>${esc(e.type)} <a href="#" data-o="${esc(other)}">${esc(other)}</a> ${e.layers.map(l => `<span class="lay" title="${LNAME[l]}" style="background:var(--l-${l})"></span>`).join("")}
+      <span class="muted">${esc(e.layers.map(l => LNAME[l]).join(", "))}${e.flags.length ? " · " + esc(e.flags.join(", ")) : ""}${e.count ? " · " + fmt(e.count) + "×" : ""}${n && n.domain ? " · " + esc(n.domain) : ""}</span></li>`;
+  }).join("") + "</ul>";
+}
+function showObject(id, target){
+  const n = N.get(id); if (!n) return;
+  const out = OUT.get(id) || [], inn = IN.get(id) || [];
+  let h = `<h2>${esc(id)}</h2><p><span class="chip">${TYPE[n.type]||n.type}</span> <span class="chip">${esc(n.domain || "bez domény")}</span>${n.shared ? " <span class='chip'>sdílený</span>" : ""}${n.status ? ` <span class="chip">${esc(n.status)}</span>` : ""}</p>`;
+  if (n.size_gb != null) h += `<p>Velikost: <b>${fmt(n.size_gb)} GB</b></p>`;
+  if (n.runtime_calls != null || Object.keys(n.apps||{}).length) {
+    h += `<p>Volání za 6 týdnů (XE module_end): <b>${fmt(n.runtime_calls)}</b></p>`;
+    const apps = Object.entries(n.apps||{}); if (apps.length) h += `<p>Přímo z aplikací (rpc_completed): ${apps.map(([a,c]) => `<span class="chip">${esc(a)} ${fmt(c)}</span>`).join("")}</p>`;
+  }
+  if (n.declared_entries && n.declared_entries.length) h += `<p>Deklarovaný vstup: ${n.declared_entries.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</p>`;
+  if (n.schedule) h += `<p>Plánovač: ${esc(n.schedule.job)} · ${esc(n.schedule.schedule)}${n.schedule.enabled ? "" : " · VYPNUTO"}</p>`;
+  if (n.qs) h += `<p>Query Store: CPU ${fmt(Math.round(n.qs.cpu_ms/1000))} s, zápisy ${fmt(n.qs.logical_writes)}</p>`;
+  if (n.dynamic) h += `<div class="note">Dynamické SQL. Z literálů: ${esc(n.dynamic.tables.map(t => t[0]).join(", ") || "nic")}. ${n.dynamic.blind ? "<b>Slepé místo:</b> jméno objektu se skládá za běhu, cíle zná jen běhová vrstva." : ""}</div>`;
+  if (n.on_table) h += `<p>Trigger na tabulce <a href="#" data-o="${esc(n.on_table)}">${esc(n.on_table)}</a></p>`;
+  h += `<h3>Odchozí (${out.length})</h3>${edgeList(out.slice(), "dst")}<h3>Příchozí (${inn.length})</h3>${edgeList(inn.slice(), "src")}`;
+  if (n.text) h += `<h3>Kód</h3><pre>${esc(n.text)}</pre>`;
+  document.getElementById(target).innerHTML = h;
+}
+
+// ---------- objekty
+function objTable(){
+  const q = document.getElementById("osearch").value.toLowerCase(), ty = document.getElementById("otype").value;
+  const rows = DATA.nodes.filter(n => (!ty || n.type === ty) && (!q || n.id.toLowerCase().includes(q) || String(n.domain||"").toLowerCase().includes(q))).slice(0, 400);
+  document.getElementById("otab").innerHTML = `<tr><th>Objekt</th><th>Typ</th><th>Doména</th><th>Stav</th><th class="n">Volání / GB</th></tr>` +
+    rows.map(n => `<tr class="click" data-o="${esc(n.id)}"><td>${esc(n.id)}</td><td>${n.type}</td><td>${esc(n.domain||"")}</td><td>${esc(n.status||"")}</td><td class="n">${n.type==="U" ? fmt(n.size_gb) : fmt(n.runtime_calls)}</td></tr>`).join("");
+}
+document.getElementById("osearch").addEventListener("input", objTable);
+document.getElementById("otype").addEventListener("change", objTable);
+document.getElementById("otab").addEventListener("click", ev => { const tr = ev.target.closest("tr[data-o]"); if (tr) showObject(tr.dataset.o, "odetail"); });
+objTable();
+
+// ---------- slepá místa
+(function(){
+  const b = S.blind, ev = S.evaluation;
+  const li = (arr, f) => arr && arr.length ? "<ul>" + arr.map(x => "<li>" + f(x) + "</li>").join("") + "</ul>" : "<p class='muted'>nic</p>";
+  const onlyRt = S.static_dead_but_alive.filter(x => x.seen_by[0] === "jen běh");
+  let h = `<h2>Co statický katalog nevidí</h2>
+  <p>Ze <b>${S.live_procs}</b> živých procedur nemá <b>${S.static_dead_but_alive.length}</b> žádného volajícího v katalogu. Volá je klient, plánovač, web nebo dynamické SQL. Bez dalších vrstev by vypadaly jako mrtvé.</p>
+  <table><tr><th>Vrstva</th><th class="n">Hran</th><th class="n">Jen tato vrstva</th></tr>${LAYERS.map(l => `<tr><td><span class="lay" style="background:var(--l-${l})"></span>${LNAME[l]}</td><td class="n">${S.layers.by_layer[l]||0}</td><td class="n">${S.layers.only[l]||0}</td></tr>`).join("")}</table>
+  <h3>Ví o nich jen běh (ne klient, ne plánovač, ne kód)</h3>${li(onlyRt, x => `<a href="#" data-o="${esc(x.proc)}">${esc(x.proc)}</a> <span class="muted">${esc(x.apps.join(", ") || "vnořené přes dynamické SQL")} · ${fmt(x.runtime)}×</span>`)}
+  <h3>Dynamické SQL se skládaným jménem objektu (${(b.dynamic_blind||[]).length})</h3>${li(b.dynamic_blind, x => `<a href="#" data-o="${esc(x.obj)}">${esc(x.obj)}</a>`)}
+  <h3>Odkazy do jiných databází (${(b.cross_db||[]).length})</h3>${li(b.cross_db, x => `<a href="#" data-o="${esc(x.obj)}">${esc(x.obj)}</a> → ${esc(x.ref)}`)}
+  <h3>Volání bez schématu, is_caller_dependent (${(b.caller_dependent||[]).length})</h3>${li(b.caller_dependent, x => `${esc(x.obj)} → ${esc(x.ref)}`)}
+  <h3>Klient: volání, která grep nerozluští</h3>${li(b.client_unresolved, x => `${esc(x.file)}:${esc(x.line)} <code>${esc(x.expression)}</code>`)}
+  <h3>Plánovač mimo T-SQL krok</h3>${li(b.agent_non_tsql, x => `${esc(x.job)} (${esc(x.subsystem)}) → ${esc(x.proc)}`)}
+  <h3>Sdílené tabulky vyřazené ze shlukování</h3><p>${Object.entries(S.shared_tables).sort((a,b) => b[1]-a[1]).map(([t,c]) => `<span class="chip">${esc(t)} · ${c} proc. · zapisuje hlavně ${esc(S.shared_owner[t]||"?")}</span>`).join("")}</p>`;
+  if (ev) h += `<h2>Jak se analyzátor trefil (proti záměru generátoru)</h2><ul>
+   <li>Čistota shluků ${Math.round(ev.purity*100)} %, ${ev.clusters} shluků proti ${ev.true_domains} zamýšleným doménám.</li>
+   <li>Mrtvé procedury: ${ev.dead_tp} z ${ev.dead_true}, falešně ${ev.dead_fp.length}.</li>
+   <li>Dynamické SQL: ${ev.dyn_found - ev.dyn_false.length} z ${ev.dyn_true}.</li>
+   <li>Roční job mimo okno měření rozpoznán: ${ev.yearly_detected ? "ano" : "ne"}.</li></ul>
+   <p class="muted">U skutečné databáze žádný záměr generátoru není. Tam shluky kontroluje architekt.</p>`;
+  document.getElementById("slepa").innerHTML = h;
+})();
+
+// ---------- graf
+let started = false;
+function startGraph(){ if (started) { draw(); return; } started = true; initGraph(); }
+let G = {nodes:[], edges:[], byId:new Map()}, view = {x:0,y:0,k:1}, sel = null, hover = null;
+const PALETTE = ["#2b5fd9","#d9822b","#2f8a4c","#c0392b","#7c3aed","#0891b2","#b7791f","#db2777","#4d7c0f","#9333ea","#0d9488","#e11d48","#64748b","#a16207","#1d4ed8","#be185d","#15803d","#7c2d12","#334155","#6d28d9"];
+const DOMS = [...new Set(DATA.nodes.map(n => n.domain).filter(Boolean))].sort();
+const DCOL = Object.fromEntries(DOMS.map((d,i) => [d, d === "sdílené" ? "#888" : PALETTE[i % PALETTE.length]]));
+const fdom = document.getElementById("fdom"); DOMS.forEach(d => fdom.insertAdjacentHTML("beforeend", `<option>${esc(d)}</option>`));
+document.getElementById("legend").innerHTML = LAYERS.map(l => `<span class="chip"><span class="lay" style="background:var(--l-${l})"></span>${LNAME[l]}</span>`).join("");
+function visible(n){
+  if (!document.getElementById("fshared").checked && n.shared) return false;
+  if (!document.getElementById("fdead").checked && n.status === "mrtvá") return false;
+  const d = fdom.value; if (d && n.domain !== d) {
+    // ukázat i přímé sousedy vybrané domény
+    const nb = (OUT.get(n.id)||[]).concat(IN.get(n.id)||[]).some(e => (N.get(e.src)||{}).domain === d || (N.get(e.dst)||{}).domain === d);
+    return nb && n.type === "U";
+  }
+  return n.type !== "V";
+}
+function initGraph(){
+  const cv = document.getElementById("cv");
+  const ang = Object.fromEntries(DOMS.map((d,i) => [d, i / DOMS.length * Math.PI * 2]));
+  let seed = 1; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  G.nodes = DATA.nodes.filter(n => n.type !== "V").map(n => {
+    const a = ang[n.domain] ?? 0, r = n.shared ? 40 : 330;
+    return {id:n.id, n, x: Math.cos(a)*r + (rnd()-.5)*90, y: Math.sin(a)*r + (rnd()-.5)*90, vx:0, vy:0,
+      r: n.type === "U" ? 4 + Math.min(10, Math.log10(1 + (n.size_gb||0)) * 2.6) : 3.2};
+  });
+  G.byId = new Map(G.nodes.map(x => [x.id, x]));
+  G.edges = DATA.edges.filter(e => G.byId.has(e.src) && G.byId.has(e.dst)).map(e => ({e, a:G.byId.get(e.src), b:G.byId.get(e.dst)}));
+  // jednoduchá silová simulace (odpuzování na mřížce, pružiny po hranách)
+  for (let it = 0; it < 220; it++) {
+    const cell = 60, grid = new Map();
+    for (const p of G.nodes) { const k = Math.floor(p.x/cell) + "," + Math.floor(p.y/cell); (grid.get(k) || grid.set(k, []).get(k)).push(p); }
+    for (const p of G.nodes) {
+      const cx = Math.floor(p.x/cell), cy = Math.floor(p.y/cell);
+      for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+        for (const q of grid.get((cx+dx) + "," + (cy+dy)) || []) { if (q === p) continue;
+          let x = p.x - q.x, y = p.y - q.y, d2 = x*x + y*y + .01; if (d2 > cell*cell) continue;
+          const f = 90 / d2; p.vx += x*f; p.vy += y*f; }
+      }
+      p.vx -= p.x * .004; p.vy -= p.y * .004;
+    }
+    for (const {e,a,b} of G.edges) {
+      const w = e.type === "writes" ? .03 : e.type === "calls" ? .02 : .01;
+      const s = (a.n.shared || b.n.shared) ? .15 : 1;
+      const x = b.x - a.x, y = b.y - a.y; a.vx += x*w*s; a.vy += y*w*s; b.vx -= x*w*s; b.vy -= y*w*s;
+    }
+    for (const p of G.nodes) { p.x += Math.max(-8, Math.min(8, p.vx)); p.y += Math.max(-8, Math.min(8, p.vy)); p.vx *= .5; p.vy *= .5; }
+  }
+  // ovládání: posun, zoom, klik
+  let drag = null;
+  cv.addEventListener("pointerdown", ev => { drag = {x: ev.clientX, y: ev.clientY, vx: view.x, vy: view.y, moved:false}; cv.setPointerCapture(ev.pointerId); });
+  cv.addEventListener("pointermove", ev => {
+    if (drag) { const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y; if (Math.abs(dx)+Math.abs(dy) > 3) drag.moved = true; view.x = drag.vx + dx; view.y = drag.vy + dy; draw(); }
+    else { const h = pick(ev); if (h !== hover) { hover = h; draw(); } }
+  });
+  cv.addEventListener("pointerup", ev => { if (drag && !drag.moved) { const p = pick(ev); sel = p ? p.id : null; if (p) showObject(p.id, "detail"); draw(); } drag = null; });
+  cv.addEventListener("wheel", ev => { ev.preventDefault(); const f = ev.deltaY < 0 ? 1.15 : 1/1.15; const r = cv.getBoundingClientRect();
+    const mx = ev.clientX - r.left - r.width/2, my = ev.clientY - r.top - r.height/2;
+    view.x = mx - (mx - view.x) * f; view.y = my - (my - view.y) * f; view.k *= f; draw(); }, {passive:false});
+  ["fdom","fshared","fdead"].forEach(id => document.getElementById(id).addEventListener("change", draw));
+  document.getElementById("fsearch").addEventListener("change", ev => { const q = ev.target.value.toLowerCase(); const p = G.nodes.find(x => x.id.toLowerCase().includes(q)); if (p) { sel = p.id; view.x = -p.x*view.k; view.y = -p.y*view.k; showObject(p.id, "detail"); draw(); } });
+  window.addEventListener("resize", draw);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+  view.k = Math.min(1, cv.clientWidth / 900); draw();
+}
+function toScreen(p, cv){ return [cv.clientWidth/2 + view.x + p.x*view.k, cv.clientHeight/2 + view.y + p.y*view.k]; }
+function pick(ev){
+  const cv = document.getElementById("cv"), r = cv.getBoundingClientRect(); const mx = ev.clientX - r.left, my = ev.clientY - r.top;
+  let best = null, bd = 12*12;
+  for (const p of G.nodes) { if (!visible(p.n)) continue; const [x,y] = toScreen(p, cv); const d = (x-mx)**2 + (y-my)**2; if (d < bd) { bd = d; best = p; } }
+  return best;
+}
+function draw(){
+  const cv = document.getElementById("cv"); if (!cv.clientWidth) return;
+  const dpr = window.devicePixelRatio || 1; cv.width = cv.clientWidth*dpr; cv.height = cv.clientHeight*dpr;
+  const c = cv.getContext("2d"); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,cv.clientWidth,cv.clientHeight);
+  const LC = Object.fromEntries(LAYERS.map(l => [l, css("--l-"+l)]));
+  const focus = sel || (hover && hover.id);
+  const nbr = new Set(); if (focus) { (OUT.get(focus)||[]).forEach(e => nbr.add(e.dst)); (IN.get(focus)||[]).forEach(e => nbr.add(e.src)); nbr.add(focus); }
+  for (const {e,a,b} of G.edges) {
+    if (!visible(a.n) || !visible(b.n)) continue;
+    const hot = focus && (a.id === focus || b.id === focus);
+    if (focus && !hot) { c.globalAlpha = .05; } else c.globalAlpha = hot ? .9 : .18;
+    const lay = e.layers.includes("static") && !e.flags.includes("via_trigger") ? "static" : e.layers.find(l => l !== "static") || "static";
+    c.strokeStyle = LC[lay]; c.lineWidth = hot ? 1.6 : (lay === "static" ? .6 : 1.4);
+    const [x1,y1] = toScreen(a, cv), [x2,y2] = toScreen(b, cv); c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke();
+  }
+  c.globalAlpha = 1;
+  for (const p of G.nodes) {
+    if (!visible(p.n)) continue;
+    const [x,y] = toScreen(p, cv); const r = p.r * Math.max(.6, Math.min(2, view.k));
+    c.globalAlpha = focus && !nbr.has(p.id) ? .2 : 1;
+    c.fillStyle = p.n.status === "mrtvá" ? css("--muted") : (DCOL[p.n.domain] || "#999");
+    c.beginPath(); if (p.n.type === "U") c.rect(x-r, y-r, 2*r, 2*r); else c.arc(x, y, r, 0, Math.PI*2); c.fill();
+    if (p.n.dynamic && p.n.dynamic.blind) { c.strokeStyle = css("--l-dynamic"); c.lineWidth = 2; c.stroke(); }
+    if (p.id === focus || (view.k > 1.6 && nbr.has(p.id)) || (p.n.type === "U" && (p.n.size_gb||0) > 1000)) {
+      c.fillStyle = css("--ink"); c.font = "11px system-ui"; c.fillText(p.id, x + r + 3, y + 3);
+    }
+  }
+  c.globalAlpha = 1;
+}
+</script>
+</body>
+</html>
