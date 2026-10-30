@@ -140,7 +140,8 @@ document.getElementById("nav").addEventListener("click", ev => {
   try { localStorage.setItem("mapa-tab", b.dataset.t); } catch(e) {}
   if (b.dataset.t === "graf") startGraph();
 });
-try { const t = localStorage.getItem("mapa-tab"); if (t) { const b = document.querySelector(`nav button[data-t="${t}"]`); if (b) b.click(); } } catch(e) {}
+// obnovení záložky až po načtení celého skriptu (graf potřebuje své proměnné)
+setTimeout(() => { try { const t = localStorage.getItem("mapa-tab"); if (t) { const b = document.querySelector(`nav button[data-t="${t}"]`); if (b) b.click(); } } catch(e) {} }, 0);
 
 // ---------- domény a váhy
 const W = Object.assign({}, S.weights);
