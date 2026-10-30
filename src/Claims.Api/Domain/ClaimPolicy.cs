@@ -14,6 +14,20 @@ public static class ClaimPolicy
     public static DateOnly ResolutionDeadline(DateOnly receivedOn) =>
         receivedOn.AddDays(ResolutionDays);
 
+    /// <summary>
+    /// Počet kalendářních dní do konce lhůty. V den termínu vrací 0, po termínu zápornou hodnotu
+    /// (počet dní po termínu se znaménkem mínus).
+    /// </summary>
+    public static int RemainingDays(DateOnly receivedOn, DateOnly today)
+    {
+        if (today < receivedOn)
+        {
+            throw new ArgumentException("Dnešní datum nemůže předcházet datu přijetí reklamace.", nameof(today));
+        }
+
+        return ResolutionDeadline(receivedOn).DayNumber - today.DayNumber;
+    }
+
     public static bool IsWithinWarranty(DateOnly purchasedOn, DateOnly claimedOn)
     {
         if (claimedOn < purchasedOn)
