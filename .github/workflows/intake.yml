@@ -1,0 +1,50 @@
+name: Intake – požadavek na specifikaci
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  spec:
+    if: contains(github.event.issue.labels.*.name, 'pozadavek')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Zadání pro analytika
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/build_prompt.py intake "${{ github.event.issue.number }}" > "$RUNNER_TEMP/prompt.txt"
+      - name: Agent připraví specifikaci (jen čtení repozitáře)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          npm install -g @anthropic-ai/claude-code > /dev/null
+          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model sonnet --max-turns 15 \
+            --allowedTools "Read,Glob,Grep" --output-format json > "$RUNNER_TEMP/agent.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: intake-output
+          path: ${{ runner.temp }}/agent.json
+
+  publish:
+    needs: spec
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: intake-output
+          path: ${{ runner.temp }}/out
+      - name: Specifikace do issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/post_spec.py "${{ github.event.issue.number }}" "$RUNNER_TEMP/out/agent.json"

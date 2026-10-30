@@ -1,0 +1,181 @@
+name: Agent – od specifikace k PR
+
+# Spouští ho člověk štítkem `ai:implement` na issue s potvrzenou specifikací.
+# Princip nejmenších oprávnění: agent běží v jobu, který smí jen číst. Větev, PR,
+# komentáře a sloučení dělají další joby deterministickými skripty.
+
+on:
+  issues:
+    types: [labeled]
+
+concurrency:
+  group: agent-issue-${{ github.event.issue.number }}
+
+env:
+  ISSUE: ${{ github.event.issue.number }}
+
+jobs:
+  preflight:
+    if: github.event.label.name == 'ai:implement'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Pruh 3 smí spustit jen vlastník
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LABELS: ${{ toJSON(github.event.issue.labels.*.name) }}
+          SENDER: ${{ github.event.sender.login }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          if echo "$LABELS" | grep -q 'pruh:3-core' && [ "$SENDER" != "$OWNER" ]; then
+            gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" \
+              --body "Pruh 3 (core): agenta smí spustit jen vlastnický tým. Spuštění od @$SENDER zamítnuto."
+            exit 1
+          fi
+
+  implement:
+    needs: preflight
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Specifikace z issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/build_prompt.py implement "$ISSUE" > "$RUNNER_TEMP/prompt.txt"
+      - name: Kódovací agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          npm install -g @anthropic-ai/claude-code > /dev/null
+          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model sonnet --max-turns 40 \
+            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(dotnet build:*),Bash(dotnet test:*)" \
+            --output-format json > "$RUNNER_TEMP/agent.json"
+      - name: Ověření – build a testy
+        run: |
+          set +e
+          dotnet test tests/Claims.Tests/Claims.Tests.csproj > "$RUNNER_TEMP/tests.log" 2>&1
+          echo $? > "$RUNNER_TEMP/tests_exit.txt"
+          tail -n 12 "$RUNNER_TEMP/tests.log"
+      - name: Mantinely a diff
+        id: diff
+        run: |
+          git add -A
+          if git diff --cached --name-only | grep -E '^(\.github/|risk-policy\.yml$|AGENTS\.md$|CODEOWNERS$)'; then
+            echo "::error::Agent změnil pipeline nebo pravidla. Změna se zahazuje."
+            exit 1
+          fi
+          git diff --cached > "$RUNNER_TEMP/change.patch"
+          if [ -s "$RUNNER_TEMP/change.patch" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; else echo "changed=false" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-output
+          path: |
+            ${{ runner.temp }}/change.patch
+            ${{ runner.temp }}/agent.json
+            ${{ runner.temp }}/tests.log
+            ${{ runner.temp }}/tests_exit.txt
+
+  publish:
+    needs: implement
+    if: needs.implement.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      pr: ${{ steps.pr.outputs.number }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: agent-output
+          path: ${{ runner.temp }}/out
+      - name: Větev a PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ github.event.issue.title }}
+        run: |
+          BRANCH="ai/issue-$ISSUE"
+          git config user.name "ai-sdlc-agent"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git apply --index "$RUNNER_TEMP/out/change.patch"
+          git commit -m "AI: $TITLE (#$ISSUE)"
+          git push --force -u origin "$BRANCH"
+          python3 .github/scripts/pr_body.py "$RUNNER_TEMP/out" "$ISSUE" > "$RUNNER_TEMP/body.md"
+          NUMBER=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --json number --jq '.[0].number')
+          if [ -z "$NUMBER" ]; then
+            URL=$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$BRANCH" --title "AI: $TITLE" --body-file "$RUNNER_TEMP/body.md")
+            NUMBER="${URL##*/}"
+          else
+            gh pr edit "$NUMBER" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/body.md"
+          fi
+          echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+
+  review:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ai/issue-${{ github.event.issue.number }}
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - uses: actions/download-artifact@v5
+        with:
+          name: agent-output
+          path: ${{ runner.temp }}/out
+      - name: Zadání pro reviewera
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/build_prompt.py review "$ISSUE" "$RUNNER_TEMP/out/change.patch" > "$RUNNER_TEMP/prompt.txt"
+      - name: AI review (jen čtení)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          npm install -g @anthropic-ai/claude-code > /dev/null
+          claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model sonnet --max-turns 15 \
+            --allowedTools "Read,Glob,Grep" --output-format json > "$RUNNER_TEMP/review.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: review-output
+          path: ${{ runner.temp }}/review.json
+
+  gate:
+    needs: [publish, review]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pyyaml
+      - uses: actions/download-artifact@v5
+        with:
+          path: ${{ runner.temp }}/out
+          merge-multiple: true
+      - name: Brána podle rizika
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/risk_gate.py "${{ needs.publish.outputs.pr }}" "$RUNNER_TEMP/out"
