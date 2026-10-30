@@ -1,6 +1,7 @@
 # Riziková politika: kdo smí sloučit změnu.
 # Čte ji brána (.github/scripts/risk_gate.py). Platí první pravidlo, které cestu zachytí;
 # výsledná úroveň PR je nejvyšší úroveň ze všech změněných souborů a signálů.
+# Cesty se porovnávají bez ohledu na velikost písmen; `*` zachytí i lomítko (fnmatch).
 #
 #   low    -> sloučí se automaticky, když projdou testy a AI review
 #   medium -> sloučení schvaluje člověk
@@ -11,14 +12,32 @@ owners:
   refunds: Spillet
 
 rules:
-  - paths: [".github/*", "risk-policy.yml", "AGENTS.md", "CODEOWNERS"]
+  - paths: [".github/*", "risk-policy.yml", "CODEOWNERS",
+            "AGENTS.md", "*AGENTS.md", "CLAUDE.md", "*CLAUDE.md", "*CLAUDE.local.md",
+            ".claude/*", "*/.claude/*", ".mcp.json", "*/.mcp.json"]
     tier: high
     owner: default
-    reason: Pipeline a mantinely. Agent nesmí měnit pravidla, podle kterých se kontroluje.
+    reason: Pipeline, mantinely a kontext agentů. Agent nesmí měnit pravidla ani instrukce, podle kterých pracuje a kontroluje se.
   - paths: ["src/Claims.Api/Refunds/*"]
     tier: high
     owner: refunds
     reason: Peníze zákazníků (vracení peněz).
+  - paths: ["db/*"]
+    tier: high
+    owner: default
+    reason: Změna schématu nebo procedury. Ověřuje se charakterizačními testy a paralelním během (viz P1).
+  - paths: ["tests/*Refund*"]
+    tier: high
+    owner: refunds
+    reason: Testy, které hlídají peníze zákazníků. Dědí úroveň kódu, který testují.
+  - paths: ["*.csproj", "*.props", "*.targets", "*nuget.config", "global.json", "*.sln", "*.slnx"]
+    tier: medium
+    owner: default
+    reason: Build a závislosti. Nový balíček nebo MSBuild target spouští kód při buildu.
+  - paths: ["tests/*ClaimPolicy*"]
+    tier: medium
+    owner: default
+    reason: Testy zákonných pravidel reklamací. Dědí úroveň kódu, který testují.
   - paths: ["src/Claims.Api/Domain/*"]
     tier: medium
     owner: default
@@ -42,5 +61,9 @@ limits:
 signals:
   # Změna produkčního kódu bez změny testů zvedá úroveň alespoň na medium.
   require_tests_for_src: true
+  # Odebrané nebo přepsané řádky v tests/ zvedají úroveň alespoň na medium (oslabení testů).
+  removed_test_lines_min_tier: medium
   # Nesouhlas AI review zvedá úroveň alespoň na medium.
   review_request_changes_min_tier: medium
+  # Nález AI review se závažností medium nebo high zvedá úroveň alespoň na medium i při souhlasu.
+  review_finding_min_tier: medium
