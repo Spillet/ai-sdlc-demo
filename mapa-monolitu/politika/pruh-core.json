@@ -1,0 +1,15 @@
+{
+  "_popis": "Vstup pro stav pruhu core. Vlastníky a prahy určují lidé (architekt a vlastníci domén), ne analyzátor. Týmy jsou fiktivní.",
+  "verze": 1,
+  "datum_snimku": "2026-10-31",
+  "platnost_dni": 30,
+  "prahy": {
+    "min_overene_pokryti": 0.8,
+    "vsechny_zapisujici_overene": true,
+    "max_blokujicich_slepych_mist": 0
+  },
+  "vlastnici": {
+    "D:Claim": {"nazev": "Reklamace", "tym": "Poprodej (fiktivní)", "github_tym": "kompas/poprodej"},
+    "D:Category": {"nazev": "Katalog", "tym": "Katalog a obsah (fiktivní)", "github_tym": "kompas/katalog"}
+  }
+}

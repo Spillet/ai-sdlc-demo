@@ -97,6 +97,21 @@ def report_md(data):
     L += ["", "## Váhy skóre", "", "| Složka | Váha |", "|---|---:|"]
     for k, v in s["weights"].items():
         L.append("| %s | %s%d |" % (s["weight_labels"][k], "+" if k.startswith("bonus") else "−", v))
+    if data.get("sensitivity"):
+        from mapa.sensitivity import report_md as sens_md
+        L += ["", sens_md(data["sensitivity"], s["weight_labels"]).rstrip()]
+    if data.get("lanes"):
+        L += ["", "## Pruh core po doménách", "",
+              "Stav určují pravidla v `mapa/evidence.py` a vstup `politika/pruh-core.json` (vlastníci, prahy), ne skóre. "
+              "Podrobnosti a co chybí: `out/evidence/<doména>.md`, pro bránu `out/evidence/<doména>.json` a `index.json`.", "",
+              "| Doména | Pruh core | Vlastník | Ověřeno / návrh / živé | Zapisující bez ověření | Blokující slepá místa | Co chybí k dalšímu stavu |",
+              "|---|---|---|---|---:|---|---|"]
+        for r in data["lanes"]:
+            L.append("| %s | **%s** | %s | %d / %d / %d | %d | %s | %s |" % (
+                r["domain"] + (" (%s)" % r["nazev"] if r["nazev"] else ""), r["popis"], r["vlastnik"] or "–",
+                r["overeno"], r["navrh"], r["zive"], r["zapisujici_neoverene"],
+                (", ".join(r["blokujici"][:5]) + (" … (%d)" % len(r["blokujici"]) if len(r["blokujici"]) > 5 else "")) or "–",
+                "; ".join(r["chybi"]) or "–"))
     return "\n".join(L) + "\n"
 
 

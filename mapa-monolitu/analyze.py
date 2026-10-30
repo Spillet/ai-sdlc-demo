@@ -9,11 +9,13 @@ Výstupy:
   out/map.json        celý graf, domény, skóre (vstup pro HTML i pro MCP server)
   out/report.md       textový souhrn výsledků
   out/context/*.md    kontextové balíčky pro AI vrstvu (první doporučená doména)
+  out/evidence/       balíček důkazů a stav pruhu core ke každé doméně (kontrakt pro bránu v P2)
   site/index.html     statická mapa, funguje otevřením z disku
 
 Jen standardní knihovna, Python 3.9+.
 """
 import argparse
+import glob
 import json
 import os
 import subprocess
@@ -28,6 +30,7 @@ from mapa.model import Monolith, LAYERS          # noqa: E402
 from mapa.cluster import cluster                 # noqa: E402
 from mapa.score import score_domains, WEIGHTS, LABELS   # noqa: E402
 from mapa import render                          # noqa: E402
+from mapa import evidence, sensitivity           # noqa: E402
 
 
 def layer_stats(mono):
@@ -103,6 +106,9 @@ def main():
     ap.add_argument("--data", default=os.path.join(HERE, "data", "synthetic"))
     ap.add_argument("--out", default=os.path.join(HERE, "out"))
     ap.add_argument("--site", default=os.path.join(HERE, "site", "index.html"))
+    ap.add_argument("--policy", default=os.path.join(HERE, "politika", "pruh-core.json"))
+    ap.add_argument("--tests", default=os.path.join(HERE, "ai-vrstva"),
+                    help="složka s charakterizačními testy po procedurách (<procedura>/golden_master*.sql, test_*.sql, beh.json)")
     ap.add_argument("--regenerate", action="store_true")
     a = ap.parse_args()
     t0 = time.time()
@@ -131,8 +137,17 @@ def main():
         live_procs=sum(1 for p in mono.modules(("P",)) if status[p] != "mrtvá"),
         modularity=cl["modularity"], merges=cl["merges"],
     )
+    sens = sensitivity.analyze(domains, WEIGHTS)
+    policy = evidence.load_policy(a.policy)
+    tests = evidence.scan_tests(a.tests)
+    packs, ev_index = evidence.build(mono, status, cl, domains, tests, policy,
+                                     evidence.inputs_hash(a.data, extra=[a.policy] + sorted(
+                                         glob.glob(os.path.join(a.tests, "*", "beh.json")))))
     os.makedirs(a.out, exist_ok=True)
     data = render.build_payload(mono, status, cl, domains, summary)
+    data["lanes"] = evidence.lane_summary(packs, domains)
+    data["sensitivity"] = sens
+    evidence.write(packs, ev_index, os.path.join(a.out, "evidence"))
     with open(os.path.join(a.out, "map.json"), "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1, sort_keys=True)
     with open(os.path.join(a.out, "report.md"), "w", encoding="utf-8") as f:
@@ -159,12 +174,17 @@ def main():
         print("%5s   %-24s %6.1f  %4d (%d/%d)        %3d   %8.1f   %s" % (
             d["order"] or ("úklid" if d["cleanup_only"] else "malý"), d["domain"], d["score"], d["n_procs"], d["n_live"], d["n_dead"], d["n_tables"],
             d["size_gb"], "; ".join(d["why"][:2])))
+    print("\nPruh core: " + ", ".join("%s %s" % (r["domain"], r["popis"]) for r in data["lanes"] if r["stav"] != "zavreny") +
+          "; ostatní zavřené (%d)" % sum(1 for r in data["lanes"] if r["stav"] == "zavreny"))
+    mc = sens["nahodne"]
+    print("Citlivost vah ±%d %%: %s před %s v %.0f %% kombinací" % (
+        100 * sens["delta"], sens["zakladni_poradi"][0], sens["zakladni_poradi"][1], 100 * mc["p_prvni_pred_druhym"]))
     if ev:
         print("\nVyhodnocení proti pravdě generátoru: čistota shluků %.0f %%, %d shluků / %d pravých domén; "
               "mrtvé %d/%d nalezeno, falešně %d; dynamické SQL %d/%d" % (
                   100 * ev["purity"], ev["clusters"], ev["true_domains"], ev["dead_tp"], ev["dead_true"],
                   len(ev["dead_fp"]), ev["dyn_found"] - len(ev["dyn_false"]), ev["dyn_true"]))
-    print("\nVýstupy: %s, %s" % (os.path.relpath(a.out, HERE), os.path.relpath(a.site, HERE)))
+    print("\nVýstupy: %s (včetně evidence/), %s" % (os.path.relpath(a.out, HERE), os.path.relpath(a.site, HERE)))
 
 
 if __name__ == "__main__":
