@@ -12,8 +12,10 @@ Služba řeší reklamace fiktivního e-shopu. API v .NET 10 (minimal API), test
 
 ## Kam nesahat
 
-- `.github/`, `risk-policy.yml`, `AGENTS.md`, `CODEOWNERS`: pipeline a mantinely. Změnu tu pipeline zamítne.
-- `src/Claims.Api/Refunds/`: peníze zákazníků. Změnu tu můžeš navrhnout, sloučit ji smí jen vlastnický tým.
+- `.github/`, `risk-policy.yml`, `CODEOWNERS`: pipeline a mantinely. Změnu tu pipeline zamítne.
+- `AGENTS.md`, `CLAUDE.md` (kdekoli v repu), `.claude/`, `.mcp.json`: instrukce a nastavení agentů. Změnu tu pipeline zamítne.
+- `src/Claims.Api/Refunds/` a testy `tests/*Refund*`: peníze zákazníků. Změnu tu můžeš navrhnout, sloučit ji smí jen vlastnický tým.
+- Úprava nebo odebrání existujícího testu a změna `*.csproj` vždy jde ke kontrole člověku.
 
 ## Doména
 

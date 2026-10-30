@@ -1,5 +1,12 @@
 # Vlastnictví kódu. V reálné firmě tu jsou týmy, ne lidé.
 *                           @Spillet
 /src/Claims.Api/Refunds/    @Spillet
+/tests/**/*Refund*          @Spillet
+/db/                        @Spillet
 /.github/                   @Spillet
 /risk-policy.yml            @Spillet
+/CODEOWNERS                 @Spillet
+AGENTS.md                   @Spillet
+CLAUDE.md                   @Spillet
+/.claude/                   @Spillet
+/.mcp.json                  @Spillet

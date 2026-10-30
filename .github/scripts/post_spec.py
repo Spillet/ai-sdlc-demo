@@ -1,4 +1,5 @@
 """Zveřejní specifikaci od agenta jako komentář k issue a označí pruh. Použití: post_spec.py ISSUE AGENT_JSON"""
+import json
 import sys
 
 from common import REPO, SPEC_MARKER, ensure_label, gh, parse_json_answer, read_agent_result
@@ -6,7 +7,7 @@ from common import REPO, SPEC_MARKER, ensure_label, gh, parse_json_answer, read_
 LANES = {
     "1-osobni": ("pruh:1-osobni", "0e8a16", "Osobní nástroj mimo produkci"),
     "2-produkt": ("pruh:2-produkt", "fbca04", "Produktová změna mimo citlivé oblasti"),
-    "3-core": ("pruh:3-core", "b60205", "Core: mění jen vlastnický tým"),
+    "3-core": ("pruh:3-core", "b60205", "Core: navrhnout smí kdokoliv, sloučit jen vlastnický tým"),
 }
 
 
@@ -21,13 +22,15 @@ def main():
     label, color, description = LANES.get(lane, LANES["2-produkt"])
 
     if lane == "3-core":
-        next_step = ("Pruh 3: agenta smí spustit jen vlastnický tým. "
-                     "Vlastník po kontrole přidá štítek `ai:implement`.")
+        next_step = ("Pruh 3 (core): štítek `ai:implement` může přidat kdokoliv, ale od ne-vlastníka "
+                     "vznikne jen draft PR. Sloučit smí jen vlastnický tým.")
     else:
         next_step = ("Pokud specifikace sedí, přidej štítek `ai:implement` a agent připraví PR. "
                      "Pokud ne, oprav text issue a štítek `pozadavek` odeber a přidej znovu.")
 
+    paths = json.dumps(spec.get("dotcene_casti", []), ensure_ascii=False).replace("-->", "")
     body = f"""{SPEC_MARKER}
+<!-- ai-spec-paths: {paths} -->
 ## Specifikace k potvrzení
 
 **{spec.get('shrnuti', '')}**
