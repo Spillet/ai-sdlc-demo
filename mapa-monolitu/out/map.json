@@ -21541,6 +21541,1087 @@
   }
  ],
  "generated_by": "mapa-monolitu analyze.py",
+ "lanes": [
+  {
+   "blokujici": [],
+   "chybi": [
+    "ověřené pokrytí živých procedur ≥ 80 % (0 z 18 (0 %))",
+    "všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …)"
+   ],
+   "domain": "D:Claim",
+   "navrh": 3,
+   "nazev": "Reklamace",
+   "overeno": 0,
+   "popis": "jen draft PR",
+   "poradi": 1,
+   "pravidla": [
+    {
+     "detail": "Poprodej (fiktivní)",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 18 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 83.2,
+   "slepa": 13,
+   "soubor": "out/evidence/D-Claim.md",
+   "stav": "jen_draft_pr",
+   "vlastnik": "Poprodej (fiktivní)",
+   "zapisujici": 13,
+   "zapisujici_neoverene": 13,
+   "zive": 18
+  },
+  {
+   "blokujici": [
+    "usp_Product_ProductAttribute_Cleanup"
+   ],
+   "chybi": [
+    "ověřené pokrytí živých procedur ≥ 80 % (0 z 25 (0 %))",
+    "všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …)",
+    "blokujících slepých míst ≤ 0 (usp_Product_ProductAttribute_Cleanup)"
+   ],
+   "domain": "D:Category",
+   "navrh": 0,
+   "nazev": "Katalog",
+   "overeno": 0,
+   "popis": "jen draft PR",
+   "poradi": 2,
+   "pravidla": [
+    {
+     "detail": "Katalog a obsah (fiktivní)",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 25 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_Product_ProductAttribute_Cleanup",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 81.6,
+   "slepa": 16,
+   "soubor": "out/evidence/D-Category.md",
+   "stav": "jen_draft_pr",
+   "vlastnik": "Katalog a obsah (fiktivní)",
+   "zapisujici": 13,
+   "zapisujici_neoverene": 13,
+   "zive": 25
+  },
+  {
+   "blokujici": [
+    "usp_Inv_Invoice_Hourly",
+    "usp_Inv_YearClose"
+   ],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)"
+   ],
+   "domain": "D:CreditNote",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": 3,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 18 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 12: usp_Inv_AccountingExport_Insert, usp_Inv_AccountingExport_MonthClose, usp_Inv_CreditNote_Recalc, usp_Inv_ExchangeRate_Approve, usp_Inv_ExchangeRate_Insert, usp_Inv_Invoice_Confirm …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_Inv_Invoice_Hourly, usp_Inv_YearClose",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 73.0,
+   "slepa": 12,
+   "soubor": "out/evidence/D-CreditNote.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 12,
+   "zapisujici_neoverene": 12,
+   "zive": 18
+  },
+  {
+   "blokujici": [
+    "usp_Pay_Payment_Cleanup"
+   ],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)"
+   ],
+   "domain": "D:GatewayLog",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": 4,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 18 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 15: usp_Pay_GatewayLog_Merge, usp_Pay_GatewayLog_Recalc, usp_Pay_GatewayLog_Update, usp_Pay_Installment_Delete, usp_Pay_Installment_Save, usp_Pay_PaymentMethod_Close …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_Pay_Payment_Cleanup",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 72.9,
+   "slepa": 10,
+   "soubor": "out/evidence/D-GatewayLog.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 15,
+   "zapisujici_neoverene": 15,
+   "zive": 18
+  },
+  {
+   "blokujici": [
+    "usp_Rpt_Customers_RptDailySales",
+    "usp_Rpt_Dispatch",
+    "usp_Rpt_Export_Accounting",
+    "usp_Rpt_Export_Email",
+    "usp_Rpt_Export_Heureka",
+    "usp_Rpt_Export_RptDailySales",
+    "usp_Rpt_Export_Sales_2026",
+    "usp_Rpt_Kpi_ExportQueue",
+    "usp_Rpt_Kpi_RptDailySales",
+    "usp_Rpt_Margin_RptDailySales",
+    "usp_Rpt_Margin_Sales_2024",
+    "usp_Rpt_RptDailySales_Cleanup",
+    "usp_Rpt_RptDailySales_Export",
+    "usp_Rpt_RptDailySales_List",
+    "usp_Rpt_RptDailySales_MonthClose",
+    "usp_Rpt_RptStockSnapshot_Cleanup",
+    "usp_Rpt_RptStockSnapshot_MonthClose",
+    "usp_Rpt_Sales_2024_Cleanup",
+    "usp_Rpt_Sales_2026_MonthClose",
+    "usp_Rpt_Stock_RptDailySales",
+    "usp_Rpt_Weekly_RptDailySales"
+   ],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)"
+   ],
+   "domain": "D:RptDailySales",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": 5,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 21 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 19: usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka, usp_Rpt_Export_RptDailySales …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka, usp_Rpt_Export_RptDailySales, usp_Rpt_Export_Sales_2026, usp_Rpt_Kpi_ExportQueue, usp_Rpt_Kpi_RptDailySales, usp_Rpt_Margin_RptDailySales, usp_Rpt_Margin_Sales_2024, usp_Rpt_RptDailySales_Cleanup, usp_Rpt_RptDailySales_Export, usp_Rpt_RptDailySales_List, usp_Rpt_RptDailySales_MonthClose, usp_Rpt_RptStockSnapshot_Cleanup, usp_Rpt_RptStockSnapshot_MonthClose, usp_Rpt_Sales_2024_Cleanup, usp_Rpt_Sales_2026_MonthClose, usp_Rpt_Stock_RptDailySales, usp_Rpt_Weekly_RptDailySales",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 72.3,
+   "slepa": 50,
+   "soubor": "out/evidence/D-RptDailySales.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 19,
+   "zapisujici_neoverene": 19,
+   "zive": 21
+  },
+  {
+   "blokujici": [
+    "usp_Cust_Customer_Nightly"
+   ],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)"
+   ],
+   "domain": "D:CustomerAddress",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": 6,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 19 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 15: usp_Cust_CustomerAddress_Close, usp_Cust_CustomerAddress_Confirm, usp_Cust_CustomerAddress_Dispatch, usp_Cust_CustomerContact_MonthClose, usp_Cust_CustomerSegment_Close, usp_Cust_CustomerSegment_Dispatch …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_Cust_Customer_Nightly",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 71.9,
+   "slepa": 11,
+   "soubor": "out/evidence/D-CustomerAddress.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 15,
+   "zapisujici_neoverene": 15,
+   "zive": 19
+  },
+  {
+   "blokujici": [
+    "usp_Price_PriceHistory_MonthClose"
+   ],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)"
+   ],
+   "domain": "D:PriceList",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": 7,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 17 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 12: usp_Price_PriceHistory_MonthClose, usp_Price_PriceList_Insert, usp_Price_PriceList_MonthClose, usp_Price_PriceList_Recalc, usp_Price_PriceList_SetStatus, usp_Price_Promo_Cancel …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_Price_PriceHistory_MonthClose",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 71.9,
+   "slepa": 10,
+   "soubor": "out/evidence/D-PriceList.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 12,
+   "zapisujici_neoverene": 12,
+   "zive": 17
+  },
+  {
+   "blokujici": [
+    "usp_Import_Stock"
+   ],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)"
+   ],
+   "domain": "D:Warehouse",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": 8,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 41 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 27: spSklad_InventoryCount_Cancel, spSklad_InventoryCount_Merge, spSklad_InventoryCount_Nightly, spSklad_StockLevel_Close, spSklad_StockLevel_Delete, spSklad_StockLevel_Save …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_Import_Stock",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 69.5,
+   "slepa": 22,
+   "soubor": "out/evidence/D-Warehouse.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 27,
+   "zapisujici_neoverene": 27,
+   "zive": 41
+  },
+  {
+   "blokujici": [],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)"
+   ],
+   "domain": "D:ShipmentTracking",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": 9,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 23 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 19: usp_Ship_CarrierService_Cancel, usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_GLS_old, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 64.7,
+   "slepa": 16,
+   "soubor": "out/evidence/D-ShipmentTracking.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 19,
+   "zapisujici_neoverene": 19,
+   "zive": 23
+  },
+  {
+   "blokujici": [
+    "usp_Order_Export",
+    "usp_Order_OrderEvent_MonthClose",
+    "usp_Order_OrderNote_Nightly",
+    "usp_Order_OrderStatusHistory_Archive"
+   ],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)"
+   ],
+   "domain": "D:OrderNote",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": 10,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": true
+    },
+    {
+     "detail": "0 z 38 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 28: spSklad_Warehouse_Update, usp_Inv_Invoice_SetStatus, usp_Inv_Invoice_Update, usp_Order_Cancel, usp_Order_CartItem_Archive, usp_Order_CartItem_Cleanup …",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_Order_Export, usp_Order_OrderEvent_MonthClose, usp_Order_OrderNote_Nightly, usp_Order_OrderStatusHistory_Archive",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 57.3,
+   "slepa": 28,
+   "soubor": "out/evidence/D-OrderNote.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 28,
+   "zapisujici_neoverene": 28,
+   "zive": 38
+  },
+  {
+   "blokujici": [
+    "usp_AuditLog_Purge"
+   ],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)",
+    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+   ],
+   "domain": "D:SysParam",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": null,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "malý shluk: posoudit jako součást sousední domény",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "0 z 2 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 2: usp_AuditLog_Purge, usp_SysParam_Set",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "usp_AuditLog_Purge",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    }
+   ],
+   "skore": 66.2,
+   "slepa": 3,
+   "soubor": "out/evidence/D-SysParam.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 2,
+   "zapisujici_neoverene": 2,
+   "zive": 2
+  },
+  {
+   "blokujici": [],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)",
+    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+   ],
+   "domain": "D:Users",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": null,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "malý shluk: posoudit jako součást sousední domény",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "0 z 2 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "chybí 1: usp_User_Save",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 87.6,
+   "slepa": 2,
+   "soubor": "out/evidence/D-Users.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 1,
+   "zapisujici_neoverene": 1,
+   "zive": 2
+  },
+  {
+   "blokujici": [],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)",
+    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+   ],
+   "domain": "D:Translation",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": null,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "malý shluk: posoudit jako součást sousední domény",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "0 z 1 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 97.2,
+   "slepa": 1,
+   "soubor": "out/evidence/D-Translation.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 0,
+   "zapisujici_neoverene": 0,
+   "zive": 1
+  },
+  {
+   "blokujici": [],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)",
+    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "domain": "D:Product_bak2019",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": null,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "0 z 0 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 100.0,
+   "slepa": 0,
+   "soubor": "out/evidence/D-Product_bak2019.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 0,
+   "zapisujici_neoverene": 0,
+   "zive": 0
+  },
+  {
+   "blokujici": [],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)",
+    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "domain": "D:TmpRecalc",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": null,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "0 z 0 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 100.0,
+   "slepa": 0,
+   "soubor": "out/evidence/D-TmpRecalc.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 0,
+   "zapisujici_neoverene": 0,
+   "zive": 0
+  },
+  {
+   "blokujici": [],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)",
+    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "domain": "D:ImportProduct",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": null,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "0 z 0 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 100.0,
+   "slepa": 0,
+   "soubor": "out/evidence/D-ImportProduct.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 0,
+   "zapisujici_neoverene": 0,
+   "zive": 0
+  },
+  {
+   "blokujici": [],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)",
+    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "domain": "D:OldOrders",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": null,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "0 z 0 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 100.0,
+   "slepa": 0,
+   "soubor": "out/evidence/D-OldOrders.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 0,
+   "zapisujici_neoverene": 0,
+   "zive": 0
+  },
+  {
+   "blokujici": [],
+   "chybi": [
+    "doména má vlastnický tým (vlastník není určen)",
+    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "domain": "D:X_Migr_Customer",
+   "navrh": 0,
+   "nazev": null,
+   "overeno": 0,
+   "popis": "zavřený",
+   "poradi": null,
+   "pravidla": [
+    {
+     "detail": "vlastník není určen",
+     "id": "R1",
+     "pravidlo": "doména má vlastnický tým",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
+     "id": "R2",
+     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
+     "pro": "jen_draft_pr",
+     "splneno": false
+    },
+    {
+     "detail": "0 z 0 (0 %)",
+     "id": "R3",
+     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": false
+    },
+    {
+     "detail": "ano",
+     "id": "R4",
+     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    },
+    {
+     "detail": "žádné",
+     "id": "R5",
+     "pravidlo": "blokujících slepých míst ≤ 0",
+     "pro": "otevreny_s_vlastnikem",
+     "splneno": true
+    }
+   ],
+   "skore": 100.0,
+   "slepa": 0,
+   "soubor": "out/evidence/D-X_Migr_Customer.md",
+   "stav": "zavreny",
+   "vlastnik": null,
+   "zapisujici": 0,
+   "zapisujici_neoverene": 0,
+   "zive": 0
+  }
+ ],
  "nodes": [
   {
    "apps": {},
@@ -32473,6 +33554,252 @@
    "type": "V"
   }
  ],
+ "sensitivity": {
+  "bod_zvratu": {
+   "druhy": "D:Category",
+   "prvni": "D:Claim",
+   "relativni_zmena_vahy": {
+    "bonus_dead": -7.156,
+    "bonus_readonly": 0.665,
+    "data_size": 3.5,
+    "dynamic_sql": 3.5,
+    "external_calls": -0.782,
+    "foreign_reads": 5.367,
+    "foreign_writes": -2.8,
+    "inbound_reads": -0.915,
+    "inbound_writes": -2.556
+   },
+   "rozdil": 1.61
+  },
+  "delta": 0.2,
+  "jedna_vaha": [
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.49,
+    "top3_stejne": false,
+    "vaha": "foreign_writes",
+    "zmena": -0.2,
+    "zmeny_poradi": 5
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.72,
+    "top3_stejne": true,
+    "vaha": "foreign_writes",
+    "zmena": 0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.48,
+    "top3_stejne": true,
+    "vaha": "inbound_writes",
+    "zmena": -0.2,
+    "zmeny_poradi": 0
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.74,
+    "top3_stejne": true,
+    "vaha": "inbound_writes",
+    "zmena": 0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.26,
+    "top3_stejne": false,
+    "vaha": "inbound_reads",
+    "zmena": -0.2,
+    "zmeny_poradi": 5
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.96,
+    "top3_stejne": true,
+    "vaha": "inbound_reads",
+    "zmena": 0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.67,
+    "top3_stejne": true,
+    "vaha": "foreign_reads",
+    "zmena": -0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.55,
+    "top3_stejne": true,
+    "vaha": "foreign_reads",
+    "zmena": 0.2,
+    "zmeny_poradi": 0
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.7,
+    "top3_stejne": true,
+    "vaha": "dynamic_sql",
+    "zmena": -0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.52,
+    "top3_stejne": false,
+    "vaha": "dynamic_sql",
+    "zmena": 0.2,
+    "zmeny_poradi": 5
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.2,
+    "top3_stejne": false,
+    "vaha": "external_calls",
+    "zmena": -0.2,
+    "zmeny_poradi": 4
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 2.02,
+    "top3_stejne": true,
+    "vaha": "external_calls",
+    "zmena": 0.2,
+    "zmeny_poradi": 0
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.7,
+    "top3_stejne": true,
+    "vaha": "data_size",
+    "zmena": -0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.52,
+    "top3_stejne": true,
+    "vaha": "data_size",
+    "zmena": 0.2,
+    "zmeny_poradi": 0
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 2.09,
+    "top3_stejne": false,
+    "vaha": "bonus_readonly",
+    "zmena": -0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.13,
+    "top3_stejne": true,
+    "vaha": "bonus_readonly",
+    "zmena": 0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.57,
+    "top3_stejne": false,
+    "vaha": "bonus_dead",
+    "zmena": -0.2,
+    "zmeny_poradi": 2
+   },
+   {
+    "druhy": "D:Category",
+    "prvni": "D:Claim",
+    "rozdil_1_2": 1.66,
+    "top3_stejne": true,
+    "vaha": "bonus_dead",
+    "zmena": 0.2,
+    "zmeny_poradi": 0
+   }
+  ],
+  "nahodne": {
+   "delta": 0.2,
+   "n": 2000,
+   "p_prvni_pred_druhym": 1.0,
+   "prvni": {
+    "D:Claim": 1.0
+   },
+   "rozsah_poradi": {
+    "D:Category": [
+     2,
+     2
+    ],
+    "D:Claim": [
+     1,
+     1
+    ],
+    "D:CreditNote": [
+     3,
+     7
+    ],
+    "D:CustomerAddress": [
+     3,
+     7
+    ],
+    "D:GatewayLog": [
+     3,
+     7
+    ],
+    "D:OrderNote": [
+     10,
+     10
+    ],
+    "D:PriceList": [
+     3,
+     7
+    ],
+    "D:RptDailySales": [
+     3,
+     8
+    ],
+    "D:ShipmentTracking": [
+     9,
+     9
+    ],
+    "D:Warehouse": [
+     6,
+     8
+    ]
+   },
+   "seed": 7
+  },
+  "zakladni_poradi": [
+   "D:Claim",
+   "D:Category",
+   "D:CreditNote",
+   "D:GatewayLog",
+   "D:RptDailySales",
+   "D:CustomerAddress",
+   "D:PriceList",
+   "D:Warehouse",
+   "D:ShipmentTracking",
+   "D:OrderNote"
+  ]
+ },
  "summary": {
   "blind": {
    "agent_non_tsql": [
@@ -32692,7 +34019,7 @@
     }
    ]
   },
-  "elapsed_s": 0.29,
+  "elapsed_s": 0.13,
   "evaluation": {
    "absorbed": [
     "Purchasing"
