@@ -118,14 +118,17 @@ def decide(policy, changes, tests_ok, review, problems=(), profile=None, labels=
         tier = max_tier(tier, rule["tier"])
         owners.add(policy["owners"][rule["owner"]])
         reasons.append(("cesta", f"`{path}`", rule["tier"], rule["reason"]))
+        # Profil cestu jen zvedne; do komentáře jde jeden řádek s nejsilnějším důvodem.
+        floor, why = rule["tier"], ""
         if rule["tier"] == "low" and not matches(path, prof["auto_merge_paths"]):
-            floor = prof["outside_auto_merge_tier"]
-            tier = max_tier(tier, floor)
-            reasons.append(("profil", f"`{path}`", floor, f"Mimo auto-merge cesty profilu `{name}`."))
+            floor, why = max_tier(floor, prof["outside_auto_merge_tier"]), f"Mimo auto-merge cesty profilu `{name}`."
         for extra in prof.get("min_tier_paths") or []:
-            if matches(path, extra["paths"]) and TIERS.index(extra["tier"]) > TIERS.index(rule["tier"]):
-                tier = max_tier(tier, extra["tier"])
-                reasons.append(("profil", f"`{path}`", extra["tier"], extra["reason"]))
+            level = TIERS.index(extra["tier"])
+            if matches(path, extra["paths"]) and level > TIERS.index(rule["tier"]) and level >= TIERS.index(floor):
+                floor, why = extra["tier"], extra["reason"]
+        if why:
+            tier = max_tier(tier, floor)
+            reasons.append(("profil", f"`{path}`", floor, why))
 
     changed_lines = sum(c["additions"] + c["deletions"] for c in changes)
     limits = prof.get("limits") or policy["limits"]
