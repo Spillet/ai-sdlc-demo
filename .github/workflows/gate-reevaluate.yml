@@ -69,7 +69,10 @@ jobs:
           fi
           gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" --name "gate-input-pr-$PR" --dir "$RUNNER_TEMP/out"
           echo "Vstup risk gate z běhu $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" | tee -a "$GITHUB_STEP_SUMMARY"
-          git fetch --no-tags --quiet origin "pull/$PR/head:refs/remotes/pr/$PR"
+          # Checkout s fetch-depth 0 už má všechny větve; token se do gitu neukládá (persist-credentials: false).
+          HEAD_REF=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json headRefName --jq .headRefName)
+          git rev-parse --verify --quiet "origin/$HEAD_REF" > /dev/null || { echo "::error::Větev origin/$HEAD_REF nenalezena."; exit 1; }
+          echo "HEAD_REF=$HEAD_REF" >> "$GITHUB_ENV"
       - name: Risk gate
         env:
           GH_TOKEN: ${{ github.token }}
@@ -78,4 +81,4 @@ jobs:
           ACTOR: ${{ github.actor }}
         run: |
           python3 .github/scripts/risk_gate.py "$PR" "$RUNNER_TEMP/out" --from-input \
-            --profile "$PROFILE" --actor "$ACTOR" --base origin/main --head "refs/remotes/pr/$PR" --trigger gate-reevaluate
+            --profile "$PROFILE" --actor "$ACTOR" --base origin/main --head "origin/$HEAD_REF" --trigger gate-reevaluate
