@@ -4,7 +4,7 @@
 -- =====================================================================
 -- NESPOUŠTĚNO proti reálné DB. Analyzátor tenhle soubor zatím nečte; slouží
 -- ke kontrole, kde se regex parser a katalog SQL Serveru rozcházejí.
--- Slepá místa katalogu: dynamické SQL, cross-DB (referenced_id NULL),
+-- Blind spots katalogu: dynamické SQL, cross-DB (referenced_id NULL),
 -- volání bez schématu (is_caller_dependent = 1), dočasné tabulky.
 SET NOCOUNT ON;
 SELECT OBJECT_SCHEMA_NAME(d.referencing_id) AS referencing_schema,

@@ -3,7 +3,7 @@
 Není to parser jazyka. Dělá přesně to, co potřebuje mapa závislostí:
 rozdělí skript na objekty, odstraní komentáře, oddělí řetězcové literály
 a v kódu najde odkazy na tabulky, volání procedur, funkce a dynamické SQL.
-Slepá místa jsou popsaná v README (sekce „Co nefunguje“).
+Blind spots jsou popsané v README (sekce „Co nefunguje“).
 """
 import re
 

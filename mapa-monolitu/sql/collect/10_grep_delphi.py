@@ -10,7 +10,7 @@ Hledá v .pas a .dfm:
   - EXEC usp_X / EXECUTE dbo.usp_X    v textu SQL (TADOQuery.SQL, CommandText)
   - SELECT/INSERT/UPDATE/DELETE nad tabulkou přímo z klienta
 Řádky, kde se jméno skládá za běhu ('usp_Rpt_' + cbReport.Text), vypíše
-s prázdným proc_name: to je slepé místo, které musí projít člověk.
+s prázdným proc_name: to je blind spot, který musí projít člověk.
 
 NESPOUŠTĚNO na reálném kódu. Víceřádkové SQL v .dfm (SQL.Strings = (...))
 skládá jen hrubě po řádcích.

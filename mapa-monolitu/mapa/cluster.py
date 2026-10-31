@@ -1,4 +1,4 @@
-"""Kandidáti na domény: label propagation nad grafem procedury–tabulky.
+"""Domain candidates: label propagation nad grafem procedury–tabulky.
 
 Postup:
 1. Ze shlukování vyřadit „sdílené“ uzly: tabulky, na které sahá velký podíl

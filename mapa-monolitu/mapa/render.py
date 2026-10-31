@@ -1,4 +1,4 @@
-"""Výstupy: JSON mapy, textový report, kontextové balíčky pro AI a statické HTML."""
+"""Výstupy: JSON mapy, textový report, context packs pro AI a statické HTML."""
 import json
 import os
 import re
@@ -33,7 +33,7 @@ def build_payload(mono, status, cl, domains, summary):
 
 def report_md(data):
     s = data["summary"]
-    L = ["# Mapa monolitu: výsledky", "",
+    L = ["# Monolith Map: výsledky", "",
          "Vygenerováno `analyze.py` (%.1f s). Syntetická DB fiktivního e-shopu, žádná reálná data." % s["elapsed_s"], "",
          "## Rozsah", "",
          "| Objekty | Počet |", "|---|---:|",
@@ -55,7 +55,7 @@ def report_md(data):
           "| Běh: SQL Agent | %d |" % ee.get("runtime:agent", 0),
           "| Běh: Kompas.Web.Api (o webu žádný jiný zdroj neví) | %d |" % ee.get("runtime:web", 0),
           "| Běh: jiné aplikace | %d |" % ee.get("runtime:other", 0), "",
-          "### Slepá místa", ""]
+          "### Blind spots", ""]
     b = s["blind"]
     L.append("- Dynamické SQL se skládaným jménem objektu: %d procedur (%s)" % (
         len(b.get("dynamic_blind", [])), ", ".join(x["obj"] for x in b.get("dynamic_blind", [])[:8]) + (" …" if len(b.get("dynamic_blind", [])) > 8 else "")))
@@ -75,7 +75,7 @@ def report_md(data):
     L += ["", "Sdílené („božské“) tabulky vyřazené ze shlukování: " +
           ", ".join("%s (%d procedur)" % kv for kv in sorted(s["shared_tables"].items(), key=lambda kv: -kv[1])),
           "", "Sdílené procedury (fan-in ≥ 8): " + ", ".join("%s (%d)" % kv for kv in sorted(s["shared_procs"].items(), key=lambda kv: -kv[1])),
-          "", "## Kandidáti na domény a doporučené pořadí", "",
+          "", "## Domain candidates a doporučené pořadí", "",
           "| # | Kandidát | Skóre | Procedury (živé/mrtvé) | Tabulky | Data | Proč |", "|---:|---|---:|---|---:|---:|---|"]
     for d in data["domains"]:
         L.append("| %s | %s | %.1f | %d (%d/%d) | %d | %.2f TB | %s |" % (
@@ -101,17 +101,17 @@ def report_md(data):
         from mapa.sensitivity import report_md as sens_md
         L += ["", sens_md(data["sensitivity"], s["weight_labels"]).rstrip()]
     if data.get("lanes"):
-        L += ["", "## Pruh core po doménách", "",
-              "Stav určují pravidla v `mapa/evidence.py` a vstup `politika/pruh-core.json` (vlastníci, prahy), ne skóre. "
-              "Podrobnosti a co chybí: `out/evidence/<doména>.md`, pro bránu `out/evidence/<doména>.json` a `index.json`.", "",
-              "| Doména | Pruh core | Vlastník | Ověřeno / návrh / živé | Zapisující bez ověření | Blokující slepá místa | Co chybí k dalšímu stavu |",
+        L += ["", "## Core lane po doménách", "",
+              "Stav určují pravidla v `mapa/evidence.py` a vstup `policy/core-lane.json` (owning teams, prahy), ne skóre. "
+              "Podrobnosti a co chybí: `out/evidence/<doména>.md`, pro risk gate `out/evidence/<doména>.json` a `index.json`.", "",
+              "| Doména | Core lane | Owning team | Verified / draft / živé | Zapisující bez ověření | Blokující blind spots | Co chybí k dalšímu stavu |",
               "|---|---|---|---|---:|---|---|"]
         for r in data["lanes"]:
             L.append("| %s | **%s** | %s | %d / %d / %d | %d | %s | %s |" % (
-                r["domain"] + (" (%s)" % r["nazev"] if r["nazev"] else ""), r["popis"], r["vlastnik"] or "–",
-                r["overeno"], r["navrh"], r["zive"], r["zapisujici_neoverene"],
-                (", ".join(r["blokujici"][:5]) + (" … (%d)" % len(r["blokujici"]) if len(r["blokujici"]) > 5 else "")) or "–",
-                "; ".join(r["chybi"]) or "–"))
+                r["domain"] + (" (%s)" % r["name"] if r["name"] else ""), r["label"], r["owner"] or "–",
+                r["verified"], r["draft"], r["live"], r["writing_unverified"],
+                (", ".join(r["blocking"][:5]) + (" … (%d)" % len(r["blocking"]) if len(r["blocking"]) > 5 else "")) or "–",
+                "; ".join(r["missing"]) or "–"))
     return "\n".join(L) + "\n"
 
 
@@ -121,7 +121,7 @@ def _table_ddl(mono, t):
 
 
 def context_packs(mono, status, cl, domain, out_dir):
-    """Kontextový balíček pro model: kód procedury + vše, co mapa ví o okolí.
+    """Context pack pro model: kód procedury + vše, co mapa ví o okolí.
 
     Tohle je vstup AI vrstvy. Model nedostává celou DB, jen řez kolem procedury.
     """
@@ -152,7 +152,7 @@ def context_packs(mono, status, cl, domain, out_dir):
         if mono.schedule.get(p):
             L.append("- plánovač: %s" % mono.schedule[p])
         if o.get("dynamic"):
-            L += ["", "## Dynamické SQL", "", "Tabulky z literálů: %s. Slepé (skládané jméno): %s." % (
+            L += ["", "## Dynamické SQL", "", "Tabulky z literálů: %s. Blind spot (skládané jméno): %s." % (
                 ", ".join(t for t, _ in o["dynamic"]["tables"]) or "žádné", "ano" if o["dynamic"]["blind"] else "ne")]
         qs = mono.qs.get(p)
         if qs:

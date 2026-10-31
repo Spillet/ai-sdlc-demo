@@ -1,4 +1,4 @@
-"""Skóre připravenosti k vyjmutí (0–100, víc = snazší vyjmout jako první).
+"""Extraction readiness score (0–100, víc = snazší vyjmout jako první).
 
 Skóre = 100 − penalizace + bonusy. Váhy jsou ručně zvolené a vypsané
 v README; jsou to předpoklady k diskusi, ne kalibrovaný model.
@@ -12,7 +12,7 @@ WEIGHTS = {
     "inbound_writes": 15,      # do tabulek domény zapisuje někdo cizí
     "inbound_reads": 10,       # tabulky domény čte někdo cizí (bude potřeba API nebo replika)
     "foreign_reads": 10,       # doména čte cizí nebo sdílené tabulky (bude potřebovat cizí API nebo kopii dat)
-    "dynamic_sql": 10,         # dynamické SQL; slepé (skládané jméno objektu) se počítá dvakrát
+    "dynamic_sql": 10,         # dynamické SQL; blind spot (skládané jméno objektu) se počítá dvakrát
     "external_calls": 10,      # vstupy zvenku: klient, web, plánovač, volání z jiných domén
     "data_size": 10,           # objem dat vlastněných doménou (log škála do 10 TB)
     "bonus_readonly": 10,      # podíl čtecích procedur: levný parallel run
@@ -198,7 +198,7 @@ def explain(r):
         elif k == "data_size":
             detail = " (%.1f TB)" % (r["size_gb"] / 1000.0)
         elif k == "dynamic_sql":
-            detail = " (%d z literálu, %d slepé)" % (r["dyn_literal"], r["dyn_blind"])
+            detail = " (%d z literálu, %d blind)" % (r["dyn_literal"], r["dyn_blind"])
         out.append("%s %.0f b.%s" % (LABELS[k], v, detail))
     bon = sorted(((k, v) for k, v in r["contrib"].items() if v > 0), key=lambda kv: -kv[1])
     for k, v in bon[:1]:
