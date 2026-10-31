@@ -1,3 +1,4 @@
+using Claims.Api.Content;
 using Claims.Api.Domain;
 using Claims.Api.Refunds;
 
@@ -16,6 +17,8 @@ app.MapPost("/claims/evaluate", (ClaimRequest request) =>
 
 app.MapPost("/claims/refund", (RefundRequest request) =>
     Results.Ok(new { amount = RefundCalculator.Calculate(request.Price, request.Outcome, request.PartialRate) }));
+
+app.MapMessageEndpoints();
 
 app.Run();
 
