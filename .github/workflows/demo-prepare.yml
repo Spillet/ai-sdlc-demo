@@ -120,9 +120,11 @@ jobs:
           PR: ${{ needs.prepare.outputs.pr }}
           BRANCH: ${{ needs.prepare.outputs.branch }}
           VERIFY: ${{ needs.verify.result }}
+          REQUESTED_BY: ${{ github.actor }}
         run: |
           python3 .github/scripts/risk_gate.py "$PR" "$RUNNER_TEMP/out" \
-            --verify "$VERIFY" --base origin/main --head "origin/$BRANCH" --trigger demo-prepare
+            --verify "$VERIFY" --base origin/main --head "origin/$BRANCH" --trigger demo-prepare \
+            --requested-by "$REQUESTED_BY"
       - name: Vstup pro gate re-evaluation
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

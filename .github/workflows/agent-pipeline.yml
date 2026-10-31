@@ -233,9 +233,12 @@ jobs:
       - name: Risk gate
         env:
           GH_TOKEN: ${{ github.token }}
+          # Kdo dal štítek ai:implement, tedy potvrdil spec a spustil agenta. Jde do komentáře risk gate.
+          REQUESTED_BY: ${{ github.actor }}
         run: |
           python3 .github/scripts/risk_gate.py "${{ needs.publish.outputs.pr }}" "$RUNNER_TEMP/out" \
-            --verify "${{ needs.verify.result }}" --base origin/main --head "origin/$BRANCH" --trigger agent-pipeline
+            --verify "${{ needs.verify.result }}" --base origin/main --head "origin/$BRANCH" --trigger agent-pipeline \
+            --requested-by "$REQUESTED_BY"
       - name: Vstup pro gate re-evaluation
         # gate-reevaluate.yml z něj přepočítá risk gate bez modelu (review, patch, výsledek verify a commit).
         if: always()

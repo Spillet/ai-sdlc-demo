@@ -87,7 +87,9 @@ Podmínky auto-merge platí ve všech profilech: testy v `verify` prošly, AI re
 
 Dnes (31. 10. 2026) tedy platí peak. Od 26. 11. do konce 30. 11. freeze, od 1. 12. zase normal.
 
-**Ruční přepsání.** Workflow [`gate-reevaluate.yml`](.github/workflows/gate-reevaluate.yml) (Actions › Gate re-evaluation › Run workflow) přepočítá risk gate nad existujícím PR. Vstupy: `pr` a `profile` (`calendar` = podle kalendáře, nebo `normal` / `peak` / `freeze`). Běží bez modelu a bez secrets a trvá kolem 25 sekund. Komentář risk gate vždy uvede aktivní profil a proč: kalendářní okno, nebo ruční přepsání, kdo ho spustil a co by platilo bez něj. Komentář se aktualizuje (ne nový komentář pod každým během) a drží historii rozhodnutí. Štítek `risk:*` se přepne, stav kontroly `risk-gate` se přepíše a při 🟢 proběhne auto-merge.
+**Ruční přepsání.** Workflow [`gate-reevaluate.yml`](.github/workflows/gate-reevaluate.yml) (Actions › Gate re-evaluation › Run workflow) přepočítá risk gate nad existujícím PR. Vstupy: `pr` a `profile` (`calendar` = podle kalendáře, nebo `normal` / `peak` / `freeze`). Běží bez modelu a bez secrets a trvá kolem 25 sekund. Komentář risk gate vždy uvede aktivní profil a proč: kalendářní okno, nebo ruční přepsání, kdo ho spustil a co by platilo bez něj. Komentář se aktualizuje (ne nový komentář pod každým během) a drží historii rozhodnutí.
+
+**Auditní stopa.** Komentář risk gate odpovídá na otázku „pod jakým režimem změna prošla“, ne jen „co se stalo“. Odstavec **Autorizace** uvádí záměr (spec v issue podle větve `ai/issue-N`, u dema `demo/messages.yml`), kdo spustil agenta (kdo dal štítek `ai:implement`, u dema kdo spustil Demo prepare) a verzi pravidel: commit, který naposledy změnil `risk-policy.yml` a `change-calendar.yml` v `main`, s odkazem na přesné znění. Historie rozhodnutí má u každého řádku verzi pravidel, takže je vidět, jestli se mezi dvěma rozhodnutími změnila pravidla, nebo jen profil. Schválení člověkem zapisuje GitHub review u PR. Gate re-evaluation agenta nespouští, kdo ho spustil, bere z artefaktu původního běhu. Štítek `risk:*` se přepne, stav kontroly `risk-gate` se přepíše a při 🟢 proběhne auto-merge.
 
 Rozhodnutí, co gate re-evaluation bere odkud:
 
@@ -118,7 +120,7 @@ Cíl: ukázat, že o merge nerozhoduje model ani autor, ale risk policy a doba. 
 | 2 | PR › komentář risk gate | 🟡 čeká na schválení. **Policy profile: `peak`**, okno „Black Friday sezóna“. U souborů řádek „V peak sezóně jde každá změna kódu ke kontrole člověku.“ Štítek `risk:medium`, kontrola `risk-gate` červeně | „Tatáž změna by v běžném týdnu prošla sama. Teď je Black Friday sezóna a kalendář říká: každý kód schvaluje člověk.“ |
 | 3 | `change-calendar.yml` | Okna peak a freeze s důvody | „Kalendář je kód, mění se přes PR a sám je v high: agent ho změnit nesmí.“ |
 | 4 | Actions › Gate re-evaluation › Run workflow: `pr` = číslo PR, `profile` = `normal` | Běh trvá asi 25 sekund | „Simuluju, že sezóna skončila, nebo že release manager vědomě povolil výjimku. Model neběží, nic nestojí.“ |
-| 5 | PR (obnovit stránku) | Komentář se přepsal: 🟢 auto-merge, **Policy profile: `normal`, ruční přepsání, spustil @Spillet**, bez přepsání by platil `peak`. Historie rozhodnutí má dva řádky. Štítek `risk:low`, PR je merged, větev smazaná | „Auditní stopa: kdo, kdy a proč pustil změnu mimo kalendář.“ |
+| 5 | PR (obnovit stránku) | Komentář se přepsal: 🟢 auto-merge, **Policy profile: `normal`, ruční přepsání, spustil @Spillet**, bez přepsání by platil `peak`. Historie rozhodnutí má dva řádky. Štítek `risk:low`, PR je merged, větev smazaná | „Auditní stopa: kdo, kdy a proč pustil změnu mimo kalendář. A pod jakou verzí pravidel: odstavec Autorizace odkazuje na přesné znění risk policy a kalendáře, podle kterých risk gate rozhodla.“ |
 | 6 | Volitelně: `risk-policy.yml` › `profiles` | Deklarativní profily | „Žádný práh není v Pythonu natvrdo. Profil smí risk tier jen zvednout.“ |
 
 **Když něco selže:**

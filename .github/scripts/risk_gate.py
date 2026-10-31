@@ -17,6 +17,10 @@ Když se zdroje neshodnou nebo risk gate nenajde žádný soubor, výsledek je `
 `--from-input` (gate re-evaluation): verdikt review, patch a výsledek ověření bere z artefaktu
 `gate-input-pr-N` posledního běhu risk gate. Když se větev PR od té doby změnila, výsledek je
 `blocked` a je potřeba pustit pipeline znovu.
+
+Komentář odpovídá na otázku auditora „pod jakým režimem změna prošla“: záměr (spec v issue podle
+větve PR), kdo spustil agenta (`--requested-by`), verze pravidel (commit, který naposledy změnil
+`risk-policy.yml` a `change-calendar.yml` v checkoutu `main`), profil a historie rozhodnutí.
 """
 import base64
 import json
@@ -41,6 +45,8 @@ UNRECOGNIZED = "Risk gate nerozpoznala změněné soubory."
 MARKER = "<!-- risk-gate -->"
 HISTORY = re.compile(r"<!-- risk-gate-history: ([A-Za-z0-9+/=]*) -->")
 INPUT_FILE = "gate-input.json"
+RULE_FILES = ("risk-policy.yml", "change-calendar.yml")
+AGENT_BRANCH = re.compile(r"ai/issue-(\d+)")
 
 
 def parse_numstat_z(text):
@@ -224,6 +230,32 @@ def prague_now():
     return datetime.now(timezone.utc).astimezone(ZoneInfo("Europe/Prague")).strftime("%Y-%m-%d %H:%M")
 
 
+def rules_version(root="."):
+    """{soubor pravidel: commit, který ho naposledy změnil}. Risk gate běží z checkoutu `main`,
+    takže je to verze pravidel, podle které rozhodla. Bez gitu nebo historie `None` (komentář ukáže `?`).
+    """
+    versions = {}
+    for name in RULE_FILES:
+        result = subprocess.run(["git", "log", "-1", "--format=%H", "--", name], cwd=root,
+                                capture_output=True, text=True, check=False)
+        versions[name] = (result.stdout.strip() or None) if result.returncode == 0 else None
+    return versions
+
+
+def intent_of(head_ref):
+    """Odkud změna přišla, podle větve PR. Větve zakládá pipeline; agent nemá token se zápisem."""
+    match = AGENT_BRANCH.fullmatch(head_ref or "")
+    if match:
+        return f"spec v issue #{match.group(1)}"
+    if (head_ref or "").startswith("demo/"):
+        return "připravená změna z [`demo/messages.yml`](../blob/main/demo/messages.yml) (demo-prepare, bez issue)"
+    return f"neznámý zdroj (větev `{head_ref or '?'}`)"
+
+
+def short(sha):
+    return sha[:7] if sha else "?"
+
+
 def encode_history(entries):
     return base64.b64encode(json.dumps(entries, ensure_ascii=False).encode("utf-8")).decode("ascii")
 
@@ -238,8 +270,22 @@ def decode_history(body):
         return []
 
 
-def render(tier, decision, reasons, review, profile, approvals=None, owners=(), history=()):
-    rows = "\n".join(f"| {kind} | {what} | {ICONS[t]} {t} | {why} |" for kind, what, t, why in reasons)
+def render_authorization(authz):
+    """Odstavec „Autorizace“: záměr, kdo spustil agenta, verze pravidel a kde je schválení člověkem."""
+    if not authz:
+        return ""
+    rules = ", ".join(
+        f"[`{name}@{short(sha)}`](../blob/{sha}/{name})" if sha else f"`{name}@?`"
+        for name, sha in authz.get("rules", {}).items()
+    )
+    who = f"@{authz['requested_by']}" if authz.get("requested_by") else "neuvedeno (běh před touto verzí)"
+    return (f"\n\n**Autorizace:** záměr: {authz.get('intent', '?')} · agenta spustil {who} "
+            f"(`{authz.get('trigger', '?')}`) · pravidla z `main`: {rules} · "
+            "schválení člověkem zapisuje review u tohoto PR.")
+
+
+def render(tier, decision, reasons, review, profile, approvals=None, owners=(), history=(), authz=None):
+    rows ="\n".join(f"| {kind} | {what} | {ICONS[t]} {t} | {why} |" for kind, what, t, why in reasons)
     findings = "\n".join(
         f"- **{f.get('severity', '?')}** `{f.get('file', '')}`: {f.get('issue', '')}" for f in review.get("findings", [])
     ) or "- bez nálezů"
@@ -255,13 +301,17 @@ def render(tier, decision, reasons, review, profile, approvals=None, owners=(), 
                      " GitHub nevynutí. V produkci ho drží ruleset (viz README).")
     past = ""
     if history:
+        # Starší záznamy historie verzi pravidel nemají.
         lines = "\n".join(f"| {h['when']} | {h['trigger']} | `{h['profile']}` ({h['source']}) | "
+                          f"{' / '.join(short(s) for s in h['rules'].values()) if h.get('rules') else '–'} | "
                           f"{ICONS.get(h['tier'], '')} {h['decision']} |" for h in history)
-        past = f"\n<details open><summary>Historie rozhodnutí</summary>\n\n| Kdy | Spustil | Profil | Rozhodnutí |\n|---|---|---|---|\n{lines}\n</details>\n"
+        past = ("\n<details open><summary>Historie rozhodnutí</summary>\n\n"
+                "| Kdy | Spustil | Profil | Pravidla (policy / kalendář) | Rozhodnutí |\n|---|---|---|---|---|\n"
+                f"{lines}\n</details>\n")
     return f"""{MARKER}
 ## Risk gate: {ICONS.get(tier, '')} {decision}
 
-**Policy profile:** `{profile['name']}` – {profile['reason']}.{need}
+**Policy profile:** `{profile['name']}` – {profile['reason']}.{need}{render_authorization(authz)}
 
 | Signál | Hodnota | Risk tier | Proč |
 |---|---|---|---|
@@ -314,10 +364,12 @@ def main():
     patch_files, patch_lines = count_patch(patch_path.read_text(errors="replace")) if patch_path.exists() else (None, 0)
     counts = {"patch": patch_files}
     head_sha, draft, labels, state = None, False, [], "OPEN"
+    head_ref = arg("--head", "").removeprefix("origin/")
     if not dry_run:
-        info = json.loads(gh("pr", "view", pr, "--repo", REPO, "--json", "files,headRefOid,isDraft,labels,state"))
+        info = json.loads(gh("pr", "view", pr, "--repo", REPO, "--json",
+                             "files,headRefName,headRefOid,isDraft,labels,state"))
         counts["soubory PR na GitHubu"] = len(info.get("files") or [])
-        head_sha, draft, state = info["headRefOid"], info["isDraft"], info["state"]
+        head_sha, draft, state, head_ref = info["headRefOid"], info["isDraft"], info["state"], info["headRefName"]
         labels = [label["name"] for label in info.get("labels") or []]
         if state != "OPEN":
             raise SystemExit(f"PR #{pr} není otevřené ({state}), risk gate nemá co rozhodnout.")
@@ -327,8 +379,11 @@ def main():
         recorded = json.loads((out / INPUT_FILE).read_text(encoding="utf-8"))
         verify = recorded.get("verify")
         stale = head_sha is not None and recorded.get("head_sha") != head_sha
+        # Kdo spustil agenta, se zapsalo při původním běhu; gate re-evaluation agenta nespouští.
+        requested_by, source_trigger = recorded.get("requested_by"), recorded.get("trigger")
     else:
         verify = arg("--verify")
+        requested_by, source_trigger = arg("--requested-by"), trigger
     tests_ok = verify == "success" and not stale
 
     review = load_review(out)
@@ -345,14 +400,17 @@ def main():
         # Vstup pro gate re-evaluation: workflow ho nahraje jako artefakt gate-input-pr-N.
         (out / INPUT_FILE).write_text(json.dumps({
             "pr": pr, "head_sha": head_sha, "verify": verify, "trigger": trigger,
-            "run_id": os.environ.get("GITHUB_RUN_ID"),
+            "requested_by": requested_by, "run_id": os.environ.get("GITHUB_RUN_ID"),
         }), encoding="utf-8")
 
+    authz = {"intent": intent_of(head_ref), "requested_by": requested_by, "trigger": source_trigger or "?",
+             "rules": rules_version()}
     comment_id, old_body = (None, "") if dry_run else find_gate_comment(pr)
     entry = {"when": prague_now(), "trigger": trigger + (f" (@{arg('--actor')})" if arg("--actor") else ""),
-             "profile": profile["name"], "source": profile["source"], "tier": shown, "decision": decision}
+             "profile": profile["name"], "source": profile["source"], "tier": shown, "decision": decision,
+             "rules": authz["rules"]}
     history = decode_history(old_body) + [entry]
-    comment = render(shown, decision, reasons, review, profile, approvals, owners, history)
+    comment = render(shown, decision, reasons, review, profile, approvals, owners, history, authz)
     summary_file = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_file:
         Path(summary_file).write_text(comment, encoding="utf-8")

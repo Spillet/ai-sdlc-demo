@@ -3,7 +3,8 @@
 Pokrývají nálezy z oponentury: cesty s mezerou, diakritikou a přejmenováním, fail-closed při
 nesouladu, chráněný kontext agentů, testy a build v risk policy, nálezy AI review a draft z preflightu.
 A policy profiles s change calendar: hranice oken v Europe/Prague, překryv, hotfix ve freeze,
-ruční přepsání a to, že profil risk tier nikdy nesníží.
+ruční přepsání a to, že profil risk tier nikdy nesníží. A auditní stopu v komentáři: záměr,
+kdo spustil agenta a verze pravidel.
 """
 import json
 import os
@@ -21,7 +22,8 @@ from common import find_spec, spec_paths
 from policy import TIERS, calendar_profile, classify, load_calendar, load_policy, resolve_profile, validate_calendar
 from preflight import high_paths, needs_owner
 from demo_change import build, load_messages, pick, prepared_review, validate
-from risk_gate import UNRECOGNIZED, count_patch, decide, integrity, load_review, outcome, parse_numstat_z
+from risk_gate import (UNRECOGNIZED, count_patch, decide, decode_history, integrity, intent_of, load_review, outcome,
+                       parse_numstat_z, render, rules_version)
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = load_policy(ROOT / "risk-policy.yml")
@@ -383,6 +385,58 @@ class Demo(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "review.json").write_text(json.dumps(forged), encoding="utf-8")
             self.assertFalse(load_review(Path(tmp))["prepared"])
+
+
+class Authorization(unittest.TestCase):
+    PROFILE = {"name": "peak", "reason": "okno „Black Friday sezóna“", "source": "calendar"}
+
+    def test_intent_comes_from_branch(self):
+        self.assertEqual(intent_of("ai/issue-7"), "spec v issue #7")
+        self.assertIn("demo-prepare", intent_of("demo/pickup-12"))
+        self.assertIn("neznámý zdroj", intent_of("ai/issue-7-hack"))
+        self.assertIn("neznámý zdroj", intent_of(None))
+
+    def test_rules_version_is_last_commit_of_each_rule_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            git(tmp, "init", "-q")
+            git(tmp, "config", "user.email", "t@t")
+            git(tmp, "config", "user.name", "t")
+            for name in ("risk-policy.yml", "change-calendar.yml"):
+                (Path(tmp) / name).write_text("a: 1\n", encoding="utf-8")
+            git(tmp, "add", "-A")
+            git(tmp, "commit", "-qm", "base")
+            base = git(tmp, "rev-parse", "HEAD").strip()
+            (Path(tmp) / "risk-policy.yml").write_text("a: 2\n", encoding="utf-8")
+            git(tmp, "commit", "-qam", "policy")
+            policy = git(tmp, "rev-parse", "HEAD").strip()
+            (Path(tmp) / "README.md").write_text("x\n", encoding="utf-8")
+            git(tmp, "add", "-A")
+            git(tmp, "commit", "-qm", "readme")
+            self.assertEqual(rules_version(tmp), {"risk-policy.yml": policy, "change-calendar.yml": base})
+        with tempfile.TemporaryDirectory() as tmp:  # bez gitu: verze neznámá, risk gate nespadne
+            self.assertEqual(rules_version(tmp), {"risk-policy.yml": None, "change-calendar.yml": None})
+
+    def test_comment_answers_the_auditor(self):
+        rules = {"risk-policy.yml": "a" * 40, "change-calendar.yml": None}
+        authz = {"intent": intent_of("ai/issue-7"), "requested_by": "Spillet", "trigger": "agent-pipeline",
+                 "rules": rules}
+        old = {"when": "2026-10-31 09:00", "trigger": "demo-prepare", "profile": "peak", "source": "calendar",
+               "tier": "medium", "decision": "čeká"}
+        new = dict(old, trigger="gate-reevaluate (@Spillet)", rules=rules)
+        body = render("medium", "čeká", [], APPROVE, self.PROFILE, {}, {"Spillet"}, [old, new], authz)
+        self.assertIn("**Autorizace:** záměr: spec v issue #7", body)
+        self.assertIn("agenta spustil @Spillet (`agent-pipeline`)", body)
+        self.assertIn(f"[`risk-policy.yml@aaaaaaa`](../blob/{'a' * 40}/risk-policy.yml)", body)
+        self.assertIn("`change-calendar.yml@?`", body)
+        self.assertIn("| – |", body)  # starší záznam historie bez verze pravidel
+        self.assertIn("| aaaaaaa / ? |", body)
+        self.assertEqual(decode_history(body)[-1]["rules"], rules)
+
+    def test_reevaluation_of_old_run_says_requester_is_unknown(self):
+        authz = {"intent": "spec v issue #7", "requested_by": None, "trigger": "demo-prepare", "rules": {}}
+        body = render("low", "auto-merge", [], APPROVE, self.PROFILE, authz=authz)
+        self.assertIn("agenta spustil neuvedeno (běh před touto verzí)", body)
+
 
 if __name__ == "__main__":
     os.chdir(ROOT)
