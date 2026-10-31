@@ -1,0 +1,15 @@
+{
+  "_description": "Vstup pro stav core lane. Owning teams a prahy určují lidé (architekt a vlastníci domén), ne analyzátor. Týmy jsou fiktivní.",
+  "version": 2,
+  "snapshot_date": "2026-10-31",
+  "validity_days": 30,
+  "thresholds": {
+    "min_verified_coverage": 0.8,
+    "all_writers_verified": true,
+    "max_blocking_blind_spots": 0
+  },
+  "owners": {
+    "D:Claim": {"name": "Reklamace", "team": "Poprodej (fiktivní)", "github_team": "kompas/poprodej"},
+    "D:Category": {"name": "Katalog", "team": "Katalog a obsah (fiktivní)", "github_team": "kompas/katalog"}
+  }
+}
