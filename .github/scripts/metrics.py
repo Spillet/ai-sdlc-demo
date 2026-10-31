@@ -2,7 +2,7 @@
 
 Bez argumentu čte PR přes `gh pr list`. S `--json` čte uložený výstup téhož příkazu
 (`gh pr list --state all --json number,title,labels,createdAt,mergedAt,closedAt,isDraft,body,headRefName`).
-Počítá: PR podle risk tier, podíl PR sloučených přes auto-merge, dobu do sloučení a cenu agenta z popisu PR.
+Počítá: PR podle risk tier, podíl PR sloučených přes auto-merge, dobu do merge a cenu agenta z popisu PR.
 Cena z popisu PR je jen implementace; intake a review mají cenu v artefaktech běhů.
 """
 import json
