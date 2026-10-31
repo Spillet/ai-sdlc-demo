@@ -22,7 +22,7 @@ jobs:
         run: dotnet test tests/Claims.Tests/Claims.Tests.csproj --logger "console;verbosity=normal"
 
   gate-tests:
-    # Testy brány a regresní sada scénářů (evals/gate-cases.yml). Bez sítě k modelu, bez secrets.
+    # Testy risk gate a regresní sada scénářů (evals/gate-cases.yml). Bez sítě k modelu, bez secrets.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
@@ -32,7 +32,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install --quiet pyyaml==6.0.2
-      - name: Unit testy brány
+      - name: Unit testy risk gate
         run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
-      - name: Regresní scénáře brány
+      - name: Regresní scénáře risk gate (evals)
         run: python3 .github/scripts/run_gate_evals.py

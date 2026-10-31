@@ -1,6 +1,6 @@
-name: Intake – požadavek na specifikaci
+name: Intake → spec
 
-# Spouští se štítkem `pozadavek`. Issue založené ze šablony dostane štítek hned a GitHub
+# Spouští se štítkem `request`. Issue založené ze šablony dostane štítek hned a GitHub
 # pošle i událost `labeled`, takže `opened` není potřeba (jinak by intake běžel dvakrát).
 # Opakovaný intake po úpravě zadání: štítek odebrat a přidat znovu.
 on:
@@ -13,7 +13,7 @@ env:
 
 jobs:
   spec:
-    if: github.event.label.name == 'pozadavek'
+    if: github.event.label.name == 'request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -25,11 +25,11 @@ jobs:
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: '22'
-      - name: Zadání pro analytika
+      - name: Zadání pro intake agenta
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 .github/scripts/build_prompt.py intake "${{ github.event.issue.number }}" > "$RUNNER_TEMP/prompt.txt"
-      - name: Agent připraví specifikaci (jen čtení repozitáře)
+      - name: Intake agent připraví spec (jen čtení repozitáře)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
@@ -55,7 +55,7 @@ jobs:
         with:
           name: intake-output
           path: ${{ runner.temp }}/out
-      - name: Specifikace do issue
+      - name: Spec do issue
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 .github/scripts/post_spec.py "${{ github.event.issue.number }}" "$RUNNER_TEMP/out/agent.json"

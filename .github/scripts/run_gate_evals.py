@@ -1,7 +1,7 @@
-"""Regresní scénáře brány (evals/gate-cases.yml). Použití: run_gate_evals.py [CESTA]
+"""Regresní scénáře risk gate (evals/gate-cases.yml). Použití: run_gate_evals.py [CESTA]
 
-Pro každý scénář spočítá úroveň brány nad uvedenou změnou a porovná ji s očekáváním.
-Nevolá model ani GitHub; běží v CI při každé změně politiky nebo brány.
+Pro každý scénář spočítá risk tier nad uvedenou změnou a porovná ji s očekáváním.
+Nevolá model ani GitHub; běží v CI při každé změně risk policy nebo risk gate.
 """
 import sys
 from pathlib import Path
@@ -24,7 +24,7 @@ def main():
     cases = yaml.safe_load(path.read_text(encoding="utf-8"))["cases"]
     policy = load_policy(root / "risk-policy.yml")
     failed = 0
-    print("| Scénář | Pruh | Očekáváno | Brána | Ověřeno během |\n|---|---|---|---|---|")
+    print("| Scénář | Lane | Očekáváno | Risk gate | Ověřeno během |\n|---|---|---|---|---|")
     for case in cases:
         changes = [{"paths": [p], "additions": a, "deletions": d, "binary": False} for p, a, d in case["changes"]]
         tier, _, _ = decide(policy, changes, True, REVIEWS[case["review"]])

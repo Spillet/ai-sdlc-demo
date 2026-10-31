@@ -1,6 +1,6 @@
 name: Požadavek na změnu
-description: Popiš, co potřebuješ. Agent z toho připraví specifikaci k potvrzení.
-labels: [pozadavek]
+description: Popiš, co potřebuješ. Intake agent z toho připraví spec k potvrzení.
+labels: [request]
 body:
   - type: textarea
     id: co

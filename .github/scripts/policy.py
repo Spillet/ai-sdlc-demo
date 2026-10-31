@@ -1,4 +1,4 @@
-"""Riziková politika: načtení a zařazení cesty. Sdílí ji brána (risk_gate.py) a preflight."""
+"""Risk policy: načtení a zařazení cesty. Sdílí ji risk gate (risk_gate.py) a preflight."""
 import fnmatch
 import unicodedata
 from pathlib import Path

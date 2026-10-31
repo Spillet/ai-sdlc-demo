@@ -19,10 +19,10 @@ from common import REPO, ensure_label, gh, parse_json_answer, read_agent_result
 from policy import classify, load_policy, max_tier
 
 LABELS = {
-    "low": ("riziko:nizke", "0e8a16", "Sloučí se automaticky po testech a review"),
-    "medium": ("riziko:stredni", "fbca04", "Sloučení schvaluje člověk"),
-    "high": ("riziko:vysoke", "b60205", "Měnit smí jen vlastnický tým"),
-    "blocked": ("blokovano", "000000", "Neprošly testy nebo mantinely, nelze sloučit"),
+    "low": ("risk:low", "0e8a16", "Auto-merge po testech a AI review"),
+    "medium": ("risk:medium", "fbca04", "Merge schvaluje člověk"),
+    "high": ("risk:high", "b60205", "Merge jen owning team"),
+    "blocked": ("blocked", "000000", "Neprošly testy nebo guardrails, nebo freeze; merge nelze"),
 }
 UNRECOGNIZED = "Brána nerozpoznala změněné soubory."
 

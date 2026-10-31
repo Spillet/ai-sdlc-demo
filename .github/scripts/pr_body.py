@@ -15,7 +15,7 @@ def main():
 
     print(f"""Closes #{issue}
 
-Toto PR připravil kódovací agent podle potvrzené specifikace v issue. O sloučení rozhoduje brána podle rizika (komentář níže), ne agent.
+Toto PR připravil kódovací agent podle potvrzené spec v issue. O merge rozhoduje risk gate (komentář níže), ne agent.
 
 ## Shrnutí od agenta
 
@@ -23,7 +23,7 @@ Toto PR připravil kódovací agent podle potvrzené specifikace v issue. O slou
 
 ## Ověření
 
-- Testy v jobu agenta: {'✅ prošly' if tests_ok else '❌ neprošly'} (informativní; brána bere výsledek z čistého jobu `verify` bez secrets)
+- Testy v jobu agenta: {'✅ prošly' if tests_ok else '❌ neprošly'} (informativní; risk gate bere výsledek z čistého jobu `verify` bez secrets)
 
 ```
 {tail}

@@ -1,9 +1,9 @@
-name: Agent – od specifikace k PR
+name: Agent pipeline – spec → PR
 
-# Spouští ho člověk štítkem `ai:implement` na issue s potvrzenou specifikací.
+# Spouští ho člověk štítkem `ai:implement` na issue s potvrzenou spec.
 # Princip nejmenších oprávnění: agent běží v jobu, který smí jen číst. Větev, PR,
-# komentáře a sloučení dělají další joby deterministickými skripty. Výsledek testů,
-# kterému brána věří, vzniká v samostatném jobu bez secrets nad čistým checkoutem.
+# komentáře a merge dělají další joby deterministickými skripty. Výsledek testů,
+# kterému risk gate věří, vzniká v samostatném jobu bez secrets nad čistým checkoutem.
 #
 # Akce jsou připnuté na SHA (komentář = verze), Claude Code na konkrétní verzi a model
 # na celé ID. Změna verze je vědomá změna přes PR, ne tichá aktualizace.
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: '22'
-      - name: Specifikace z issue
+      - name: Spec z issue
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 .github/scripts/build_prompt.py implement "$ISSUE" > "$RUNNER_TEMP/prompt.txt"
@@ -80,13 +80,13 @@ jobs:
           claude -p "$(cat "$RUNNER_TEMP/prompt.txt")" --model "$MODEL" --max-turns 40 \
             --allowedTools "Read,Edit,Write,Glob,Grep,Bash(dotnet build:*),Bash(dotnet test:*)" \
             --output-format json > "$RUNNER_TEMP/agent.json"
-      - name: Testy pro popis PR (informativní, bráně se nepředávají)
+      - name: Testy pro popis PR (informativní, risk gate je nepoužije)
         run: |
           set +e
           dotnet test tests/Claims.Tests/Claims.Tests.csproj > "$RUNNER_TEMP/tests.log" 2>&1
           echo $? > "$RUNNER_TEMP/tests_exit.txt"
           tail -n 12 "$RUNNER_TEMP/tests.log"
-      - name: Mantinely a diff
+      - name: Guardrails a diff
         id: diff
         run: |
           git add -A
@@ -158,7 +158,7 @@ jobs:
           ref: ${{ env.BRANCH }}
           fetch-depth: 0
           persist-credentials: false
-      - name: Mantinely znovu, nad větví PR
+      - name: Guardrails znovu, nad větví PR
         run: |
           if git diff --name-only -z origin/main...HEAD | grep -zEi "$PROTECTED_PATHS" | tr '\0' '\n' | grep .; then
             echo "::error::Větev PR mění pipeline, pravidla nebo kontext agentů."
@@ -207,7 +207,7 @@ jobs:
 
   gate:
     # Běží i když review nebo verify selže (fail-closed: chybějící review = nesouhlas,
-    # neúspěšné ověření = zablokováno). Skripty brány jsou z main, ne z větve agenta.
+    # neúspěšné ověření = blocked). Skripty risk gate jsou z main, ne z větve agenta.
     needs: [publish, verify, review]
     if: always() && needs.publish.result == 'success'
     runs-on: ubuntu-latest
@@ -230,7 +230,7 @@ jobs:
         with:
           path: ${{ runner.temp }}/out
           merge-multiple: true
-      - name: Brána podle rizika
+      - name: Risk gate
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

@@ -1,8 +1,8 @@
 """Kdo spouští agenta a kam změna míří. Použití: preflight.py ISSUE
 
-Pruh 3 (core) nebo specifikace, která míří do cest s úrovní high, spuštěná někým jiným než
-vlastníkem: agent běží, ale PR vznikne jako draft a brána ho jen okomentuje. Kdokoliv tedy
-může v core navrhnout změnu, sloučit ji smí jen vlastnický tým.
+Lane core nebo spec, která míří do cest s risk tier high, spuštěná někým jiným než
+vlastníkem: agent běží, ale PR vznikne jako draft a risk gate ho jen okomentuje. Kdokoliv tedy
+může v core navrhnout změnu, merge smí jen owning team.
 
 Výstup `draft=true|false` jde do GITHUB_OUTPUT.
 """
@@ -15,7 +15,7 @@ from policy import classify, load_policy
 
 
 def high_paths(paths, policy):
-    """Cesty ze specifikace, které politika řadí do high. Adresář se bere i s obsahem."""
+    """Cesty ze spec, které risk policy řadí do high. Adresář se bere i s obsahem."""
     hits = []
     for path in paths:
         probes = [path, path.rstrip("/") + "/x"]
@@ -24,13 +24,17 @@ def high_paths(paths, policy):
     return hits
 
 
+# `pruh:3-core` je starý štítek z doby před slovníkem termínů; platí dál, aby starší issue nezměkla.
+CORE_LABELS = {"lane:core", "pruh:3-core"}
+
+
 def needs_owner(labels, paths, policy):
     reasons = []
-    if "pruh:3-core" in labels:
-        reasons.append("pruh 3 (core)")
+    if CORE_LABELS & set(labels):
+        reasons.append("lane core")
     hits = high_paths(paths, policy)
     if hits:
-        reasons.append("specifikace míří do chráněných cest: " + ", ".join(f"`{p}`" for p in hits))
+        reasons.append("spec míří do chráněných cest: " + ", ".join(f"`{p}`" for p in hits))
     return reasons
 
 
@@ -46,7 +50,7 @@ def main():
     if draft:
         gh("issue", "comment", number, "--repo", REPO, "--body-file", "-", input_text=(
             f"Spuštění od @{sender}: {'; '.join(reasons)}. Agent připraví návrh jako **draft PR**. "
-            "Brána ho jen okomentuje, sloučit ho smí jen vlastnický tým."))
+            "Risk gate ho jen okomentuje, merge smí jen owning team."))
     print(f"Důvody pro vlastníka: {reasons or 'žádné'}; spouští {sender}; draft={draft}")
     with open(os.environ.get("GITHUB_OUTPUT", os.devnull), "a", encoding="utf-8") as f:
         f.write(f"draft={'true' if draft else 'false'}\n")

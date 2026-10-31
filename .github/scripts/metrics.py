@@ -2,7 +2,7 @@
 
 Bez argumentu čte PR přes `gh pr list`. S `--json` čte uložený výstup téhož příkazu
 (`gh pr list --state all --json number,title,labels,createdAt,mergedAt,closedAt,isDraft,body,headRefName`).
-Počítá: PR podle úrovně brány, podíl sloučených automaticky, dobu do sloučení a cenu agenta z popisu PR.
+Počítá: PR podle risk tier, podíl PR sloučených přes auto-merge, dobu do sloučení a cenu agenta z popisu PR.
 Cena z popisu PR je jen implementace; intake a review mají cenu v artefaktech běhů.
 """
 import json
@@ -12,7 +12,9 @@ from datetime import datetime
 
 from common import REPO, gh
 
-TIERS = {"riziko:nizke": "🟢 low", "riziko:stredni": "🟡 medium", "riziko:vysoke": "🔴 high", "blokovano": "⛔ blokováno"}
+# Nové štítky podle slovníku termínů a staré české štítky na PR, které vznikly před přejmenováním.
+TIERS = {"risk:low": "🟢 low", "risk:medium": "🟡 medium", "risk:high": "🔴 high", "blocked": "⛔ blocked",
+         "riziko:nizke": "🟢 low", "riziko:stredni": "🟡 medium", "riziko:vysoke": "🔴 high", "blokovano": "⛔ blocked"}
 COST = re.compile(r"\|\s*(\d+)\s*\|\s*([\d.]+) USD\s*\|\s*([\d.]+) min\s*\|")
 
 
@@ -36,7 +38,7 @@ def summarize(prs):
     by_tier = {}
     for pr in prs:
         names = {label["name"] for label in pr.get("labels", [])}
-        tier = next((TIERS[n] for n in TIERS if n in names), "bez rozhodnutí brány")
+        tier = next((TIERS[n] for n in TIERS if n in names), "bez rozhodnutí risk gate")
         by_tier[tier] = by_tier.get(tier, 0) + 1
         match = COST.search(pr.get("body") or "")
         if match:
@@ -48,14 +50,14 @@ def summarize(prs):
         rows.append(f"| #{pr['number']} | {pr['title']} | {tier} | {state} | "
                     f"{match.group(2) + ' USD' if match else '?'} |")
     merged = [p for p in prs if p.get("mergedAt")]
-    lines = ["| PR | Název | Brána | Stav | Cena agenta |", "|---|---|---|---|---|", *sorted(rows)]
+    lines = ["| PR | Název | Risk tier | Stav | Cena agenta |", "|---|---|---|---|---|", *sorted(rows)]
     lines.append("")
-    lines.append(f"- PR od agenta: {len(prs)}; podle brány: "
+    lines.append(f"- PR od agenta: {len(prs)}; podle risk tier: "
                  + ", ".join(f"{k} {v}" for k, v in sorted(by_tier.items())))
     if prs:
-        lines.append(f"- Sloučeno automaticky: {len(merged)} z {len(prs)} ({100 * len(merged) / len(prs):.0f} %)")
+        lines.append(f"- Sloučeno (auto-merge): {len(merged)} z {len(prs)} ({100 * len(merged) / len(prs):.0f} %)")
     if merged:
-        lines.append(f"- Doba od PR do sloučení (medián): "
+        lines.append(f"- Doba od PR do merge (medián): "
                      f"{sorted(hours(p['createdAt'], p['mergedAt']) * 60 for p in merged)[len(merged) // 2]:.1f} min")
     if costs:
         lines.append(f"- Cena implementace: celkem {sum(costs):.2f} USD, průměr {sum(costs) / len(costs):.2f} USD na PR, "

@@ -184,9 +184,10 @@ class SpecAndPreflight(unittest.TestCase):
 
     def test_high_paths_from_spec_need_owner_even_in_lane_2(self):
         self.assertEqual(high_paths(["src/Claims.Api/Refunds/", "docs/a.md"], POLICY), ["src/Claims.Api/Refunds/"])
-        self.assertTrue(needs_owner(["pruh:2-produkt"], ["src/Claims.Api/Refunds/X.cs"], POLICY))
-        self.assertFalse(needs_owner(["pruh:2-produkt"], ["docs/a.md"], POLICY))
-        self.assertTrue(needs_owner(["pruh:3-core"], [], POLICY))
+        self.assertTrue(needs_owner(["lane:product"], ["src/Claims.Api/Refunds/X.cs"], POLICY))
+        self.assertFalse(needs_owner(["lane:product"], ["docs/a.md"], POLICY))
+        self.assertTrue(needs_owner(["lane:core"], [], POLICY))
+        self.assertTrue(needs_owner(["pruh:3-core"], [], POLICY))  # starý štítek platí dál
 
 
 if __name__ == "__main__":

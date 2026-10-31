@@ -6,7 +6,7 @@ import subprocess
 
 SPEC_MARKER = "<!-- ai-spec -->"
 SPEC_PATHS = re.compile(r"<!-- ai-spec-paths: (\[.*\]) -->")
-# Specifikaci smí zapsat jen pipeline. `gh issue view --json comments` vrací login bota bez `[bot]`.
+# Spec smí zapsat jen pipeline. `gh issue view --json comments` vrací login bota bez `[bot]`.
 SPEC_AUTHORS = {"github-actions", "github-actions[bot]"}
 REPO = os.environ.get("GITHUB_REPOSITORY", "")
 
@@ -31,10 +31,10 @@ def load_issue(number):
 
 
 def find_spec(issue):
-    """Poslední specifikace od pipeline (bota), jinak text issue.
+    """Poslední spec od pipeline (bota), jinak text issue.
 
     Komentář se značkou od kohokoli jiného se ignoruje: jinak by kdokoli s právem komentovat
-    mohl po potvrzení podstrčit jinou specifikaci.
+    mohl po potvrzení podstrčit jinou spec.
     """
     for comment in reversed(issue.get("comments", [])):
         author = (comment.get("author") or {}).get("login", "")
@@ -44,7 +44,7 @@ def find_spec(issue):
 
 
 def spec_paths(spec):
-    """Dotčené části ze strojově čitelné značky ve specifikaci. Bez značky prázdný seznam."""
+    """Dotčené části ze strojově čitelné značky ve spec. Bez značky prázdný seznam."""
     match = SPEC_PATHS.search(spec or "")
     if not match:
         return []
