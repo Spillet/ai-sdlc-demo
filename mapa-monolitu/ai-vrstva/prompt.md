@@ -18,7 +18,7 @@ Vyrob tři věci:
    - podezřelá místa: souběh, transakce, magická čísla, NOLOCK, natvrdo dané hodnoty
    - otevřené otázky pro člověka; nic si nedomýšlej, co v kódu není
 
-2. CHARAKTERIZAČNÍ TEST (tSQLt, nebo golden master u čtecí procedury)
+2. CHARACTERIZATION TEST (tSQLt, nebo golden master u čtecí procedury)
    - zachyť SOUČASNÉ chování, i když vypadá jako chyba; takový test označ
    - izoluj tabulky přes tSQLt.FakeTable, volané procedury přes tSQLt.SpyProcedure
    - pokryj každou větev s RETURN nebo RAISERROR

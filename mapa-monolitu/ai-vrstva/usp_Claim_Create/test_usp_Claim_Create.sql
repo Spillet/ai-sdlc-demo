@@ -1,4 +1,4 @@
--- [MODEL] Charakterizační testy tSQLt pro dbo.usp_Claim_Create. NESPUŠTĚNO.
+-- [MODEL] Characterization tests tSQLt pro dbo.usp_Claim_Create. NESPUŠTĚNO.
 -- Zachycují SOUČASNÉ chování. Testy označené "ZACHYCUJE PODEZŘELÉ CHOVÁNÍ" mají
 -- projít dnes; až se chování vědomě změní, upraví se test i kód zároveň.
 -- Předpoklad: tSQLt nainstalovaný v testovací kopii DB (ne v produkci).

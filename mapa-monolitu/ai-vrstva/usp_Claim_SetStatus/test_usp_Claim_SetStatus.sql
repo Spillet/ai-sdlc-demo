@@ -1,4 +1,4 @@
--- [MODEL] Charakterizační testy tSQLt pro dbo.usp_Claim_SetStatus. NESPUŠTĚNO.
+-- [MODEL] Characterization tests tSQLt pro dbo.usp_Claim_SetStatus. NESPUŠTĚNO.
 -- Zachycují SOUČASNÉ chování včetně cizích zápisů. Právě tyhle testy musí po
 -- vytažení služby spadnout vědomě: cizí zápis se nahradí událostí.
 
