@@ -1,0 +1,24 @@
+# Připravené změny pro nácvik dema (.github/workflows/demo-prepare.yml).
+# Každá položka je nová šablona zákaznické zprávy v src/Claims.Api/Content/Templates/ s testem.
+# demo-prepare vezme první šablonu, která ještě není v main. Když jsou všechny použité,
+# vezme první znovu s číslem běhu v klíči a v názvu třídy, takže demo jde opakovat donekonečna.
+#
+# Zástupné symboly: {orderNumber}, {claimNumber}, {resolveBy}. {claimNumber} je povinný (hlídá ho test).
+
+messages:
+  - key: claim-ready-for-pickup
+    class: ClaimReadyForPickupTemplate
+    subject: "Reklamace {claimNumber} je připravená k vyzvednutí"
+    body: "Dobrý den, zboží z reklamace {claimNumber} k objednávce {orderNumber} si můžete vyzvednout na výdejním místě. Uložené je do {resolveBy}."
+  - key: claim-peak-delay
+    class: ClaimPeakDelayTemplate
+    subject: "Reklamace {claimNumber}: v sezóně to potrvá déle"
+    body: "Dobrý den, reklamaci {claimNumber} k objednávce {orderNumber} jsme přijali. V sezóně Black Friday máme víc práce, vyřídíme ji ale v zákonné lhůtě, nejpozději do {resolveBy}."
+  - key: claim-needs-info
+    class: ClaimNeedsInfoTemplate
+    subject: "Reklamace {claimNumber}: potřebujeme doplnit údaje"
+    body: "Dobrý den, k reklamaci {claimNumber} (objednávka {orderNumber}) potřebujeme fotku a popis vady. Pošlete je prosím odpovědí na tento e-mail. Lhůta na vyřízení běží do {resolveBy}."
+  - key: claim-sent-to-service
+    class: ClaimSentToServiceTemplate
+    subject: "Reklamace {claimNumber} je v servisu"
+    body: "Dobrý den, zboží z reklamace {claimNumber} k objednávce {orderNumber} jsme předali do autorizovaného servisu. Vyřídíme ji nejpozději do {resolveBy}."

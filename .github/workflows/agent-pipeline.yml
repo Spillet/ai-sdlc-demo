@@ -235,4 +235,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 .github/scripts/risk_gate.py "${{ needs.publish.outputs.pr }}" "$RUNNER_TEMP/out" \
-            --verify "${{ needs.verify.result }}" --base origin/main --head "origin/$BRANCH"
+            --verify "${{ needs.verify.result }}" --base origin/main --head "origin/$BRANCH" --trigger agent-pipeline
+      - name: Vstup pro gate re-evaluation
+        # gate-reevaluate.yml z něj přepočítá risk gate bez modelu (review, patch, výsledek verify a commit).
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: gate-input-pr-${{ needs.publish.outputs.pr }}
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/out/gate-input.json
+            ${{ runner.temp }}/out/review.json
+            ${{ runner.temp }}/out/change.patch

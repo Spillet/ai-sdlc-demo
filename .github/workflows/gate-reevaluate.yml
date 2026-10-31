@@ -1,0 +1,81 @@
+name: Gate re-evaluation
+
+# Přepočítá risk gate nad existujícím PR. Bez modelu a bez secrets (jen GITHUB_TOKEN), do minuty.
+#
+# Co bere odkud:
+# - AI review, patch od agenta a výsledek verify i s commitem, který verify ověřil: z artefaktu
+#   gate-input-pr-N posledního běhu risk gate (agent-pipeline nebo demo-prepare). Review bez modelu
+#   zopakovat nejde a dotnet test by s instalací .NET trval přes minutu.
+# - Diff, soubory PR a štítky: znovu z gitu a GitHubu. Risk policy a change calendar: z main.
+# Když se větev PR od posledního ověření změnila, risk gate dá blocked a je potřeba pustit pipeline znovu.
+#
+# Vstup `profile` ručně přepíše change calendar. Komentář risk gate uvede, kdo přepsání spustil
+# a co by platilo bez něj. V produkci by tenhle workflow chránil GitHub Environment se schvalovateli.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Číslo PR
+        required: true
+        type: string
+      profile:
+        description: Policy profile (calendar = podle change calendar)
+        required: false
+        type: choice
+        default: calendar
+        options: [calendar, normal, peak, freeze]
+
+permissions: {}
+
+concurrency:
+  group: gate-pr-${{ inputs.pr }}
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+      issues: write
+      statuses: write
+    steps:
+      - name: Kontrola vstupu
+        env:
+          PR: ${{ inputs.pr }}
+        run: |
+          if ! [[ "$PR" =~ ^[0-9]+$ ]]; then echo "::error::Vstup pr musí být číslo PR."; exit 1; fi
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pyyaml==6.0.2
+      - name: Artefakt posledního běhu risk gate a větev PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ inputs.pr }}
+        run: |
+          RUN_ID=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=gate-input-pr-$PR&per_page=20" \
+            --jq '[.artifacts[] | select(.expired | not)] | sort_by(.created_at) | last | .workflow_run.id // empty')
+          if [ -z "$RUN_ID" ]; then
+            echo "::error::PR #$PR nemá artefakt gate-input-pr-$PR (PR vzniklo před gate re-evaluation, nebo artefakt vypršel). Pusť agent-pipeline nebo demo-prepare znovu."
+            exit 1
+          fi
+          gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" --name "gate-input-pr-$PR" --dir "$RUNNER_TEMP/out"
+          echo "Vstup risk gate z běhu $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$RUN_ID" | tee -a "$GITHUB_STEP_SUMMARY"
+          git fetch --no-tags --quiet origin "pull/$PR/head:refs/remotes/pr/$PR"
+      - name: Risk gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ inputs.pr }}
+          PROFILE: ${{ inputs.profile }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          python3 .github/scripts/risk_gate.py "$PR" "$RUNNER_TEMP/out" --from-input \
+            --profile "$PROFILE" --actor "$ACTOR" --base origin/main --head "refs/remotes/pr/$PR" --trigger gate-reevaluate

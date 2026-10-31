@@ -1,0 +1,135 @@
+name: Demo prepare – připravená změna → PR → risk gate
+
+# Pro opakovatelný nácvik dema, bez modelu a bez secrets. Z demo/messages.yml vezme první šablonu
+# zprávy, která ještě není v main, a založí větev demo/<klíč>-<běh> a PR. Pak spustí verify
+# (guardrails a dotnet test v čistém jobu) a risk gate se stejným skriptem jako agent pipeline.
+# AI review se nespouští; risk gate dostane připravený záznam review a v komentáři to přizná
+# (signál accept_prepared_review v risk-policy.yml).
+#
+# Cíl dema: v profilu peak PR čeká 🟡, po gate-reevaluate s profile=normal dostane 🟢 a sloučí se.
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: demo-prepare
+
+env:
+  # Stejné guardrails jako v agent-pipeline.yml; shodu hlídá test_risk_gate.py.
+  PROTECTED_PATHS: '(^|/)(\.github/|\.claude/|\.mcp\.json$|[^/]*(agents|claude)(\.local)?\.md$)|^(risk-policy\.yml|change-calendar\.yml|codeowners)$'
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      pr: ${{ steps.pr.outputs.number }}
+      branch: ${{ steps.pr.outputs.branch }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pyyaml==6.0.2
+      - name: Připravená změna z demo/messages.yml
+        id: change
+        run: python3 .github/scripts/demo_change.py change "$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+      - name: Větev a PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          KEY: ${{ steps.change.outputs.key }}
+        run: |
+          BRANCH="demo/$KEY-$GITHUB_RUN_NUMBER"
+          mkdir -p "$RUNNER_TEMP/out"
+          git config user.name "ai-sdlc-demo"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add -A
+          git diff --cached --binary > "$RUNNER_TEMP/out/change.patch"
+          git commit -m "Demo: šablona zprávy $KEY"
+          git push -u origin "$BRANCH"
+          python3 .github/scripts/demo_change.py review > "$RUNNER_TEMP/out/review.json"
+          python3 .github/scripts/demo_change.py body "$KEY" > "$RUNNER_TEMP/body.md"
+          URL=$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$BRANCH" \
+            --title "Demo: šablona zprávy $KEY" --body-file "$RUNNER_TEMP/body.md")
+          echo "number=${URL##*/}" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          echo "PR: $URL" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: demo-output
+          path: |
+            ${{ runner.temp }}/out/change.patch
+            ${{ runner.temp }}/out/review.json
+
+  verify:
+    # Stejné ověření jako v agent pipeline: čistý checkout větve PR, bez secrets a bez tokenu se zápisem.
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          ref: ${{ needs.prepare.outputs.branch }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Guardrails znovu, nad větví PR
+        run: |
+          if git diff --name-only -z origin/main...HEAD | grep -zEi "$PROTECTED_PATHS" | tr '\0' '\n' | grep .; then
+            echo "::error::Větev PR mění pipeline, pravidla nebo kontext agentů."
+            exit 1
+          fi
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build a testy
+        run: dotnet test tests/Claims.Tests/Claims.Tests.csproj
+
+  gate:
+    needs: [prepare, verify]
+    if: always() && needs.prepare.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pyyaml==6.0.2
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: demo-output
+          path: ${{ runner.temp }}/out
+      - name: Risk gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ needs.prepare.outputs.pr }}
+          BRANCH: ${{ needs.prepare.outputs.branch }}
+          VERIFY: ${{ needs.verify.result }}
+        run: |
+          python3 .github/scripts/risk_gate.py "$PR" "$RUNNER_TEMP/out" \
+            --verify "$VERIFY" --base origin/main --head "origin/$BRANCH" --trigger demo-prepare
+      - name: Vstup pro gate re-evaluation
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: gate-input-pr-${{ needs.prepare.outputs.pr }}
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/out/gate-input.json
+            ${{ runner.temp }}/out/review.json
+            ${{ runner.temp }}/out/change.patch
