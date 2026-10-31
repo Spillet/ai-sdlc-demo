@@ -1,0 +1,29 @@
+# Change calendar: kdy platí který policy profile (profily jsou v risk-policy.yml).
+#
+# - Okno platí celé dny od `start` do `end` včetně, v časovém pásmu `timezone`.
+# - Když se okna překrývají, platí nejpřísnější profil (vyšší `rank` v risk-policy.yml).
+# - Mimo okna platí `default_profile` z risk-policy.yml.
+# - Ručně přepsat profil jde jen přes workflow gate-reevaluate.yml; risk gate pak v komentáři
+#   uvede, kdo přepsání spustil a co by dal kalendář.
+#
+# Změna kalendáře je změna guardrails: jde přes PR, risk tier high (owning team).
+# E-shop je fiktivní, data odpovídají typické sezóně Black Friday.
+
+timezone: Europe/Prague
+
+windows:
+  - name: Black Friday sezóna
+    profile: peak
+    start: 2026-10-30
+    end: 2026-11-30
+    reason: Nejvyšší provoz roku, výpadek stojí nejvíc. Každá změna kódu jde přes člověka.
+  - name: Nejsilnější dny Black Friday
+    profile: freeze
+    start: 2026-11-26
+    end: 2026-11-30
+    reason: Nejsilnější dny Black Friday. Nasazuje se jen hotfix.
+  - name: Vánoční uzávěrka
+    profile: peak
+    start: 2026-12-14
+    end: 2026-12-23
+    reason: Poslední dny objednávek s doručením do Vánoc.

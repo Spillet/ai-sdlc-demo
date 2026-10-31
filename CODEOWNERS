@@ -5,6 +5,7 @@
 /db/                        @Spillet
 /.github/                   @Spillet
 /risk-policy.yml            @Spillet
+/change-calendar.yml        @Spillet
 /CODEOWNERS                 @Spillet
 AGENTS.md                   @Spillet
 CLAUDE.md                   @Spillet

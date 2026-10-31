@@ -22,7 +22,7 @@ env:
   MODEL: claude-sonnet-5-5
   # Cesty, na které agent nesmí sáhnout (grep -Ei nad seznamem souborů z gitu, oddělených NUL).
   # Musí odpovídat prvnímu pravidlu v risk-policy.yml; hlídá to test_risk_gate.py.
-  PROTECTED_PATHS: '(^|/)(\.github/|\.claude/|\.mcp\.json$|[^/]*(agents|claude)(\.local)?\.md$)|^(risk-policy\.yml|codeowners)$'
+  PROTECTED_PATHS: '(^|/)(\.github/|\.claude/|\.mcp\.json$|[^/]*(agents|claude)(\.local)?\.md$)|^(risk-policy\.yml|change-calendar\.yml|codeowners)$'
 
 jobs:
   preflight:

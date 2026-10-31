@@ -1,23 +1,27 @@
-# Riziková politika: kdo smí sloučit změnu.
-# Čte ji brána (.github/scripts/risk_gate.py). Platí první pravidlo, které cestu zachytí;
-# výsledná úroveň PR je nejvyšší úroveň ze všech změněných souborů a signálů.
+# Risk policy: kdo smí udělat merge změny.
+# Čte ji risk gate (.github/scripts/risk_gate.py). Platí první pravidlo, které cestu zachytí;
+# výsledný risk tier PR je nejvyšší tier ze všech změněných souborů a signálů.
 # Cesty se porovnávají bez ohledu na velikost písmen; `*` zachytí i lomítko (fnmatch).
 #
-#   low    -> sloučí se automaticky, když projdou testy a AI review
-#   medium -> sloučení schvaluje člověk
-#   high   -> měnit smí jen vlastnický tým (agent připraví návrh, nic nesloučí)
+#   low     -> auto-merge, když projdou testy a AI review
+#   medium  -> merge schvaluje člověk
+#   high    -> merge jen owning team (agent připraví návrh, nic nesloučí)
+#   blocked -> merge nelze (neprošly testy nebo guardrails, nebo freeze)
+#
+# `rules` jsou základní zařazení cest. Policy profiles (níže) je smějí jen zpřísnit, nikdy změkčit.
+# Který profil platí, určuje change-calendar.yml, nebo ruční přepsání přes gate-reevaluate.yml.
 
 owners:
   default: Spillet
   refunds: Spillet
 
 rules:
-  - paths: [".github/*", "risk-policy.yml", "CODEOWNERS",
+  - paths: [".github/*", "risk-policy.yml", "change-calendar.yml", "CODEOWNERS",
             "AGENTS.md", "*AGENTS.md", "CLAUDE.md", "*CLAUDE.md", "*CLAUDE.local.md",
             ".claude/*", "*/.claude/*", ".mcp.json", "*/.mcp.json"]
     tier: high
     owner: default
-    reason: Pipeline, mantinely a kontext agentů. Agent nesmí měnit pravidla ani instrukce, podle kterých pracuje a kontroluje se.
+    reason: Pipeline, guardrails a kontext agentů. Agent nesmí měnit pravidla ani instrukce, podle kterých pracuje a kontroluje se.
   - paths: ["src/Claims.Api/Refunds/*"]
     tier: high
     owner: refunds
@@ -25,11 +29,11 @@ rules:
   - paths: ["db/*"]
     tier: high
     owner: default
-    reason: Změna schématu nebo procedury. Ověřuje se charakterizačními testy a paralelním během (viz P1).
+    reason: Změna schématu nebo procedury. Ověřuje se characterization tests a parallel run (viz P1 Monolith Map).
   - paths: ["tests/*Refund*"]
     tier: high
     owner: refunds
-    reason: Testy, které hlídají peníze zákazníků. Dědí úroveň kódu, který testují.
+    reason: Testy, které hlídají peníze zákazníků. Dědí risk tier kódu, který testují.
   - paths: ["*.csproj", "*.props", "*.targets", "*nuget.config", "global.json", "*.sln", "*.slnx"]
     tier: medium
     owner: default
@@ -37,15 +41,19 @@ rules:
   - paths: ["tests/*ClaimPolicy*"]
     tier: medium
     owner: default
-    reason: Testy zákonných pravidel reklamací. Dědí úroveň kódu, který testují.
+    reason: Testy zákonných pravidel reklamací. Dědí risk tier kódu, který testují.
   - paths: ["src/Claims.Api/Domain/*"]
     tier: medium
     owner: default
     reason: Zákonná pravidla reklamací.
+  - paths: ["src/Claims.Api/Content/*"]
+    tier: low
+    owner: default
+    reason: Texty a šablony zákaznických zpráv. Nemění peníze ani zákonná pravidla.
   - paths: ["src/*"]
     tier: medium
     owner: default
-    reason: Produkční kód služby.
+    reason: Ostatní produkční kód (včetně Program.cs, který registruje i endpoint Refunds). Novou bezpečnou oblast je potřeba přidat do policy výslovně.
   - paths: ["tests/*", "docs/*", "*.md"]
     tier: low
     owner: default
@@ -54,16 +62,72 @@ rules:
 default_tier: medium
 
 limits:
-  # Velké změny se hůř kontrolují. Nad limitem se úroveň zvedá.
+  # Výchozí limity. Profil je může přepsat (peak má přísnější limit pro low).
   low_max_changed_lines: 150
   medium_max_changed_lines: 400
 
 signals:
-  # Změna produkčního kódu bez změny testů zvedá úroveň alespoň na medium.
+  # Změna produkčního kódu bez změny testů zvedá risk tier alespoň na medium.
   require_tests_for_src: true
-  # Odebrané nebo přepsané řádky v tests/ zvedají úroveň alespoň na medium (oslabení testů).
+  # Odebrané nebo přepsané řádky v tests/ zvedají risk tier alespoň na medium (oslabení testů).
   removed_test_lines_min_tier: medium
-  # Nesouhlas AI review zvedá úroveň alespoň na medium.
+  # Nesouhlas AI review zvedá risk tier alespoň na medium.
   review_request_changes_min_tier: medium
-  # Nález AI review se závažností medium nebo high zvedá úroveň alespoň na medium i při souhlasu.
+  # Nález AI review se závažností medium nebo high zvedá risk tier alespoň na medium i při souhlasu.
   review_finding_min_tier: medium
+  # Připravená změna z demo-prepare.yml nemá AI review (běží bez modelu). true = risk gate bere
+  # připravený záznam review jako souhlas a v komentáři to přizná. V produkci false.
+  accept_prepared_review: true
+
+# Policy profiles. Profil je deklarativní: risk gate v Pythonu nemá žádný práh natvrdo.
+#   rank                  pořadí přísnosti; při překryvu oken v kalendáři vyhrává vyšší
+#   auto_merge_paths      jen soubory v těchto cestách smí zůstat low; ostatní dostanou outside_auto_merge_tier
+#   min_tier_paths        minimální risk tier pro cesty (zvedá, nikdy nesnižuje)
+#   min_tier              minimální risk tier pro celé PR (freeze: blocked)
+#   label_exceptions      štítek PR, který nahradí min_tier jiným minimem (hotfix ve freeze)
+#   limits                prahy velikosti změny
+#   approvals             kolik schválení risk gate požaduje pro medium a high (zapíše do komentáře)
+default_profile: normal
+
+profiles:
+  normal:
+    rank: 0
+    description: Běžný provoz. Auto-merge pro dokumentaci, testy a malé změny v Content/.
+    auto_merge_paths: ["docs/*", "*.md", "tests/*", "src/Claims.Api/Content/*"]
+    outside_auto_merge_tier: medium
+    min_tier_paths: []
+    limits:
+      low_max_changed_lines: 150
+      medium_max_changed_lines: 400
+    approvals: {medium: 1, high: 1}
+
+  peak:
+    rank: 1
+    description: Sezóna s nejvyšším provozem. Auto-merge jen dokumentace, každou změnu kódu schvaluje člověk.
+    auto_merge_paths: ["docs/*"]
+    outside_auto_merge_tier: medium
+    min_tier_paths:
+      - paths: ["src/*", "tests/*", "*.csproj", "*.props", "*.targets"]
+        tier: medium
+        reason: V peak sezóně jde každá změna kódu ke kontrole člověku.
+    limits:
+      low_max_changed_lines: 50
+      medium_max_changed_lines: 400
+    approvals: {medium: 1, high: 2}
+
+  freeze:
+    rank: 2
+    description: Nejsilnější dny sezóny. Nic se nesloučí samo; projde jen hotfix, a to přes owning team.
+    auto_merge_paths: []
+    outside_auto_merge_tier: medium
+    min_tier_paths: []
+    min_tier: blocked
+    min_tier_reason: Freeze, změny čekají na konec okna.
+    label_exceptions:
+      - label: hotfix
+        min_tier: high
+        reason: Hotfix ve freeze schvaluje owning team.
+    limits:
+      low_max_changed_lines: 50
+      medium_max_changed_lines: 400
+    approvals: {medium: 1, high: 2}

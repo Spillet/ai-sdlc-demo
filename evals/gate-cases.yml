@@ -6,6 +6,8 @@
 # Sloupec `overeno` říká, jestli scénář prošel i skutečným během pipeline.
 #
 # changes: [cesta, přidané řádky, odebrané řádky]; review: approve | request_changes | approve+medium
+# profile: policy profile (bez uvedení normal); labels: štítky PR (např. hotfix).
+# Sekce `calendar` ověřuje change calendar: okamžik v UTC -> očekávaný profil.
 
 cases:
   - name: FAQ v dokumentaci
@@ -78,3 +80,86 @@ cases:
     review: approve
     tier: medium
     overeno: ne
+  - name: Nová šablona zprávy v Content/ s testem (normal)
+    request: Přidej šablonu zprávy, že reklamace je připravená k vyzvednutí na pobočce.
+    lane: product
+    changes: [[src/Claims.Api/Content/Templates/ClaimReadyForPickupTemplate.cs, 10, 0], [tests/Claims.Tests/Content/ClaimReadyForPickupTemplateTests.cs, 22, 0]]
+    review: approve
+    tier: low
+    overeno: demo-prepare a gate-reevaluate (README, živé demo)
+  - name: Stejná šablona v Black Friday sezóně (peak)
+    request: Přidej šablonu zprávy, že reklamace je připravená k vyzvednutí na pobočce.
+    lane: product
+    profile: peak
+    changes: [[src/Claims.Api/Content/Templates/ClaimReadyForPickupTemplate.cs, 10, 0], [tests/Claims.Tests/Content/ClaimReadyForPickupTemplateTests.cs, 22, 0]]
+    review: approve
+    tier: medium
+    overeno: demo-prepare (README, živé demo)
+  - name: Zákonné pravidlo v Domain/ (normal)
+    request: Prodluž lhůtu na vyřízení reklamace na 45 dní.
+    lane: product
+    changes: [[src/Claims.Api/Domain/ClaimPolicy.cs, 1, 1], [tests/Claims.Tests/OtherTests.cs, 8, 0]]
+    review: approve
+    tier: medium
+    overeno: ne
+  - name: Malá úprava FAQ v peak
+    request: Doplň do FAQ, že v sezóně trvá vyřízení déle.
+    lane: product
+    profile: peak
+    changes: [[docs/faq-reklamace.md, 6, 0]]
+    review: approve
+    tier: low
+    overeno: ne
+  - name: Větší úprava FAQ v peak (nad limitem 50 řádků)
+    request: Přepiš FAQ k reklamacím.
+    lane: product
+    profile: peak
+    changes: [[docs/faq-reklamace.md, 40, 20]]
+    review: approve
+    tier: medium
+    overeno: ne
+  - name: Peníze v peak (2 schválení owning team)
+    request: Oprav zaokrouhlení částečné refundace.
+    lane: core
+    profile: peak
+    changes: [[src/Claims.Api/Refunds/RefundCalculator.cs, 1, 1], [tests/Claims.Tests/OtherTests.cs, 6, 0]]
+    review: approve
+    tier: high
+    overeno: ne
+  - name: Dokumentace ve freeze
+    request: Oprav překlep v FAQ.
+    lane: product
+    profile: freeze
+    changes: [[docs/faq-reklamace.md, 1, 1]]
+    review: approve
+    tier: blocked
+    overeno: ne
+  - name: Hotfix ve freeze
+    request: Endpoint se šablonami padá na neznámém klíči, oprav to hned.
+    lane: product
+    profile: freeze
+    labels: [hotfix]
+    changes: [[src/Claims.Api/Content/MessageCatalog.cs, 3, 1], [tests/Claims.Tests/Content/MessageCatalogTests.cs, 8, 0]]
+    review: approve
+    tier: high
+    overeno: ne
+
+calendar:
+  - at: "2026-10-29T22:59:00Z"
+    profile: normal
+    note: 29. 10. 23:59 v Praze, den před sezónou
+  - at: "2026-10-29T23:00:00Z"
+    profile: peak
+    note: 30. 10. 00:00 v Praze, začátek Black Friday sezóny
+  - at: "2026-10-31T09:00:00Z"
+    profile: peak
+    note: dnešek (31. 10. 2026)
+  - at: "2026-11-25T23:00:00Z"
+    profile: freeze
+    note: 26. 11. 00:00, freeze uvnitř peak, platí přísnější
+  - at: "2026-11-30T22:59:00Z"
+    profile: freeze
+    note: 30. 11. 23:59, poslední minuta obou oken
+  - at: "2026-11-30T23:00:00Z"
+    profile: normal
+    note: 1. 12. 00:00, po sezóně

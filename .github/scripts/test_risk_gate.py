@@ -1,7 +1,9 @@
-"""Testy brány podle rizika. Spuštění: python3 -m unittest discover -s .github/scripts -p 'test_*.py'
+"""Testy risk gate. Spuštění: python3 -m unittest discover -s .github/scripts -p 'test_*.py'
 
 Pokrývají nálezy z oponentury: cesty s mezerou, diakritikou a přejmenováním, fail-closed při
-nesouladu, chráněný kontext agentů, testy a build v politice, nálezy AI review a draft z preflightu.
+nesouladu, chráněný kontext agentů, testy a build v risk policy, nálezy AI review a draft z preflightu.
+A policy profiles s change calendar: hranice oken v Europe/Prague, překryv, hotfix ve freeze,
+ruční přepsání a to, že profil risk tier nikdy nesníží.
 """
 import os
 import re
@@ -10,15 +12,18 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from datetime import datetime, timezone
+
 import yaml
 
 from common import find_spec, spec_paths
-from policy import classify, load_policy
+from policy import TIERS, calendar_profile, classify, load_calendar, load_policy, resolve_profile, validate_calendar
 from preflight import high_paths, needs_owner
 from risk_gate import UNRECOGNIZED, count_patch, decide, integrity, outcome, parse_numstat_z
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = load_policy(ROOT / "risk-policy.yml")
+CALENDAR = load_calendar(ROOT / "change-calendar.yml")
 APPROVE = {"verdict": "approve", "summary": "ok", "findings": []}
 
 
@@ -105,21 +110,27 @@ class FailClosed(unittest.TestCase):
 class Policy(unittest.TestCase):
     PROTECTED = ["CLAUDE.md", "docs/CLAUDE.md", "AGENTS.md", "tests/AGENTS.md", "CLAUDE.local.md",
                  ".claude/settings.json", ".mcp.json", ".github/workflows/x.yml", ".github/scripts/risk_gate.py",
-                 "CODEOWNERS", "risk-policy.yml", "src/.claude/hooks.json", "docs/claude.md"]
+                 "CODEOWNERS", "risk-policy.yml", "change-calendar.yml", "src/.claude/hooks.json", "docs/claude.md"]
     FREE = ["docs/faq-reklamace.md", "src/Claims.Api/Program.cs", "tests/Claims.Tests/NewTests.cs",
-            "README.md", "docs/github-navod.md"]
+            "README.md", "docs/github-navod.md", "src/Claims.Api/Content/Templates/X.cs", "demo/messages.yml"]
 
     def test_protected_paths_are_high(self):
         for path in self.PROTECTED:
             self.assertEqual(classify(path, POLICY)["tier"], "high", path)
 
     def test_workflow_guard_matches_policy(self):
-        workflow = yaml.safe_load((ROOT / ".github/workflows/agent-pipeline.yml").read_text(encoding="utf-8"))
-        guard = re.compile(workflow["env"]["PROTECTED_PATHS"], re.IGNORECASE)
+        guards = {}
+        for path in sorted((ROOT / ".github/workflows").glob("*.yml")):
+            env = yaml.safe_load(path.read_text(encoding="utf-8")).get("env") or {}
+            if "PROTECTED_PATHS" in env:
+                guards[path.name] = env["PROTECTED_PATHS"]
+        self.assertIn("agent-pipeline.yml", guards)
+        self.assertEqual(len(set(guards.values())), 1, f"guardrails se ve workflow liší: {guards}")
+        guard = re.compile(guards["agent-pipeline.yml"], re.IGNORECASE)
         for path in self.PROTECTED:
-            self.assertTrue(guard.search(path), f"mantinel nepokrývá {path}")
+            self.assertTrue(guard.search(path), f"guardrail nepokrývá {path}")
         for path in self.FREE:
-            self.assertFalse(guard.search(path), f"mantinel zbytečně blokuje {path}")
+            self.assertFalse(guard.search(path), f"guardrail zbytečně blokuje {path}")
 
     def test_tests_inherit_tier_and_build_files_are_medium(self):
         expected = {
@@ -133,6 +144,9 @@ class Policy(unittest.TestCase):
             "db/procedures/usp_ClaimRefund.sql": "high",
             "tests/Claims.Tests/OtherTests.cs": "low",
             "src/Claims.Api/Refunds/Vrácení.cs": "high",
+            "src/Claims.Api/Content/Templates/Nova.cs": "low",
+            "src/Claims.Api/Program.cs": "medium",
+            "src/Claims.Api/Shipping/Nova.cs": "medium",
         }
         for path, tier in expected.items():
             self.assertEqual(classify(path, POLICY)["tier"], tier, path)
@@ -167,6 +181,8 @@ class Signals(unittest.TestCase):
         self.assertEqual(outcome("low", True, True)[2], "failure")  # draft se nikdy nesloučí
         self.assertEqual(outcome("low", False, False)[1], "blocked")
         self.assertEqual(outcome("medium", True, False)[2], "failure")
+        self.assertEqual(outcome("blocked", True, False, "freeze")[1:], ("blocked", "failure"))
+        self.assertIn("2×", outcome("high", True, False, "peak", {"high": 2})[0])
 
 
 class SpecAndPreflight(unittest.TestCase):
@@ -189,6 +205,135 @@ class SpecAndPreflight(unittest.TestCase):
         self.assertTrue(needs_owner(["lane:core"], [], POLICY))
         self.assertTrue(needs_owner(["pruh:3-core"], [], POLICY))  # starý štítek platí dál
 
+
+
+def changes_of(*rows):
+    return [{"paths": [p], "additions": a, "deletions": d, "binary": False} for p, a, d in rows]
+
+
+CONTENT = changes_of(("src/Claims.Api/Content/Templates/PickupTemplate.cs", 10, 0),
+                     ("tests/Claims.Tests/Content/PickupTemplateTests.cs", 22, 0))
+
+
+def tier_in(profile, changes, labels=(), review=APPROVE):
+    return decide(POLICY, changes, True, review, (), profile, labels)[0]
+
+
+class Profiles(unittest.TestCase):
+    def test_content_change_by_profile(self):  # scénář dema
+        self.assertEqual(tier_in("normal", CONTENT), "low")
+        self.assertEqual(tier_in("peak", CONTENT), "medium")
+        self.assertEqual(tier_in("freeze", CONTENT), "blocked")
+
+    def test_default_profile_is_normal(self):
+        self.assertEqual(decide(POLICY, CONTENT, True, APPROVE)[0], "low")
+
+    def test_normal_code_outside_safe_area(self):
+        domain = changes_of(("src/Claims.Api/Domain/ClaimPolicy.cs", 5, 1), ("tests/Claims.Tests/OtherTests.cs", 10, 0))
+        refunds = changes_of(("src/Claims.Api/Refunds/RefundCalculator.cs", 2, 1), ("tests/Claims.Tests/OtherTests.cs", 10, 0))
+        program = changes_of(("src/Claims.Api/Program.cs", 2, 0), ("tests/Claims.Tests/OtherTests.cs", 10, 0))
+        self.assertEqual(tier_in("normal", domain), "medium")
+        self.assertEqual(tier_in("normal", refunds), "high")
+        self.assertEqual(tier_in("normal", program), "medium")
+
+    def test_normal_content_needs_tests_review_and_size(self):
+        no_test = changes_of(("src/Claims.Api/Content/Templates/PickupTemplate.cs", 10, 0))
+        big = changes_of(("src/Claims.Api/Content/Templates/PickupTemplate.cs", 140, 0),
+                         ("tests/Claims.Tests/Content/PickupTemplateTests.cs", 20, 0))
+        finding = {"verdict": "approve", "summary": "", "findings": [{"severity": "medium"}]}
+        self.assertEqual(tier_in("normal", no_test), "medium")
+        self.assertEqual(tier_in("normal", big), "medium")
+        self.assertEqual(tier_in("normal", CONTENT, review=finding), "medium")
+        self.assertEqual(tier_in("normal", CONTENT, review={"verdict": "request_changes", "findings": []}), "medium")
+
+    def test_peak_auto_merge_only_small_docs(self):
+        self.assertEqual(tier_in("peak", changes_of(("docs/faq-reklamace.md", 30, 0))), "low")
+        self.assertEqual(tier_in("peak", changes_of(("docs/faq-reklamace.md", 45, 10))), "medium")  # limit 50
+        self.assertEqual(tier_in("peak", changes_of(("README.md", 3, 0))), "medium")
+        self.assertEqual(tier_in("peak", changes_of(("tests/Claims.Tests/OtherTests.cs", 5, 0))), "medium")
+
+    def test_peak_high_needs_two_approvals(self):
+        refunds = changes_of(("src/Claims.Api/Refunds/RefundCalculator.cs", 1, 1), ("tests/Claims.Tests/OtherTests.cs", 5, 0))
+        self.assertEqual(tier_in("peak", refunds), "high")
+        self.assertEqual(POLICY["profiles"]["peak"]["approvals"]["high"], 2)
+        self.assertIn("2×", outcome("high", True, False, "peak", POLICY["profiles"]["peak"]["approvals"])[0])
+
+    def test_freeze_blocks_everything_except_hotfix(self):
+        docs = changes_of(("docs/faq-reklamace.md", 3, 0))
+        self.assertEqual(tier_in("freeze", docs), "blocked")
+        self.assertEqual(tier_in("freeze", docs, labels=["hotfix"]), "high")
+        self.assertEqual(tier_in("freeze", CONTENT, labels=["hotfix", "jiny"]), "high")
+        tier, owners, _ = decide(POLICY, docs, True, APPROVE, (), "freeze", ["hotfix"])
+        self.assertIn(POLICY["owners"]["default"], owners)
+        self.assertEqual(outcome(tier, True, False, "freeze")[1], "high")
+        self.assertEqual(outcome(tier, False, False, "freeze")[1], "blocked")  # hotfix s neprošlými testy ne
+
+    def test_hotfix_label_changes_nothing_outside_freeze(self):
+        self.assertEqual(tier_in("normal", CONTENT, labels=["hotfix"]), "low")
+        self.assertEqual(tier_in("peak", CONTENT, labels=["hotfix"]), "medium")
+
+    def test_profile_never_lowers_tier(self):
+        samples = [CONTENT, changes_of(("docs/a.md", 5, 0)), changes_of(("README.md", 200, 0)),
+                   changes_of(("src/Claims.Api/Refunds/A.cs", 1, 0)), changes_of(("tests/Claims.Tests/OtherTests.cs", 0, 3)),
+                   changes_of((".github/workflows/x.yml", 1, 0)), changes_of(("src/Claims.Api/Domain/X.cs", 3, 0))]
+        ranked = sorted(POLICY["profiles"], key=lambda n: POLICY["profiles"][n]["rank"])
+        for changes in samples:
+            for labels in ((), ("hotfix",)):
+                tiers = [TIERS.index(tier_in(name, changes, labels)) for name in ranked]
+                self.assertEqual(tiers, sorted(tiers), f"{changes} {labels}: {tiers}")
+
+    def test_profiles_are_declarative(self):
+        for name in ("risk_gate.py", "policy.py"):
+            source = (ROOT / ".github/scripts" / name).read_text(encoding="utf-8")
+            for literal in ('"peak"', '"freeze"', '"hotfix"', "'peak'", "'freeze'", "'hotfix'"):
+                self.assertNotIn(literal, source, f"{name}: profil natvrdo v kódu ({literal})")
+
+
+def at(text):
+    return datetime.fromisoformat(text.replace("Z", "+00:00"))
+
+
+class Calendar(unittest.TestCase):
+    def test_calendar_is_valid(self):
+        self.assertEqual(validate_calendar(POLICY, CALENDAR), [])
+        broken = {"windows": [{"name": "x", "profile": "neni", "start": "2026-01-02", "end": "2026-01-01"}]}
+        self.assertEqual(len(validate_calendar(POLICY, broken)), 2)
+        with self.assertRaises(ValueError):
+            calendar_profile(POLICY, broken, at("2026-01-01T12:00:00Z"))
+
+    def test_window_boundaries_in_prague_time(self):
+        cases = {
+            "2026-10-29T22:59:00Z": "normal",  # 29. 10. 23:59 v Praze (CET)
+            "2026-10-29T23:00:00Z": "peak",    # 30. 10. 00:00 v Praze, začátek sezóny
+            "2026-10-31T09:00:00Z": "peak",    # dnešek
+            "2026-11-25T22:59:00Z": "peak",
+            "2026-11-25T23:00:00Z": "freeze",  # 26. 11. 00:00, freeze uvnitř peak
+            "2026-11-30T22:59:00Z": "freeze",  # 30. 11. 23:59, poslední minuta obou oken
+            "2026-11-30T23:00:00Z": "normal",  # 1. 12. 00:00
+            "2026-12-14T12:00:00Z": "peak",
+            "2027-01-05T12:00:00Z": "normal",
+        }
+        for moment, expected in cases.items():
+            self.assertEqual(calendar_profile(POLICY, CALENDAR, at(moment))[0], expected, moment)
+
+    def test_overlap_takes_strictest_regardless_of_order(self):
+        reversed_calendar = dict(CALENDAR, windows=list(reversed(CALENDAR["windows"])))
+        for calendar in (CALENDAR, reversed_calendar):
+            name, window = calendar_profile(POLICY, calendar, at("2026-11-27T12:00:00Z"))
+            self.assertEqual(name, "freeze")
+            self.assertEqual(window["name"], "Nejsilnější dny Black Friday")
+
+    def test_manual_override_is_explained(self):
+        now = at("2026-10-31T09:00:00Z")
+        resolved = resolve_profile(POLICY, CALENDAR, now, override="normal", actor="Spillet")
+        self.assertEqual((resolved["name"], resolved["source"], resolved["calendar_name"]), ("normal", "override", "peak"))
+        self.assertIn("@Spillet", resolved["reason"])
+        self.assertIn("Black Friday sezóna", resolved["reason"])
+        self.assertEqual(resolve_profile(POLICY, CALENDAR, now, override="calendar")["name"], "peak")
+        self.assertEqual(resolve_profile(POLICY, CALENDAR, now)["source"], "calendar")
+        self.assertEqual(resolve_profile(POLICY, CALENDAR, at("2027-01-05T12:00:00Z"))["source"], "default")
+        with self.assertRaises(ValueError):
+            resolve_profile(POLICY, CALENDAR, now, override="volno")
 
 if __name__ == "__main__":
     os.chdir(ROOT)

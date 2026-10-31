@@ -1,22 +1,34 @@
-"""Brána podle rizika. Rozhodne, kdo smí PR sloučit, a rozhodnutí zdůvodní.
+"""Risk gate. Rozhodne, kdo smí udělat merge PR, a rozhodnutí zdůvodní.
 
-Použití: risk_gate.py PR ARTIFACT_DIR --verify success|failure [--base REF --head REF] [--dry-run]
+Použití:
+  risk_gate.py PR ARTIFACT_DIR --verify success|failure [--base REF --head REF] [--trigger NAME] [--dry-run]
+  risk_gate.py PR ARTIFACT_DIR --from-input [--profile normal|peak|freeze|calendar] [--actor LOGIN] ...
 
-Rozhoduje deterministicky z rizikové politiky a signálů (změněné soubory, velikost změny,
-testy, AI review). Model tu nic nerozhoduje, jen dodává verdikt review jako jeden ze signálů.
+Rozhoduje deterministicky z risk policy, aktivního policy profile a signálů (změněné soubory,
+velikost změny, testy, AI review). Model tu nic nerozhoduje, jen dodává verdikt review jako signál.
+
+Policy profile určuje change calendar (change-calendar.yml), nebo ruční přepsání `--profile`
+z workflow gate-reevaluate.yml. Profil risk tier jen zvedá, nikdy nesnižuje.
 
 Seznam změněných souborů bere z gitu (`git diff --numstat -z`), ne z textu patche, a porovná ho
-se dvěma nezávislými zdroji: se seznamem souborů PR z GitHubu a s počtem hlaviček v patchi od agenta.
-Když se zdroje neshodnou nebo brána nenajde žádný soubor, výsledek je `high` (fail-closed).
+se dvěma nezávislými zdroji: se seznamem souborů PR z GitHubu a s počtem hlaviček v patchi.
+Když se zdroje neshodnou nebo risk gate nenajde žádný soubor, výsledek je `high` (fail-closed).
+
+`--from-input` (gate re-evaluation): verdikt review, patch a výsledek ověření bere z artefaktu
+`gate-input-pr-N` posledního běhu risk gate. Když se větev PR od té doby změnila, výsledek je
+`blocked` a je potřeba pustit pipeline znovu.
 """
+import base64
 import json
 import os
+import re
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 from common import REPO, ensure_label, gh, parse_json_answer, read_agent_result
-from policy import classify, load_policy, max_tier
+from policy import TIERS, classify, load_calendar, load_policy, matches, max_tier, resolve_profile
 
 LABELS = {
     "low": ("risk:low", "0e8a16", "Auto-merge po testech a AI review"),
@@ -24,7 +36,11 @@ LABELS = {
     "high": ("risk:high", "b60205", "Merge jen owning team"),
     "blocked": ("blocked", "000000", "Neprošly testy nebo guardrails, nebo freeze; merge nelze"),
 }
-UNRECOGNIZED = "Brána nerozpoznala změněné soubory."
+ICONS = {"low": "🟢", "medium": "🟡", "high": "🔴", "blocked": "⛔"}
+UNRECOGNIZED = "Risk gate nerozpoznala změněné soubory."
+MARKER = "<!-- risk-gate -->"
+HISTORY = re.compile(r"<!-- risk-gate-history: ([A-Za-z0-9+/=]*) -->")
+INPUT_FILE = "gate-input.json"
 
 
 def parse_numstat_z(text):
@@ -68,9 +84,9 @@ def count_patch(text):
 
 
 def integrity(changes, other_counts, patch_lines):
-    """Fail-closed kontrola, že brána vidí všechny změněné soubory. Vrátí seznam důvodů pro `high`."""
+    """Fail-closed kontrola, že risk gate vidí všechny změněné soubory. Vrátí seznam důvodů pro `high`."""
     problems = []
-    if not changes and (patch_lines > 0 or any(count > 0 for count in other_counts.values())):
+    if not changes and (patch_lines > 0 or any(count > 0 for count in other_counts.values() if count is not None)):
         problems.append(UNRECOGNIZED + " Seznam je prázdný, ale změna má řádky nebo soubory.")
     for source, count in other_counts.items():
         if count is not None and count != len(changes):
@@ -78,8 +94,17 @@ def integrity(changes, other_counts, patch_lines):
     return problems
 
 
-def decide(policy, changes, tests_ok, review, problems=()):
-    """Vrátí (úroveň, vlastníci, řádky zdůvodnění). Úroveň je nejvyšší ze všech signálů."""
+def profile_of(policy, name=None):
+    name = name or policy["default_profile"]
+    return name, policy["profiles"][name]
+
+
+def decide(policy, changes, tests_ok, review, problems=(), profile=None, labels=()):
+    """Vrátí (risk tier, vlastníci, řádky zdůvodnění). Risk tier je nejvyšší ze všech signálů.
+
+    `profile` je název policy profile (výchozí `default_profile`), `labels` štítky PR.
+    """
+    name, prof = profile_of(policy, profile)
     tier, owners, reasons = "low", set(), []
 
     for problem in problems:
@@ -88,23 +113,32 @@ def decide(policy, changes, tests_ok, review, problems=()):
         reasons.append(("integrita", "nesoulad", "high", problem))
 
     paths = [p for change in changes for p in change["paths"]]
-    for change in changes:
-        for path in change["paths"]:
-            rule = classify(path, policy)
-            tier = max_tier(tier, rule["tier"])
-            owners.add(policy["owners"][rule["owner"]])
-            reasons.append(("cesta", f"`{path}`", rule["tier"], rule["reason"]))
+    for path in paths:
+        rule = classify(path, policy)
+        tier = max_tier(tier, rule["tier"])
+        owners.add(policy["owners"][rule["owner"]])
+        reasons.append(("cesta", f"`{path}`", rule["tier"], rule["reason"]))
+        if rule["tier"] == "low" and not matches(path, prof["auto_merge_paths"]):
+            floor = prof["outside_auto_merge_tier"]
+            tier = max_tier(tier, floor)
+            reasons.append(("profil", f"`{path}`", floor, f"Mimo auto-merge cesty profilu `{name}`."))
+        for extra in prof.get("min_tier_paths") or []:
+            if matches(path, extra["paths"]) and TIERS.index(extra["tier"]) > TIERS.index(rule["tier"]):
+                tier = max_tier(tier, extra["tier"])
+                reasons.append(("profil", f"`{path}`", extra["tier"], extra["reason"]))
 
     changed_lines = sum(c["additions"] + c["deletions"] for c in changes)
-    limits = policy["limits"]
+    limits = prof.get("limits") or policy["limits"]
     if changed_lines > limits["medium_max_changed_lines"]:
-        tier = "high"
+        tier = max_tier(tier, "high")
         reasons.append(("velikost", f"{changed_lines} řádků", "high", "Nad limitem pro kontrolu člověkem."))
     elif changed_lines > limits["low_max_changed_lines"]:
         tier = max_tier(tier, "medium")
-        reasons.append(("velikost", f"{changed_lines} řádků", "medium", "Nad limitem pro automatické sloučení."))
+        reasons.append(("velikost", f"{changed_lines} řádků", "medium",
+                        f"Nad limitem pro auto-merge v profilu `{name}` ({limits['low_max_changed_lines']} řádků)."))
     else:
-        reasons.append(("velikost", f"{changed_lines} řádků", "low", "V limitu."))
+        reasons.append(("velikost", f"{changed_lines} řádků", "low",
+                        f"V limitu profilu `{name}` ({limits['low_max_changed_lines']} řádků)."))
 
     signals = policy["signals"]
     touches_src = any(p.startswith("src/") for p in paths)
@@ -120,67 +154,125 @@ def decide(policy, changes, tests_ok, review, problems=()):
         reasons.append(("testy", f"odebráno {removed_test_lines} řádků testů", floor,
                         "Úprava nebo odebrání testu může oslabit ochranu. Kontroluje člověk."))
 
-    if review.get("verdict") != "approve":
+    prepared = bool(review.get("prepared"))
+    approved = review.get("verdict") == "approve" and (not prepared or signals.get("accept_prepared_review", False))
+    source = " (připravené, bez modelu)" if prepared else ""
+    if not approved:
         floor = signals["review_request_changes_min_tier"]
         tier = max_tier(tier, floor)
-        reasons.append(("AI review", "nesouhlasí", floor, review.get("summary", "")))
+        reasons.append(("AI review", f"nesouhlasí{source}", floor, review.get("summary", "")))
     else:
-        reasons.append(("AI review", "souhlasí", "low", review.get("summary", "")))
+        reasons.append(("AI review", f"souhlasí{source}", "low", review.get("summary", "")))
 
     serious = [f for f in review.get("findings", []) if str(f.get("severity", "")).lower() in ("high", "medium")]
     if serious:
         floor = signals["review_finding_min_tier"]
         tier = max_tier(tier, floor)
         reasons.append(("AI review", f"{len(serious)} vážných nálezů", floor,
-                        "Nález se závažností medium nebo high zvedá úroveň i při souhlasu."))
+                        "Nález se závažností medium nebo high zvedá risk tier i při souhlasu."))
+
+    floor, why = prof.get("min_tier"), prof.get("min_tier_reason", "")
+    for exception in prof.get("label_exceptions") or []:
+        if exception["label"] in labels:
+            floor, why = exception["min_tier"], f"Štítek `{exception['label']}`: {exception['reason']}"
+            owners.add(policy["owners"]["default"])
+            break
+    if floor:
+        tier = max_tier(tier, floor)
+        reasons.append(("profil", f"`{name}`", floor, why))
 
     reasons.append(("testy", "prošly" if tests_ok else "NEPROŠLY", "low" if tests_ok else "blocked",
-                    "Ověření v čistém jobu bez secrets: mantinely a dotnet test."))
+                    "Ověření v čistém jobu bez secrets: guardrails a dotnet test."))
     return tier, owners, reasons
 
 
-def outcome(tier, tests_ok, draft):
-    """(rozhodnutí, štítek, stav kontroly) pro výslednou úroveň."""
+def outcome(tier, tests_ok, draft, profile="", approvals=None):
+    """(rozhodnutí, štítek, stav kontroly) pro výsledný risk tier."""
+    approvals = approvals or {}
     if not tests_ok:
-        return "zablokováno, neprošly testy nebo mantinely", "blocked", "failure"
+        return "blocked: neprošly testy nebo guardrails", "blocked", "failure"
+    if tier == "blocked":
+        return f"blocked: profil `{profile}`, merge teď nelze", "blocked", "failure"
     if draft:
-        return "jen návrh (draft): pruh 3 spustil ne-vlastník, rozhodne vlastnický tým", tier, "failure"
+        return "jen draft: lane core spustil ne-vlastník, rozhodne owning team", tier, "failure"
     if tier == "low":
-        return "sloučeno automaticky", "low", "success"
+        return "auto-merge", "low", "success"
     if tier == "medium":
-        return "čeká na schválení člověkem", "medium", "failure"
-    return "jen vlastnický tým", "high", "failure"
+        return f"čeká na schválení člověkem ({approvals.get('medium', 1)}×)", "medium", "failure"
+    return f"merge jen owning team ({approvals.get('high', 1)}× schválení)", "high", "failure"
 
 
 def load_review(out):
     agent = read_agent_result(out / "review.json")
     try:
-        return parse_json_answer(agent.get("result", ""))
+        review = parse_json_answer(agent.get("result", ""))
     except (ValueError, TypeError):
-        return {"verdict": "request_changes", "summary": "Review se nepodařilo načíst, brána ho bere jako nesouhlas.",
+        return {"verdict": "request_changes", "summary": "Review se nepodařilo načíst, risk gate ho bere jako nesouhlas.",
                 "findings": []}
+    # Připravené review (demo-prepare.yml) se pozná podle obalu od workflow, ne podle textu odpovědi:
+    # obal píše skript, obsah `result` by u skutečného review psal model.
+    review["prepared"] = agent.get("prepared_by") == "demo-prepare"
+    return review
 
 
-def render(tier, decision, reasons, review):
-    icons = {"low": "🟢", "medium": "🟡", "high": "🔴", "blocked": "⛔"}
-    rows = "\n".join(f"| {kind} | {what} | {icons[t]} {t} | {why} |" for kind, what, t, why in reasons)
+def prague_now():
+    from zoneinfo import ZoneInfo
+
+    return datetime.now(timezone.utc).astimezone(ZoneInfo("Europe/Prague")).strftime("%Y-%m-%d %H:%M")
+
+
+def encode_history(entries):
+    return base64.b64encode(json.dumps(entries, ensure_ascii=False).encode("utf-8")).decode("ascii")
+
+
+def decode_history(body):
+    match = HISTORY.search(body or "")
+    if not match:
+        return []
+    try:
+        return json.loads(base64.b64decode(match.group(1)).decode("utf-8"))
+    except (ValueError, TypeError):
+        return []
+
+
+def render(tier, decision, reasons, review, profile, approvals=None, owners=(), history=()):
+    rows = "\n".join(f"| {kind} | {what} | {ICONS[t]} {t} | {why} |" for kind, what, t, why in reasons)
     findings = "\n".join(
         f"- **{f.get('severity', '?')}** `{f.get('file', '')}`: {f.get('issue', '')}" for f in review.get("findings", [])
     ) or "- bez nálezů"
-    return f"""## Brána podle rizika: {icons.get(tier, '')} {decision}
+    approvals = approvals or {}
+    need = ""
+    if tier in ("medium", "high"):
+        count = approvals.get(tier, 1)
+        who = "owning team" if tier == "high" else "člověk s právem merge"
+        people = ", ".join(f"@{o}" for o in sorted(owners)) or "?"
+        need = f"\n\n**Potřebná schválení:** {count} ({who}; code owners: {people})."
+        if count > 1:
+            need += (" V demu je owning team jeden člověk a repo nemá ruleset, takže druhé schválení"
+                     " GitHub nevynutí. V produkci ho drží ruleset (viz README).")
+    past = ""
+    if history:
+        lines = "\n".join(f"| {h['when']} | {h['trigger']} | `{h['profile']}` ({h['source']}) | "
+                          f"{ICONS.get(h['tier'], '')} {h['decision']} |" for h in history)
+        past = f"\n<details open><summary>Historie rozhodnutí</summary>\n\n| Kdy | Spustil | Profil | Rozhodnutí |\n|---|---|---|---|\n{lines}\n</details>\n"
+    return f"""{MARKER}
+## Risk gate: {ICONS.get(tier, '')} {decision}
 
-| Signál | Hodnota | Úroveň | Proč |
+**Policy profile:** `{profile['name']}` – {profile['reason']}.{need}
+
+| Signál | Hodnota | Risk tier | Proč |
 |---|---|---|---|
 {rows}
 
-Výsledná úroveň je nejvyšší ze všech signálů. Pravidla jsou v [`risk-policy.yml`](../blob/main/risk-policy.yml).
-
-<details><summary>AI review: {review.get('verdict', '?')}</summary>
+Výsledný risk tier je nejvyšší ze všech signálů. Pravidla a profily jsou v [`risk-policy.yml`](../blob/main/risk-policy.yml), okna v [`change-calendar.yml`](../blob/main/change-calendar.yml).
+{past}
+<details><summary>AI review: {review.get('verdict', '?')}{' (připravené, bez modelu)' if review.get('prepared') else ''}</summary>
 
 {review.get('summary', '')}
 
 {findings}
 </details>
+<!-- risk-gate-history: {encode_history(list(history))} -->
 """
 
 
@@ -194,27 +286,70 @@ def git_numstat(base, head):
     return result.stdout.decode("utf-8", errors="surrogateescape")
 
 
+def find_gate_comment(pr):
+    """(id, text) posledního komentáře risk gate od pipeline, nebo (None, "")."""
+    ids = gh("api", f"repos/{REPO}/issues/{pr}/comments", "--paginate", "--jq",
+             '.[] | select(.user.login == "github-actions[bot]") | select(.body | contains("<!-- risk-gate -->")) | .id',
+             check=False).split()
+    if not ids:
+        return None, ""
+    return ids[-1], gh("api", f"repos/{REPO}/issues/comments/{ids[-1]}", "--jq", ".body", check=False)
+
+
 def main():
     pr, out = sys.argv[1], Path(sys.argv[2])
     dry_run = "--dry-run" in sys.argv
-    tests_ok = arg("--verify") == "success"
-    policy = load_policy()
+    from_input = "--from-input" in sys.argv
+    trigger = arg("--trigger", "gate-reevaluate" if from_input else "agent-pipeline")
+    policy, calendar = load_policy(), load_calendar()
+    profile = resolve_profile(policy, calendar, override=arg("--profile"), actor=arg("--actor"))
+    prof = policy["profiles"][profile["name"]]
+    print(f"Policy profile: {profile['name']} ({profile['reason']})")
 
     changes = parse_numstat_z(git_numstat(arg("--base", "origin/main"), arg("--head", "HEAD")))
     patch_path = out / "change.patch"
     patch_files, patch_lines = count_patch(patch_path.read_text(errors="replace")) if patch_path.exists() else (None, 0)
-    counts = {"patch od agenta": patch_files}
-    head_sha, draft = None, False
+    counts = {"patch": patch_files}
+    head_sha, draft, labels, state = None, False, [], "OPEN"
     if not dry_run:
-        info = json.loads(gh("pr", "view", pr, "--repo", REPO, "--json", "files,headRefOid,isDraft"))
+        info = json.loads(gh("pr", "view", pr, "--repo", REPO, "--json", "files,headRefOid,isDraft,labels,state"))
         counts["soubory PR na GitHubu"] = len(info.get("files") or [])
-        head_sha, draft = info["headRefOid"], info["isDraft"]
+        head_sha, draft, state = info["headRefOid"], info["isDraft"], info["state"]
+        labels = [label["name"] for label in info.get("labels") or []]
+        if state != "OPEN":
+            raise SystemExit(f"PR #{pr} není otevřené ({state}), risk gate nemá co rozhodnout.")
+
+    stale = False
+    if from_input:
+        recorded = json.loads((out / INPUT_FILE).read_text(encoding="utf-8"))
+        verify = recorded.get("verify")
+        stale = head_sha is not None and recorded.get("head_sha") != head_sha
+    else:
+        verify = arg("--verify")
+    tests_ok = verify == "success" and not stale
 
     review = load_review(out)
-    tier, owners, reasons = decide(policy, changes, tests_ok, review, integrity(changes, counts, patch_lines))
-    decision, label, state = outcome(tier, tests_ok, draft)
+    tier, owners, reasons = decide(policy, changes, tests_ok, review, integrity(changes, counts, patch_lines),
+                                   profile["name"], labels)
+    if stale:
+        reasons.insert(0, ("ověření", "jiný commit", "blocked",
+                           "Větev PR se od posledního ověření změnila. Pusť pipeline znovu."))
+    approvals = prof.get("approvals") or {}
+    decision, label, status = outcome(tier, tests_ok, draft, profile["name"], approvals)
+    shown = "blocked" if label == "blocked" else tier
 
-    comment = render(label if label == "blocked" else tier, decision, reasons, review)
+    if not from_input and head_sha:
+        # Vstup pro gate re-evaluation: workflow ho nahraje jako artefakt gate-input-pr-N.
+        (out / INPUT_FILE).write_text(json.dumps({
+            "pr": pr, "head_sha": head_sha, "verify": verify, "trigger": trigger,
+            "run_id": os.environ.get("GITHUB_RUN_ID"),
+        }), encoding="utf-8")
+
+    comment_id, old_body = (None, "") if dry_run else find_gate_comment(pr)
+    entry = {"when": prague_now(), "trigger": trigger + (f" (@{arg('--actor')})" if arg("--actor") else ""),
+             "profile": profile["name"], "source": profile["source"], "tier": shown, "decision": decision}
+    history = decode_history(old_body) + [entry]
+    comment = render(shown, decision, reasons, review, profile, approvals, owners, history)
     summary_file = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_file:
         Path(summary_file).write_text(comment, encoding="utf-8")
@@ -222,19 +357,29 @@ def main():
         print(comment)
         return
 
-    gh("pr", "comment", pr, "--repo", REPO, "--body-file", "-", input_text=comment)
+    payload = json.dumps({"body": comment}, ensure_ascii=False)
+    if comment_id:
+        gh("api", "-X", "PATCH", f"repos/{REPO}/issues/comments/{comment_id}", "--input", "-", input_text=payload)
+    else:
+        gh("api", "-X", "POST", f"repos/{REPO}/issues/{pr}/comments", "--input", "-", input_text=payload)
+
     name, color, description = LABELS[label]
     ensure_label(name, color, description)
-    gh("pr", "edit", pr, "--repo", REPO, "--add-label", name)
+    stale_labels = [LABELS[t][0] for t in LABELS if LABELS[t][0] != name and LABELS[t][0] in labels]
+    edit = ["pr", "edit", pr, "--repo", REPO, "--add-label", name]
+    if stale_labels:
+        edit += ["--remove-label", ",".join(stale_labels)]
+    gh(*edit)
     # Výsledek jako stav kontroly `risk-gate` na commitu. Ruleset na `main` ho může vyžadovat (viz README).
-    gh("api", f"repos/{REPO}/statuses/{head_sha}", "-f", f"state={state}", "-f", "context=risk-gate",
-       "-f", f"description={tier}: {decision}"[:140], check=False)
+    gh("api", f"repos/{REPO}/statuses/{head_sha}", "-f", f"state={status}", "-f", "context=risk-gate",
+       "-f", f"description={profile['name']}: {tier}: {decision}"[:140], check=False)
 
     if label == "low" and not draft:
         gh("pr", "merge", pr, "--repo", REPO, "--squash", "--delete-branch")
+        print(f"PR #{pr}: auto-merge hotový.")
     elif label in ("medium", "high"):
-        reviewers = ",".join(sorted(owners))
-        gh("pr", "edit", pr, "--repo", REPO, "--add-reviewer", reviewers, check=False)
+        gh("pr", "edit", pr, "--repo", REPO, "--add-reviewer", ",".join(sorted(owners)), check=False)
+    print(f"PR #{pr}: {profile['name']} -> {shown}: {decision}")
 
 
 if __name__ == "__main__":
