@@ -221,7 +221,7 @@
    ],
    "too_small": false,
    "why": [
-    "dynamické SQL -10 b. (0 z literálu, 3 slepé)",
+    "dynamické SQL -10 b. (0 z literálu, 3 blind)",
     "velikost dat -7 b. (0.9 TB)",
     "volání zvenku -6 b.",
     "čtecí cesty (levné ověření) +3 b."
@@ -366,7 +366,7 @@
    ],
    "too_small": false,
    "why": [
-    "dynamické SQL -10 b. (1 z literálu, 4 slepé)",
+    "dynamické SQL -10 b. (1 z literálu, 4 blind)",
     "velikost dat -7 b. (0.6 TB)",
     "volání zvenku -6 b.",
     "čtecí cesty (levné ověření) +1 b."
@@ -689,7 +689,7 @@
    "too_small": false,
    "why": [
     "zápisy do cizích tabulek -9 b. (Shipment, Orders)",
-    "dynamické SQL -9 b. (1 z literálu, 3 slepé)",
+    "dynamické SQL -9 b. (1 z literálu, 3 blind)",
     "velikost dat -8 b. (1.6 TB)",
     "čtecí cesty (levné ověření) +2 b.",
     "hlavní zapisovatel sdílené tabulky Shipment"
@@ -21543,245 +21543,251 @@
  "generated_by": "mapa-monolitu analyze.py",
  "lanes": [
   {
-   "blokujici": [],
-   "chybi": [
-    "ověřené pokrytí živých procedur ≥ 80 % (0 z 18 (0 %))",
-    "všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …)"
-   ],
+   "autonomy_level": "L1",
+   "blind_spots": 13,
+   "blocking": [],
    "domain": "D:Claim",
-   "navrh": 3,
-   "nazev": "Reklamace",
-   "overeno": 0,
-   "popis": "jen draft PR",
-   "poradi": 1,
-   "pravidla": [
+   "draft": 3,
+   "file": "out/evidence/D-Claim.md",
+   "label": "draft-only",
+   "live": 18,
+   "missing": [
+    "ověřené pokrytí živých procedur ≥ 80 % (0 z 18 (0 %))",
+    "všechny zapisující procedury mají zelený characterization test (chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …)"
+   ],
+   "name": "Reklamace",
+   "owner": "Poprodej (fiktivní)",
+   "rank": 1,
+   "rules": [
     {
+     "applies_to": "draft-only",
      "detail": "Poprodej (fiktivní)",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 18 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 83.2,
-   "slepa": 13,
-   "soubor": "out/evidence/D-Claim.md",
-   "stav": "jen_draft_pr",
-   "vlastnik": "Poprodej (fiktivní)",
-   "zapisujici": 13,
-   "zapisujici_neoverene": 13,
-   "zive": 18
+   "score": 83.2,
+   "state": "draft-only",
+   "verified": 0,
+   "writing": 13,
+   "writing_unverified": 13
   },
   {
-   "blokujici": [
+   "autonomy_level": "L1",
+   "blind_spots": 16,
+   "blocking": [
     "usp_Product_ProductAttribute_Cleanup"
    ],
-   "chybi": [
-    "ověřené pokrytí živých procedur ≥ 80 % (0 z 25 (0 %))",
-    "všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …)",
-    "blokujících slepých míst ≤ 0 (usp_Product_ProductAttribute_Cleanup)"
-   ],
    "domain": "D:Category",
-   "navrh": 0,
-   "nazev": "Katalog",
-   "overeno": 0,
-   "popis": "jen draft PR",
-   "poradi": 2,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-Category.md",
+   "label": "draft-only",
+   "live": 25,
+   "missing": [
+    "ověřené pokrytí živých procedur ≥ 80 % (0 z 25 (0 %))",
+    "všechny zapisující procedury mají zelený characterization test (chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …)",
+    "blokujících blind spots ≤ 0 (usp_Product_ProductAttribute_Cleanup)"
+   ],
+   "name": "Katalog",
+   "owner": "Katalog a obsah (fiktivní)",
+   "rank": 2,
+   "rules": [
     {
+     "applies_to": "draft-only",
      "detail": "Katalog a obsah (fiktivní)",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 25 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_Product_ProductAttribute_Cleanup",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 81.6,
-   "slepa": 16,
-   "soubor": "out/evidence/D-Category.md",
-   "stav": "jen_draft_pr",
-   "vlastnik": "Katalog a obsah (fiktivní)",
-   "zapisujici": 13,
-   "zapisujici_neoverene": 13,
-   "zive": 25
+   "score": 81.6,
+   "state": "draft-only",
+   "verified": 0,
+   "writing": 13,
+   "writing_unverified": 13
   },
   {
-   "blokujici": [
+   "autonomy_level": "L0",
+   "blind_spots": 12,
+   "blocking": [
     "usp_Inv_Invoice_Hourly",
     "usp_Inv_YearClose"
    ],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)"
-   ],
    "domain": "D:CreditNote",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": 3,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-CreditNote.md",
+   "label": "closed",
+   "live": 18,
+   "missing": [
+    "doména má owning team (owning team není určen)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": 3,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 18 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 12: usp_Inv_AccountingExport_Insert, usp_Inv_AccountingExport_MonthClose, usp_Inv_CreditNote_Recalc, usp_Inv_ExchangeRate_Approve, usp_Inv_ExchangeRate_Insert, usp_Inv_Invoice_Confirm …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_Inv_Invoice_Hourly, usp_Inv_YearClose",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 73.0,
-   "slepa": 12,
-   "soubor": "out/evidence/D-CreditNote.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 12,
-   "zapisujici_neoverene": 12,
-   "zive": 18
+   "score": 73.0,
+   "state": "closed",
+   "verified": 0,
+   "writing": 12,
+   "writing_unverified": 12
   },
   {
-   "blokujici": [
+   "autonomy_level": "L0",
+   "blind_spots": 10,
+   "blocking": [
     "usp_Pay_Payment_Cleanup"
    ],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)"
-   ],
    "domain": "D:GatewayLog",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": 4,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-GatewayLog.md",
+   "label": "closed",
+   "live": 18,
+   "missing": [
+    "doména má owning team (owning team není určen)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": 4,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 18 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 15: usp_Pay_GatewayLog_Merge, usp_Pay_GatewayLog_Recalc, usp_Pay_GatewayLog_Update, usp_Pay_Installment_Delete, usp_Pay_Installment_Save, usp_Pay_PaymentMethod_Close …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_Pay_Payment_Cleanup",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 72.9,
-   "slepa": 10,
-   "soubor": "out/evidence/D-GatewayLog.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 15,
-   "zapisujici_neoverene": 15,
-   "zive": 18
+   "score": 72.9,
+   "state": "closed",
+   "verified": 0,
+   "writing": 15,
+   "writing_unverified": 15
   },
   {
-   "blokujici": [
+   "autonomy_level": "L0",
+   "blind_spots": 50,
+   "blocking": [
     "usp_Rpt_Customers_RptDailySales",
     "usp_Rpt_Dispatch",
     "usp_Rpt_Export_Accounting",
@@ -21804,822 +21810,834 @@
     "usp_Rpt_Stock_RptDailySales",
     "usp_Rpt_Weekly_RptDailySales"
    ],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)"
-   ],
    "domain": "D:RptDailySales",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": 5,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-RptDailySales.md",
+   "label": "closed",
+   "live": 21,
+   "missing": [
+    "doména má owning team (owning team není určen)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": 5,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 21 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 19: usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka, usp_Rpt_Export_RptDailySales …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka, usp_Rpt_Export_RptDailySales, usp_Rpt_Export_Sales_2026, usp_Rpt_Kpi_ExportQueue, usp_Rpt_Kpi_RptDailySales, usp_Rpt_Margin_RptDailySales, usp_Rpt_Margin_Sales_2024, usp_Rpt_RptDailySales_Cleanup, usp_Rpt_RptDailySales_Export, usp_Rpt_RptDailySales_List, usp_Rpt_RptDailySales_MonthClose, usp_Rpt_RptStockSnapshot_Cleanup, usp_Rpt_RptStockSnapshot_MonthClose, usp_Rpt_Sales_2024_Cleanup, usp_Rpt_Sales_2026_MonthClose, usp_Rpt_Stock_RptDailySales, usp_Rpt_Weekly_RptDailySales",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 72.3,
-   "slepa": 50,
-   "soubor": "out/evidence/D-RptDailySales.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 19,
-   "zapisujici_neoverene": 19,
-   "zive": 21
+   "score": 72.3,
+   "state": "closed",
+   "verified": 0,
+   "writing": 19,
+   "writing_unverified": 19
   },
   {
-   "blokujici": [
+   "autonomy_level": "L0",
+   "blind_spots": 11,
+   "blocking": [
     "usp_Cust_Customer_Nightly"
    ],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)"
-   ],
    "domain": "D:CustomerAddress",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": 6,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-CustomerAddress.md",
+   "label": "closed",
+   "live": 19,
+   "missing": [
+    "doména má owning team (owning team není určen)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": 6,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 19 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 15: usp_Cust_CustomerAddress_Close, usp_Cust_CustomerAddress_Confirm, usp_Cust_CustomerAddress_Dispatch, usp_Cust_CustomerContact_MonthClose, usp_Cust_CustomerSegment_Close, usp_Cust_CustomerSegment_Dispatch …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_Cust_Customer_Nightly",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 71.9,
-   "slepa": 11,
-   "soubor": "out/evidence/D-CustomerAddress.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 15,
-   "zapisujici_neoverene": 15,
-   "zive": 19
+   "score": 71.9,
+   "state": "closed",
+   "verified": 0,
+   "writing": 15,
+   "writing_unverified": 15
   },
   {
-   "blokujici": [
+   "autonomy_level": "L0",
+   "blind_spots": 10,
+   "blocking": [
     "usp_Price_PriceHistory_MonthClose"
    ],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)"
-   ],
    "domain": "D:PriceList",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": 7,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-PriceList.md",
+   "label": "closed",
+   "live": 17,
+   "missing": [
+    "doména má owning team (owning team není určen)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": 7,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 17 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 12: usp_Price_PriceHistory_MonthClose, usp_Price_PriceList_Insert, usp_Price_PriceList_MonthClose, usp_Price_PriceList_Recalc, usp_Price_PriceList_SetStatus, usp_Price_Promo_Cancel …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_Price_PriceHistory_MonthClose",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 71.9,
-   "slepa": 10,
-   "soubor": "out/evidence/D-PriceList.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 12,
-   "zapisujici_neoverene": 12,
-   "zive": 17
+   "score": 71.9,
+   "state": "closed",
+   "verified": 0,
+   "writing": 12,
+   "writing_unverified": 12
   },
   {
-   "blokujici": [
+   "autonomy_level": "L0",
+   "blind_spots": 22,
+   "blocking": [
     "usp_Import_Stock"
    ],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)"
-   ],
    "domain": "D:Warehouse",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": 8,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-Warehouse.md",
+   "label": "closed",
+   "live": 41,
+   "missing": [
+    "doména má owning team (owning team není určen)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": 8,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 41 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 27: spSklad_InventoryCount_Cancel, spSklad_InventoryCount_Merge, spSklad_InventoryCount_Nightly, spSklad_StockLevel_Close, spSklad_StockLevel_Delete, spSklad_StockLevel_Save …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_Import_Stock",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 69.5,
-   "slepa": 22,
-   "soubor": "out/evidence/D-Warehouse.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 27,
-   "zapisujici_neoverene": 27,
-   "zive": 41
+   "score": 69.5,
+   "state": "closed",
+   "verified": 0,
+   "writing": 27,
+   "writing_unverified": 27
   },
   {
-   "blokujici": [],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)"
-   ],
+   "autonomy_level": "L0",
+   "blind_spots": 16,
+   "blocking": [],
    "domain": "D:ShipmentTracking",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": 9,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-ShipmentTracking.md",
+   "label": "closed",
+   "live": 23,
+   "missing": [
+    "doména má owning team (owning team není určen)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": 9,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 23 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 19: usp_Ship_CarrierService_Cancel, usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_GLS_old, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 64.7,
-   "slepa": 16,
-   "soubor": "out/evidence/D-ShipmentTracking.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 19,
-   "zapisujici_neoverene": 19,
-   "zive": 23
+   "score": 64.7,
+   "state": "closed",
+   "verified": 0,
+   "writing": 19,
+   "writing_unverified": 19
   },
   {
-   "blokujici": [
+   "autonomy_level": "L0",
+   "blind_spots": 28,
+   "blocking": [
     "usp_Order_Export",
     "usp_Order_OrderEvent_MonthClose",
     "usp_Order_OrderNote_Nightly",
     "usp_Order_OrderStatusHistory_Archive"
    ],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)"
-   ],
    "domain": "D:OrderNote",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": 10,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-OrderNote.md",
+   "label": "closed",
+   "live": 38,
+   "missing": [
+    "doména má owning team (owning team není určen)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": 10,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "ano",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": true
+     "met": true,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 38 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 28: spSklad_Warehouse_Update, usp_Inv_Invoice_SetStatus, usp_Inv_Invoice_Update, usp_Order_Cancel, usp_Order_CartItem_Archive, usp_Order_CartItem_Cleanup …",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_Order_Export, usp_Order_OrderEvent_MonthClose, usp_Order_OrderNote_Nightly, usp_Order_OrderStatusHistory_Archive",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 57.3,
-   "slepa": 28,
-   "soubor": "out/evidence/D-OrderNote.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 28,
-   "zapisujici_neoverene": 28,
-   "zive": 38
+   "score": 57.3,
+   "state": "closed",
+   "verified": 0,
+   "writing": 28,
+   "writing_unverified": 28
   },
   {
-   "blokujici": [
+   "autonomy_level": "L0",
+   "blind_spots": 3,
+   "blocking": [
     "usp_AuditLog_Purge"
    ],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)",
-    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
-   ],
    "domain": "D:SysParam",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": null,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-SysParam.md",
+   "label": "closed",
+   "live": 2,
+   "missing": [
+    "doména má owning team (owning team není určen)",
+    "doména je mezi domain candidates (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": null,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "malý shluk: posoudit jako součást sousední domény",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 2 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 2: usp_AuditLog_Purge, usp_SysParam_Set",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "usp_AuditLog_Purge",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 66.2,
-   "slepa": 3,
-   "soubor": "out/evidence/D-SysParam.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 2,
-   "zapisujici_neoverene": 2,
-   "zive": 2
+   "score": 66.2,
+   "state": "closed",
+   "verified": 0,
+   "writing": 2,
+   "writing_unverified": 2
   },
   {
-   "blokujici": [],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)",
-    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
-   ],
+   "autonomy_level": "L0",
+   "blind_spots": 2,
+   "blocking": [],
    "domain": "D:Users",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": null,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-Users.md",
+   "label": "closed",
+   "live": 2,
+   "missing": [
+    "doména má owning team (owning team není určen)",
+    "doména je mezi domain candidates (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": null,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "malý shluk: posoudit jako součást sousední domény",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 2 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "chybí 1: usp_User_Save",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 87.6,
-   "slepa": 2,
-   "soubor": "out/evidence/D-Users.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 1,
-   "zapisujici_neoverene": 1,
-   "zive": 2
+   "score": 87.6,
+   "state": "closed",
+   "verified": 0,
+   "writing": 1,
+   "writing_unverified": 1
   },
   {
-   "blokujici": [],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)",
-    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
-   ],
+   "autonomy_level": "L0",
+   "blind_spots": 1,
+   "blocking": [],
    "domain": "D:Translation",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": null,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-Translation.md",
+   "label": "closed",
+   "live": 1,
+   "missing": [
+    "doména má owning team (owning team není určen)",
+    "doména je mezi domain candidates (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": null,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "malý shluk: posoudit jako součást sousední domény",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 1 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "ano",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 97.2,
-   "slepa": 1,
-   "soubor": "out/evidence/D-Translation.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 0,
-   "zapisujici_neoverene": 0,
-   "zive": 1
+   "score": 97.2,
+   "state": "closed",
+   "verified": 0,
+   "writing": 0,
+   "writing_unverified": 0
   },
   {
-   "blokujici": [],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)",
-    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
-   ],
+   "autonomy_level": "L0",
+   "blind_spots": 0,
+   "blocking": [],
    "domain": "D:Product_bak2019",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": null,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-Product_bak2019.md",
+   "label": "closed",
+   "live": 0,
+   "missing": [
+    "doména má owning team (owning team není určen)",
+    "doména je mezi domain candidates (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": null,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 0 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "ano",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 100.0,
-   "slepa": 0,
-   "soubor": "out/evidence/D-Product_bak2019.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 0,
-   "zapisujici_neoverene": 0,
-   "zive": 0
+   "score": 100.0,
+   "state": "closed",
+   "verified": 0,
+   "writing": 0,
+   "writing_unverified": 0
   },
   {
-   "blokujici": [],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)",
-    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
-   ],
+   "autonomy_level": "L0",
+   "blind_spots": 0,
+   "blocking": [],
    "domain": "D:TmpRecalc",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": null,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-TmpRecalc.md",
+   "label": "closed",
+   "live": 0,
+   "missing": [
+    "doména má owning team (owning team není určen)",
+    "doména je mezi domain candidates (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": null,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 0 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "ano",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 100.0,
-   "slepa": 0,
-   "soubor": "out/evidence/D-TmpRecalc.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 0,
-   "zapisujici_neoverene": 0,
-   "zive": 0
+   "score": 100.0,
+   "state": "closed",
+   "verified": 0,
+   "writing": 0,
+   "writing_unverified": 0
   },
   {
-   "blokujici": [],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)",
-    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
-   ],
+   "autonomy_level": "L0",
+   "blind_spots": 0,
+   "blocking": [],
    "domain": "D:ImportProduct",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": null,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-ImportProduct.md",
+   "label": "closed",
+   "live": 0,
+   "missing": [
+    "doména má owning team (owning team není určen)",
+    "doména je mezi domain candidates (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": null,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 0 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "ano",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 100.0,
-   "slepa": 0,
-   "soubor": "out/evidence/D-ImportProduct.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 0,
-   "zapisujici_neoverene": 0,
-   "zive": 0
+   "score": 100.0,
+   "state": "closed",
+   "verified": 0,
+   "writing": 0,
+   "writing_unverified": 0
   },
   {
-   "blokujici": [],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)",
-    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
-   ],
+   "autonomy_level": "L0",
+   "blind_spots": 0,
+   "blocking": [],
    "domain": "D:OldOrders",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": null,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-OldOrders.md",
+   "label": "closed",
+   "live": 0,
+   "missing": [
+    "doména má owning team (owning team není určen)",
+    "doména je mezi domain candidates (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": null,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 0 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "ano",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 100.0,
-   "slepa": 0,
-   "soubor": "out/evidence/D-OldOrders.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 0,
-   "zapisujici_neoverene": 0,
-   "zive": 0
+   "score": 100.0,
+   "state": "closed",
+   "verified": 0,
+   "writing": 0,
+   "writing_unverified": 0
   },
   {
-   "blokujici": [],
-   "chybi": [
-    "doména má vlastnický tým (vlastník není určen)",
-    "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
-   ],
+   "autonomy_level": "L0",
+   "blind_spots": 0,
+   "blocking": [],
    "domain": "D:X_Migr_Customer",
-   "navrh": 0,
-   "nazev": null,
-   "overeno": 0,
-   "popis": "zavřený",
-   "poradi": null,
-   "pravidla": [
+   "draft": 0,
+   "file": "out/evidence/D-X_Migr_Customer.md",
+   "label": "closed",
+   "live": 0,
+   "missing": [
+    "doména má owning team (owning team není určen)",
+    "doména je mezi domain candidates (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+   ],
+   "name": null,
+   "owner": null,
+   "rank": null,
+   "rules": [
     {
-     "detail": "vlastník není určen",
+     "applies_to": "draft-only",
+     "detail": "owning team není určen",
      "id": "R1",
-     "pravidlo": "doména má vlastnický tým",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména má owning team"
     },
     {
+     "applies_to": "draft-only",
      "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
      "id": "R2",
-     "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-     "pro": "jen_draft_pr",
-     "splneno": false
+     "met": false,
+     "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
     },
     {
+     "applies_to": "open",
      "detail": "0 z 0 (0 %)",
      "id": "R3",
-     "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": false
+     "met": false,
+     "rule": "ověřené pokrytí živých procedur ≥ 80 %"
     },
     {
+     "applies_to": "open",
      "detail": "ano",
      "id": "R4",
-     "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "všechny zapisující procedury mají zelený characterization test"
     },
     {
+     "applies_to": "open",
      "detail": "žádné",
      "id": "R5",
-     "pravidlo": "blokujících slepých míst ≤ 0",
-     "pro": "otevreny_s_vlastnikem",
-     "splneno": true
+     "met": true,
+     "rule": "blokujících blind spots ≤ 0"
     }
    ],
-   "skore": 100.0,
-   "slepa": 0,
-   "soubor": "out/evidence/D-X_Migr_Customer.md",
-   "stav": "zavreny",
-   "vlastnik": null,
-   "zapisujici": 0,
-   "zapisujici_neoverene": 0,
-   "zive": 0
+   "score": 100.0,
+   "state": "closed",
+   "verified": 0,
+   "writing": 0,
+   "writing_unverified": 0
   }
  ],
  "nodes": [
@@ -34019,7 +34037,7 @@
     }
    ]
   },
-  "elapsed_s": 0.13,
+  "elapsed_s": 0.14,
   "evaluation": {
    "absorbed": [
     "Purchasing"

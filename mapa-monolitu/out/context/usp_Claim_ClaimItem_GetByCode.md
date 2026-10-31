@@ -34,7 +34,7 @@ END
 
 ## Dynamické SQL
 
-Tabulky z literálů: ClaimReason. Slepé (skládané jméno): ne.
+Tabulky z literálů: ClaimReason. Blind spot (skládané jméno): ne.
 
 ## Provoz (Query Store, 30 dní)
 

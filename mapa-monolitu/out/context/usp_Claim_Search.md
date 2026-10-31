@@ -43,7 +43,7 @@ END
 
 ## Dynamické SQL
 
-Tabulky z literálů: Claim, Customer, Orders. Slepé (skládané jméno): ne.
+Tabulky z literálů: Claim, Customer, Orders. Blind spot (skládané jméno): ne.
 
 ## Provoz (Query Store, 30 dní)
 

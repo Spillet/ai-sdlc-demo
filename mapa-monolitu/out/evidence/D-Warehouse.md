@@ -1,35 +1,35 @@
-# Balíček důkazů: D:Warehouse
+# Evidence pack: D:Warehouse
 
-Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `3a31a99461f1…`). Strojová verze: `D-Warehouse.json` (schéma `mapa-monolitu/dukazy@1`).
+Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `fed7344328f4…`). Strojová verze: `D-Warehouse.json` (schéma `mapa-monolitu/evidence-pack@2`).
 
-## Pruh core: **zavřený**
+## Core lane: **closed** (autonomy level L0)
 
 - Kdo spustí agenta: nikdo; intake odpoví, co chybí
 - PR: nevzniká
-- Kdo sloučí: jen vlastník ručně mimo AI pipeline (pokud existuje)
-- Vlastník: neurčen
+- Kdo udělá merge: jen vlastník ručně mimo AI pipeline (pokud existuje)
+- Owning team: neurčen
 
 | Pravidlo | Pro stav | Splněno | Detail |
 |---|---|---|---|
-| R1 doména má vlastnický tým | jen draft PR | **ne** | vlastník není určen |
-| R2 doména je kandidát na vyjmutí (ne úklid, ne malý shluk) | jen draft PR | ano | ano |
-| R3 ověřené pokrytí živých procedur ≥ 80 % | otevřený s vlastníkem | **ne** | 0 z 41 (0 %) |
-| R4 všechny zapisující procedury mají zelený charakterizační test | otevřený s vlastníkem | **ne** | chybí 27: spSklad_InventoryCount_Cancel, spSklad_InventoryCount_Merge, spSklad_InventoryCount_Nightly, spSklad_StockLevel_Close, spSklad_StockLevel_Delete, spSklad_StockLevel_Save … |
-| R5 blokujících slepých míst ≤ 0 | otevřený s vlastníkem | **ne** | usp_Import_Stock |
+| R1 doména má owning team | draft-only | **ne** | owning team není určen |
+| R2 doména je mezi domain candidates (ne úklid, ne malý shluk) | draft-only | ano | ano |
+| R3 ověřené pokrytí živých procedur ≥ 80 % | open | **ne** | 0 z 41 (0 %) |
+| R4 všechny zapisující procedury mají zelený characterization test | open | **ne** | chybí 27: spSklad_InventoryCount_Cancel, spSklad_InventoryCount_Merge, spSklad_InventoryCount_Nightly, spSklad_StockLevel_Close, spSklad_StockLevel_Delete, spSklad_StockLevel_Save … |
+| R5 blokujících blind spots ≤ 0 | open | **ne** | usp_Import_Stock |
 
 **Co chybí k dalšímu stavu:**
 
-- doména má vlastnický tým (vlastník není určen)
+- doména má owning team (owning team není určen)
 
-## Připravenost k vyjmutí
+## Extraction readiness score
 
-Skóre 69.5, pořadí 8. Skóre řadí domény k vyjmutí, stav pruhu neurčuje.
+Skóre 69.5, pořadí 8. Extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje.
 
-## Pokrytí charakterizačními testy
+## Pokrytí characterization tests
 
-Živých procedur 41: ověřeno 0, jen návrh 0, chybí 41. Zapisujících 27, z toho bez ověřeného testu 27.
+Živých procedur 41: verified 0, draft 0, missing 41. Zapisujících 27, z toho bez ověřeného testu 27.
 
-Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh pruh neotevře.
+Draft = test existuje, ale nemá doložený zelený běh (`run.json`). Draft core lane neotevře.
 
 | Procedura | Stav | Golden master | tSQLt | Zapisuje | Volání / 6 týdnů |
 |---|---|---|---|---|---:|
@@ -81,31 +81,31 @@ Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh p
 | `usp_Po_Supplier_Recalc` | živá | – | – | Supplier | 758 |
 | `usp_Po_Supplier_SetStatus` | živá | – | – | PurchaseOrderItem, Supplier | 18 212 |
 
-## Slepá místa
+## Blind spots
 
 | Objekt | Typ | Blokuje otevření | Popis |
 |---|---|---|---|
-| `usp_Import_Stock` | dynamicke_sql_slepe | **ano** | jméno objektu se skládá za běhu a běh žádný cíl nezachytil |
-| `spSklad_Warehouse_SetStatus` | dynamicke_sql_z_literalu | ne | dynamické SQL, cíle jdou vyčíst z literálů |
-| `spSklad_Warehouse_Delete` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
-| `spSklad_InventoryCount_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `spSklad_InventoryCount_Check` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `spSklad_InventoryCount_Nightly` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `spSklad_StockLevel_Close` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `spSklad_StockLevel_Delete` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `spSklad_StockReservation_Export` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `spSklad_Warehouse_Approve` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `spSklad_Warehouse_Delete` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `spSklad_Warehouse_Export` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `spSklad_Warehouse_SetStatus` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Import_Stock` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Po_GoodsReceipt_Get` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Po_GoodsReceipt_GetDetail` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Po_GoodsReceipt_Sync` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Po_Supplier_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Po_Supplier_Close` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Po_Supplier_Dispatch` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Po_Supplier_Hourly` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Po_Supplier_SetStatus` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Import_Stock` | dynamic_sql_blind | **ano** | jméno objektu se skládá za běhu a běh žádný cíl nezachytil |
+| `spSklad_Warehouse_Delete` | caller_dependent | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `spSklad_Warehouse_SetStatus` | dynamic_sql_literal | ne | dynamické SQL, cíle jdou vyčíst z literálů |
+| `spSklad_InventoryCount_Cancel` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_InventoryCount_Check` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_InventoryCount_Nightly` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `spSklad_StockLevel_Close` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_StockLevel_Delete` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_StockReservation_Export` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `spSklad_Warehouse_Approve` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_Warehouse_Delete` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `spSklad_Warehouse_Export` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `spSklad_Warehouse_SetStatus` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Import_Stock` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Po_GoodsReceipt_Get` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_GoodsReceipt_GetDetail` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_GoodsReceipt_Sync` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_Supplier_Cancel` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_Supplier_Close` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_Supplier_Dispatch` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Po_Supplier_Hourly` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Po_Supplier_SetStatus` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
 
 Tučně v tabulce procedur = zápis do tabulky jiné domény nebo sdílené tabulky.

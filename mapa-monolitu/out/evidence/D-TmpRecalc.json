@@ -1,24 +1,116 @@
 {
- "domena": "D:TmpRecalc",
- "nazev": null,
- "objekty": [
+ "blind_spots": [],
+ "core_lane": {
+  "autonomy_level": "L0",
+  "gate": {
+   "pr": "nevzniká",
+   "who_merges": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "who_runs_agent": "nikdo; intake odpoví, co chybí"
+  },
+  "label": "closed",
+  "missing_for_next_state": [
+   "doména má owning team (owning team není určen)",
+   "doména je mezi domain candidates (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "owning team není určen",
+    "id": "R1",
+    "met": false,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
+    "id": "R2",
+    "met": false,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 0 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "ano",
+    "id": "R4",
+    "met": true,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "žádné",
+    "id": "R5",
+    "met": true,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "closed"
+ },
+ "coverage": {
+  "draft": 0,
+  "live_procedures": 0,
+  "missing": 0,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 0,
+  "writing_unverified": []
+ },
+ "domain": "D:TmpRecalc",
+ "name": null,
+ "objects": [
   "TmpRecalc",
   "usp_Import_Price",
   "usp_Old_OrderExport"
  ],
- "pokryti": {
-  "chybi": 0,
-  "navrh": 0,
-  "overene_pokryti": 0.0,
-  "overeno": 0,
-  "zapisujici": 0,
-  "zapisujici_neoverene": [],
-  "zive_procedury": 0
- },
- "pripravenost": {
-  "poradi": null,
-  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
-  "prispevky": {
+ "owner": null,
+ "procedures": [
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Import_Price",
+   "status": "mrtvá",
+   "writes": [
+    "TmpRecalc"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Old_OrderExport",
+   "status": "mrtvá",
+   "writes": [
+    "TmpRecalc"
+   ],
+   "writes_foreign": []
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 1.0,
+   "bonus_readonly": 0.0,
+   "data_size": 0.486,
+   "dynamic_sql": 0.0,
+   "external_calls": 0.0,
+   "foreign_reads": 0.0,
+   "foreign_writes": 0.0,
+   "inbound_reads": 0.0,
+   "inbound_writes": 0.0
+  },
+  "contributions": {
    "bonus_dead": 5.0,
    "bonus_readonly": 0.0,
    "data_size": -4.9,
@@ -29,109 +121,18 @@
    "inbound_reads": -0.0,
    "inbound_writes": -0.0
   },
-  "skore": 100.0,
-  "slozky": {
-   "bonus_dead": 1.0,
-   "bonus_readonly": 0.0,
-   "data_size": 0.486,
-   "dynamic_sql": 0.0,
-   "external_calls": 0.0,
-   "foreign_reads": 0.0,
-   "foreign_writes": 0.0,
-   "inbound_reads": 0.0,
-   "inbound_writes": 0.0
-  }
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": null,
+  "score": 100.0
  },
- "procedury": [
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Import_Price",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "TmpRecalc"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Old_OrderExport",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "TmpRecalc"
-   ],
-   "zapisuje_cizi": []
-  }
- ],
- "pruh_core": {
-  "brana": {
-   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
-   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
-   "pr": "nevzniká"
-  },
-  "chybi_k_dalsimu_stavu": [
-   "doména má vlastnický tým (vlastník není určen)",
-   "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
-  ],
-  "popis": "zavřený",
-  "pravidla": [
-   {
-    "detail": "vlastník není určen",
-    "id": "R1",
-    "pravidlo": "doména má vlastnický tým",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
-    "id": "R2",
-    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "0 z 0 (0 %)",
-    "id": "R3",
-    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "ano",
-    "id": "R4",
-    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": true
-   },
-   {
-    "detail": "žádné",
-    "id": "R5",
-    "pravidlo": "blokujících slepých míst ≤ 0",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": true
-   }
-  ],
-  "stav": "zavreny"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
  },
- "schema": "mapa-monolitu/dukazy@1",
- "slepa_mista": [],
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "tabulky": [
+ "tables": [
   "TmpRecalc"
- ],
- "vlastnik": null
+ ]
 }

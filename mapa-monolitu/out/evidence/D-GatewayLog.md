@@ -1,35 +1,35 @@
-# Balíček důkazů: D:GatewayLog
+# Evidence pack: D:GatewayLog
 
-Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `3a31a99461f1…`). Strojová verze: `D-GatewayLog.json` (schéma `mapa-monolitu/dukazy@1`).
+Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `fed7344328f4…`). Strojová verze: `D-GatewayLog.json` (schéma `mapa-monolitu/evidence-pack@2`).
 
-## Pruh core: **zavřený**
+## Core lane: **closed** (autonomy level L0)
 
 - Kdo spustí agenta: nikdo; intake odpoví, co chybí
 - PR: nevzniká
-- Kdo sloučí: jen vlastník ručně mimo AI pipeline (pokud existuje)
-- Vlastník: neurčen
+- Kdo udělá merge: jen vlastník ručně mimo AI pipeline (pokud existuje)
+- Owning team: neurčen
 
 | Pravidlo | Pro stav | Splněno | Detail |
 |---|---|---|---|
-| R1 doména má vlastnický tým | jen draft PR | **ne** | vlastník není určen |
-| R2 doména je kandidát na vyjmutí (ne úklid, ne malý shluk) | jen draft PR | ano | ano |
-| R3 ověřené pokrytí živých procedur ≥ 80 % | otevřený s vlastníkem | **ne** | 0 z 18 (0 %) |
-| R4 všechny zapisující procedury mají zelený charakterizační test | otevřený s vlastníkem | **ne** | chybí 15: usp_Pay_GatewayLog_Merge, usp_Pay_GatewayLog_Recalc, usp_Pay_GatewayLog_Update, usp_Pay_Installment_Delete, usp_Pay_Installment_Save, usp_Pay_PaymentMethod_Close … |
-| R5 blokujících slepých míst ≤ 0 | otevřený s vlastníkem | **ne** | usp_Pay_Payment_Cleanup |
+| R1 doména má owning team | draft-only | **ne** | owning team není určen |
+| R2 doména je mezi domain candidates (ne úklid, ne malý shluk) | draft-only | ano | ano |
+| R3 ověřené pokrytí živých procedur ≥ 80 % | open | **ne** | 0 z 18 (0 %) |
+| R4 všechny zapisující procedury mají zelený characterization test | open | **ne** | chybí 15: usp_Pay_GatewayLog_Merge, usp_Pay_GatewayLog_Recalc, usp_Pay_GatewayLog_Update, usp_Pay_Installment_Delete, usp_Pay_Installment_Save, usp_Pay_PaymentMethod_Close … |
+| R5 blokujících blind spots ≤ 0 | open | **ne** | usp_Pay_Payment_Cleanup |
 
 **Co chybí k dalšímu stavu:**
 
-- doména má vlastnický tým (vlastník není určen)
+- doména má owning team (owning team není určen)
 
-## Připravenost k vyjmutí
+## Extraction readiness score
 
-Skóre 72.9, pořadí 4. Skóre řadí domény k vyjmutí, stav pruhu neurčuje.
+Skóre 72.9, pořadí 4. Extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje.
 
-## Pokrytí charakterizačními testy
+## Pokrytí characterization tests
 
-Živých procedur 18: ověřeno 0, jen návrh 0, chybí 18. Zapisujících 15, z toho bez ověřeného testu 15.
+Živých procedur 18: verified 0, draft 0, missing 18. Zapisujících 15, z toho bez ověřeného testu 15.
 
-Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh pruh neotevře.
+Draft = test existuje, ale nemá doložený zelený běh (`run.json`). Draft core lane neotevře.
 
 | Procedura | Stav | Golden master | tSQLt | Zapisuje | Volání / 6 týdnů |
 |---|---|---|---|---|---:|
@@ -52,19 +52,19 @@ Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh p
 | `usp_Pay_Refund_Insert` | živá | – | – | Refund | 22 |
 | `usp_Refund_Create` | živá | – | – | PaymentTransaction, Refund | 19 |
 
-## Slepá místa
+## Blind spots
 
 | Objekt | Typ | Blokuje otevření | Popis |
 |---|---|---|---|
-| `usp_Pay_Payment_Cleanup` | jina_databaze | **ano** | zápis do Accounting.dbo.Payment_Archive (katalog nemá ID) |
-| `usp_Pay_Payment_Search` | dynamicke_sql_slepe | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: PaymentMethod (jen v okně měření) |
-| `usp_Pay_GatewayLog_Update` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
-| `usp_Pay_GatewayLog_Update` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
-| `usp_Pay_Installment_Delete` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Pay_PaymentTransaction_Dispatch` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Pay_PaymentTransaction_Sync` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Pay_Payment_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Pay_Payment_Cleanup` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Pay_Payment_List` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Pay_Payment_Cleanup` | cross_database | **ano** | zápis do Accounting.dbo.Payment_Archive (katalog nemá ID) |
+| `usp_Pay_GatewayLog_Update` | caller_dependent | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `usp_Pay_GatewayLog_Update` | caller_dependent | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `usp_Pay_Payment_Search` | dynamic_sql_blind | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: PaymentMethod (jen v okně měření) |
+| `usp_Pay_Installment_Delete` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Pay_PaymentTransaction_Dispatch` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Pay_PaymentTransaction_Sync` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Pay_Payment_Cancel` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Pay_Payment_Cleanup` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Pay_Payment_List` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
 
 Tučně v tabulce procedur = zápis do tabulky jiné domény nebo sdílené tabulky.

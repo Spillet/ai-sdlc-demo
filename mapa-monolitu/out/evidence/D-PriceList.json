@@ -1,7 +1,141 @@
 {
- "domena": "D:PriceList",
- "nazev": null,
- "objekty": [
+ "blind_spots": [
+  {
+   "blocking": true,
+   "description": "zápis do DWH.dbo.PriceHistory_Archive (katalog nemá ID)",
+   "object": "usp_Price_PriceHistory_MonthClose",
+   "type": "cross_database"
+  },
+  {
+   "blocking": false,
+   "description": "volá usp_SysParam_Get bez schématu (is_caller_dependent)",
+   "object": "usp_Price_Promo_Get",
+   "type": "caller_dependent"
+  },
+  {
+   "blocking": false,
+   "description": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "object": "usp_Price_Voucher_Confirm",
+   "type": "caller_dependent"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Price_PriceHistory_MonthClose",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Price_PriceList_MonthClose",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Price_PriceList_SetStatus",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Price_Promo_Cancel",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Price_Promo_Import",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Price_Promo_Save",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Price_Voucher_Confirm",
+   "type": "entry_outside_catalog"
+  }
+ ],
+ "core_lane": {
+  "autonomy_level": "L0",
+  "gate": {
+   "pr": "nevzniká",
+   "who_merges": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "who_runs_agent": "nikdo; intake odpoví, co chybí"
+  },
+  "label": "closed",
+  "missing_for_next_state": [
+   "doména má owning team (owning team není určen)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "owning team není určen",
+    "id": "R1",
+    "met": false,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "ano",
+    "id": "R2",
+    "met": true,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 17 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "chybí 12: usp_Price_PriceHistory_MonthClose, usp_Price_PriceList_Insert, usp_Price_PriceList_MonthClose, usp_Price_PriceList_Recalc, usp_Price_PriceList_SetStatus, usp_Price_Promo_Cancel …",
+    "id": "R4",
+    "met": false,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "usp_Price_PriceHistory_MonthClose",
+    "id": "R5",
+    "met": false,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "closed"
+ },
+ "coverage": {
+  "draft": 0,
+  "live_procedures": 17,
+  "missing": 17,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 12,
+  "writing_unverified": [
+   "usp_Price_PriceHistory_MonthClose",
+   "usp_Price_PriceList_Insert",
+   "usp_Price_PriceList_MonthClose",
+   "usp_Price_PriceList_Recalc",
+   "usp_Price_PriceList_SetStatus",
+   "usp_Price_Promo_Cancel",
+   "usp_Price_Promo_Import",
+   "usp_Price_Promo_Save",
+   "usp_Price_VoucherUse_Approve",
+   "usp_Price_Voucher_Confirm",
+   "usp_Price_Voucher_Merge",
+   "usp_Product_Product_Merge"
+  ]
+ },
+ "domain": "D:PriceList",
+ "name": null,
+ "objects": [
   "PriceHistory",
   "PriceList",
   "Promo",
@@ -29,32 +163,305 @@
   "usp_Price_Voucher_Merge",
   "usp_Product_Product_Merge"
  ],
- "pokryti": {
-  "chybi": 17,
-  "navrh": 0,
-  "overene_pokryti": 0.0,
-  "overeno": 0,
-  "zapisujici": 12,
-  "zapisujici_neoverene": [
-   "usp_Price_PriceHistory_MonthClose",
-   "usp_Price_PriceList_Insert",
-   "usp_Price_PriceList_MonthClose",
-   "usp_Price_PriceList_Recalc",
-   "usp_Price_PriceList_SetStatus",
-   "usp_Price_Promo_Cancel",
-   "usp_Price_Promo_Import",
-   "usp_Price_Promo_Save",
-   "usp_Price_VoucherUse_Approve",
-   "usp_Price_Voucher_Confirm",
-   "usp_Price_Voucher_Merge",
-   "usp_Product_Product_Merge"
-  ],
-  "zive_procedury": 17
- },
- "pripravenost": {
-  "poradi": 7,
-  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
-  "prispevky": {
+ "owner": null,
+ "procedures": [
+  {
+   "calls_6_weeks": 10714,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceHistory_GetDetail",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceHistory_MonthClose",
+   "status": "živá",
+   "writes": [
+    "PriceHistory",
+    "Promo"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 22,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceHistory_Overview",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 990,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceList_Insert",
+   "status": "živá",
+   "writes": [
+    "PriceList"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceList_MonthClose",
+   "status": "živá",
+   "writes": [
+    "Product",
+    "Promo"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 1292,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceList_Overview",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1817,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceList_Recalc",
+   "status": "živá",
+   "writes": [
+    "PriceList",
+    "Product"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceList_Save",
+   "status": "mrtvá",
+   "writes": [
+    "PriceList",
+    "Product"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 1509,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceList_Search",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4173,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_PriceList_SetStatus",
+   "status": "živá",
+   "writes": [
+    "PriceList",
+    "Promo"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2277,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_Promo_Cancel",
+   "status": "živá",
+   "writes": [
+    "PriceList",
+    "PriceListItem",
+    "Product"
+   ],
+   "writes_foreign": [
+    "PriceListItem",
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 1726,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_Promo_Get",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 141,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_Promo_Import",
+   "status": "živá",
+   "writes": [
+    "Promo"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 39589,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_Promo_Save",
+   "status": "živá",
+   "writes": [
+    "Promo"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1689,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_VoucherUse_Approve",
+   "status": "živá",
+   "writes": [
+    "PriceList",
+    "VoucherUse"
+   ],
+   "writes_foreign": [
+    "VoucherUse"
+   ]
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_Voucher_Cancel",
+   "status": "mrtvá",
+   "writes": [
+    "PriceList",
+    "Promo"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 933,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_Voucher_Confirm",
+   "status": "živá",
+   "writes": [
+    "PriceHistory",
+    "VoucherUse"
+   ],
+   "writes_foreign": [
+    "VoucherUse"
+   ]
+  },
+  {
+   "calls_6_weeks": 95,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Price_Voucher_Merge",
+   "status": "živá",
+   "writes": [
+    "Voucher"
+   ],
+   "writes_foreign": [
+    "Voucher"
+   ]
+  },
+  {
+   "calls_6_weeks": 8524,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Product_Product_Merge",
+   "status": "živá",
+   "writes": [
+    "Product"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 0.136,
+   "bonus_readonly": 0.263,
+   "data_size": 0.712,
+   "dynamic_sql": 0.0,
+   "external_calls": 0.561,
+   "foreign_reads": 0.612,
+   "foreign_writes": 0.381,
+   "inbound_reads": 0.308,
+   "inbound_writes": 0.0
+  },
+  "contributions": {
    "bonus_dead": 0.7,
    "bonus_readonly": 2.6,
    "data_size": -7.1,
@@ -65,427 +472,21 @@
    "inbound_reads": -3.1,
    "inbound_writes": -0.0
   },
-  "skore": 71.9,
-  "slozky": {
-   "bonus_dead": 0.136,
-   "bonus_readonly": 0.263,
-   "data_size": 0.712,
-   "dynamic_sql": 0.0,
-   "external_calls": 0.561,
-   "foreign_reads": 0.612,
-   "foreign_writes": 0.381,
-   "inbound_reads": 0.308,
-   "inbound_writes": 0.0
-  }
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": 7,
+  "score": 71.9
  },
- "procedury": [
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceHistory_GetDetail",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 10714,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceHistory_MonthClose",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "PriceHistory",
-    "Promo"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceHistory_Overview",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 22,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceList_Insert",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 990,
-   "zapisuje": [
-    "PriceList"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceList_MonthClose",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "Product",
-    "Promo"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceList_Overview",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1292,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceList_Recalc",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1817,
-   "zapisuje": [
-    "PriceList",
-    "Product"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceList_Save",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "PriceList",
-    "Product"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceList_Search",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1509,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_PriceList_SetStatus",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4173,
-   "zapisuje": [
-    "PriceList",
-    "Promo"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_Promo_Cancel",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2277,
-   "zapisuje": [
-    "PriceList",
-    "PriceListItem",
-    "Product"
-   ],
-   "zapisuje_cizi": [
-    "PriceListItem",
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_Promo_Get",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1726,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_Promo_Import",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 141,
-   "zapisuje": [
-    "Promo"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_Promo_Save",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 39589,
-   "zapisuje": [
-    "Promo"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_VoucherUse_Approve",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1689,
-   "zapisuje": [
-    "PriceList",
-    "VoucherUse"
-   ],
-   "zapisuje_cizi": [
-    "VoucherUse"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_Voucher_Cancel",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "PriceList",
-    "Promo"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_Voucher_Confirm",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 933,
-   "zapisuje": [
-    "PriceHistory",
-    "VoucherUse"
-   ],
-   "zapisuje_cizi": [
-    "VoucherUse"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Price_Voucher_Merge",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 95,
-   "zapisuje": [
-    "Voucher"
-   ],
-   "zapisuje_cizi": [
-    "Voucher"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Product_Product_Merge",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 8524,
-   "zapisuje": [
-    "Product"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  }
- ],
- "pruh_core": {
-  "brana": {
-   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
-   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
-   "pr": "nevzniká"
-  },
-  "chybi_k_dalsimu_stavu": [
-   "doména má vlastnický tým (vlastník není určen)"
-  ],
-  "popis": "zavřený",
-  "pravidla": [
-   {
-    "detail": "vlastník není určen",
-    "id": "R1",
-    "pravidlo": "doména má vlastnický tým",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "ano",
-    "id": "R2",
-    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-    "pro": "jen_draft_pr",
-    "splneno": true
-   },
-   {
-    "detail": "0 z 17 (0 %)",
-    "id": "R3",
-    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "chybí 12: usp_Price_PriceHistory_MonthClose, usp_Price_PriceList_Insert, usp_Price_PriceList_MonthClose, usp_Price_PriceList_Recalc, usp_Price_PriceList_SetStatus, usp_Price_Promo_Cancel …",
-    "id": "R4",
-    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "usp_Price_PriceHistory_MonthClose",
-    "id": "R5",
-    "pravidlo": "blokujících slepých míst ≤ 0",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   }
-  ],
-  "stav": "zavreny"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
  },
- "schema": "mapa-monolitu/dukazy@1",
- "slepa_mista": [
-  {
-   "blokujici": true,
-   "objekt": "usp_Price_PriceHistory_MonthClose",
-   "popis": "zápis do DWH.dbo.PriceHistory_Archive (katalog nemá ID)",
-   "typ": "jina_databaze"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_Promo_Get",
-   "popis": "volá usp_SysParam_Get bez schématu (is_caller_dependent)",
-   "typ": "volani_bez_schematu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_Voucher_Confirm",
-   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
-   "typ": "volani_bez_schematu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_PriceHistory_MonthClose",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_PriceList_MonthClose",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_PriceList_SetStatus",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_Promo_Cancel",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_Promo_Import",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_Promo_Save",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Price_Voucher_Confirm",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  }
- ],
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "tabulky": [
+ "tables": [
   "PriceHistory",
   "PriceList",
   "Promo",
   "PromoProduct"
- ],
- "vlastnik": null
+ ]
 }

@@ -1,7 +1,161 @@
 {
- "domena": "D:Claim",
- "nazev": "Reklamace",
- "objekty": [
+ "blind_spots": [
+  {
+   "blocking": false,
+   "description": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "object": "usp_Claim_Claim_Get",
+   "type": "caller_dependent"
+  },
+  {
+   "blocking": false,
+   "description": "dynamické SQL, cíle jdou vyčíst z literálů",
+   "object": "usp_Claim_ClaimItem_GetByCode",
+   "type": "dynamic_sql_literal"
+  },
+  {
+   "blocking": false,
+   "description": "dynamické SQL, cíle jdou vyčíst z literálů",
+   "object": "usp_Claim_Search",
+   "type": "dynamic_sql_literal"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Claim_ClaimReason_Cleanup",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Claim_ClaimReason_Hourly",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Claim_ClaimStatusHistory_Cleanup",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Claim_ClaimStatusHistory_Confirm",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Claim_Claim_Archive",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Claim_Create",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Claim_GetDetail",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Claim_OverdueCheck",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Claim_Search",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Claim_SetStatus",
+   "type": "entry_outside_catalog"
+  }
+ ],
+ "core_lane": {
+  "autonomy_level": "L1",
+  "gate": {
+   "pr": "vždy draft; risk gate jen okomentuje dopad a chybějící důkazy",
+   "who_merges": "vlastník po převzetí PR; první úkol agenta je doplnit characterization tests",
+   "who_runs_agent": "kdokoli (záměr a akceptační kritéria)"
+  },
+  "label": "draft-only",
+  "missing_for_next_state": [
+   "ověřené pokrytí živých procedur ≥ 80 % (0 z 18 (0 %))",
+   "všechny zapisující procedury mají zelený characterization test (chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "Poprodej (fiktivní)",
+    "id": "R1",
+    "met": true,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "ano",
+    "id": "R2",
+    "met": true,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 18 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …",
+    "id": "R4",
+    "met": false,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "žádné",
+    "id": "R5",
+    "met": true,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "draft-only"
+ },
+ "coverage": {
+  "draft": 3,
+  "live_procedures": 18,
+  "missing": 15,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 13,
+  "writing_unverified": [
+   "usp_Claim_ClaimReason_Cleanup",
+   "usp_Claim_ClaimReason_Hourly",
+   "usp_Claim_ClaimStatusHistory_Cleanup",
+   "usp_Claim_ClaimStatusHistory_Confirm",
+   "usp_Claim_ClaimStatusHistory_Delete",
+   "usp_Claim_ClaimStatusHistory_Merge",
+   "usp_Claim_Claim_Archive",
+   "usp_Claim_Claim_Delete",
+   "usp_Claim_Create",
+   "usp_Claim_Notify",
+   "usp_Claim_OverdueCheck",
+   "usp_Claim_ServiceCenter_Merge",
+   "usp_Claim_SetStatus"
+  ]
+ },
+ "domain": "D:Claim",
+ "name": "Reklamace",
+ "objects": [
   "Claim",
   "ClaimDocument",
   "ClaimItem",
@@ -32,33 +186,314 @@
   "usp_Claim_ServiceCenter_Merge",
   "usp_Claim_SetStatus"
  ],
- "pokryti": {
-  "chybi": 15,
-  "navrh": 3,
-  "overene_pokryti": 0.0,
-  "overeno": 0,
-  "zapisujici": 13,
-  "zapisujici_neoverene": [
-   "usp_Claim_ClaimReason_Cleanup",
-   "usp_Claim_ClaimReason_Hourly",
-   "usp_Claim_ClaimStatusHistory_Cleanup",
-   "usp_Claim_ClaimStatusHistory_Confirm",
-   "usp_Claim_ClaimStatusHistory_Delete",
-   "usp_Claim_ClaimStatusHistory_Merge",
-   "usp_Claim_Claim_Archive",
-   "usp_Claim_Claim_Delete",
-   "usp_Claim_Create",
-   "usp_Claim_Notify",
-   "usp_Claim_OverdueCheck",
-   "usp_Claim_ServiceCenter_Merge",
-   "usp_Claim_SetStatus"
-  ],
-  "zive_procedury": 18
+ "owner": {
+  "github_team": "kompas/poprodej",
+  "name": "Reklamace",
+  "team": "Poprodej (fiktivní)"
  },
- "pripravenost": {
-  "poradi": 1,
-  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
-  "prispevky": {
+ "procedures": [
+  {
+   "calls_6_weeks": 410,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_ClaimItem_GetByCode",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_ClaimReason_Cleanup",
+   "status": "živá",
+   "writes": [
+    "ClaimDocument",
+    "ReturnRequest"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_ClaimReason_Hourly",
+   "status": "živá",
+   "writes": [
+    "ClaimStatusHistory"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_ClaimStatusHistory_Cleanup",
+   "status": "živá",
+   "writes": [
+    "Claim",
+    "ClaimItem",
+    "ReturnRequest"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1064,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_ClaimStatusHistory_Confirm",
+   "status": "živá",
+   "writes": [
+    "ClaimItem",
+    "ClaimStatusHistory"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1022,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_ClaimStatusHistory_Delete",
+   "status": "živá",
+   "writes": [
+    "ClaimDocument",
+    "ClaimStatusHistory"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1772,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_ClaimStatusHistory_Merge",
+   "status": "živá",
+   "writes": [
+    "ClaimStatusHistory"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4032,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_Claim_Archive",
+   "status": "živá",
+   "writes": [
+    "ReturnRequest"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4081,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_Claim_Delete",
+   "status": "živá",
+   "writes": [
+    "Claim"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2923,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_Claim_Get",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_Claim_Insert",
+   "status": "mrtvá",
+   "writes": [
+    "Claim"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1515,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_Claim_Overview",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 199741,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": {
+     "files": [
+      "ai-vrstva/usp_Claim_Create/test_usp_Claim_Create.sql"
+     ],
+     "run": null,
+     "status": "draft"
+    }
+   },
+   "coverage": "draft",
+   "name": "usp_Claim_Create",
+   "status": "živá",
+   "writes": [
+    "Claim",
+    "ClaimItem",
+    "ClaimStatusHistory"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 84948,
+   "characterization": {
+    "golden_master": {
+     "files": [
+      "ai-vrstva/usp_Claim_GetDetail/golden_master.sql"
+     ],
+     "run": null,
+     "status": "draft"
+    },
+    "tsqlt": null
+   },
+   "coverage": "draft",
+   "name": "usp_Claim_GetDetail",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 36,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_Notify",
+   "status": "živá",
+   "writes": [
+    "ExportQueue"
+   ],
+   "writes_foreign": [
+    "ExportQueue"
+   ]
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_OverdueCheck",
+   "status": "živá",
+   "writes": [
+    "Claim",
+    "ClaimStatusHistory"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 13848,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_Search",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1498,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Claim_ServiceCenter_Merge",
+   "status": "živá",
+   "writes": [
+    "ServiceCenter"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 21,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": {
+     "files": [
+      "ai-vrstva/usp_Claim_SetStatus/test_usp_Claim_SetStatus.sql"
+     ],
+     "run": null,
+     "status": "draft"
+    }
+   },
+   "coverage": "draft",
+   "name": "usp_Claim_SetStatus",
+   "status": "živá",
+   "writes": [
+    "Claim",
+    "ClaimStatusHistory",
+    "StockLevel"
+   ],
+   "writes_foreign": [
+    "StockLevel"
+   ]
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 0.045,
+   "bonus_readonly": 0.238,
+   "data_size": 0.575,
+   "dynamic_sql": 0.286,
+   "external_calls": 0.381,
+   "foreign_reads": 0.387,
+   "foreign_writes": 0.125,
+   "inbound_reads": 0.0,
+   "inbound_writes": 0.0
+  },
+  "contributions": {
    "bonus_dead": 0.2,
    "bonus_readonly": 2.4,
    "data_size": -5.7,
@@ -69,447 +504,18 @@
    "inbound_reads": -0.0,
    "inbound_writes": -0.0
   },
-  "skore": 83.2,
-  "slozky": {
-   "bonus_dead": 0.045,
-   "bonus_readonly": 0.238,
-   "data_size": 0.575,
-   "dynamic_sql": 0.286,
-   "external_calls": 0.381,
-   "foreign_reads": 0.387,
-   "foreign_writes": 0.125,
-   "inbound_reads": 0.0,
-   "inbound_writes": 0.0
-  }
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": 1,
+  "score": 83.2
  },
- "procedury": [
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_ClaimItem_GetByCode",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 410,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_ClaimReason_Cleanup",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "ClaimDocument",
-    "ReturnRequest"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_ClaimReason_Hourly",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "ClaimStatusHistory"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_ClaimStatusHistory_Cleanup",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "Claim",
-    "ClaimItem",
-    "ReturnRequest"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_ClaimStatusHistory_Confirm",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1064,
-   "zapisuje": [
-    "ClaimItem",
-    "ClaimStatusHistory"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_ClaimStatusHistory_Delete",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1022,
-   "zapisuje": [
-    "ClaimDocument",
-    "ClaimStatusHistory"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_ClaimStatusHistory_Merge",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1772,
-   "zapisuje": [
-    "ClaimStatusHistory"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_Claim_Archive",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4032,
-   "zapisuje": [
-    "ReturnRequest"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_Claim_Delete",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4081,
-   "zapisuje": [
-    "Claim"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_Claim_Get",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2923,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_Claim_Insert",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "Claim"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_Claim_Overview",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1515,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": {
-     "beh": null,
-     "soubory": [
-      "ai-vrstva/usp_Claim_Create/test_usp_Claim_Create.sql"
-     ],
-     "stav": "navrh"
-    }
-   },
-   "nazev": "usp_Claim_Create",
-   "pokryti": "navrh",
-   "stav": "živá",
-   "volani_6_tydnu": 199741,
-   "zapisuje": [
-    "Claim",
-    "ClaimItem",
-    "ClaimStatusHistory"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": {
-     "beh": null,
-     "soubory": [
-      "ai-vrstva/usp_Claim_GetDetail/golden_master.sql"
-     ],
-     "stav": "navrh"
-    },
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_GetDetail",
-   "pokryti": "navrh",
-   "stav": "živá",
-   "volani_6_tydnu": 84948,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_Notify",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 36,
-   "zapisuje": [
-    "ExportQueue"
-   ],
-   "zapisuje_cizi": [
-    "ExportQueue"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_OverdueCheck",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "Claim",
-    "ClaimStatusHistory"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_Search",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 13848,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Claim_ServiceCenter_Merge",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1498,
-   "zapisuje": [
-    "ServiceCenter"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": {
-     "beh": null,
-     "soubory": [
-      "ai-vrstva/usp_Claim_SetStatus/test_usp_Claim_SetStatus.sql"
-     ],
-     "stav": "navrh"
-    }
-   },
-   "nazev": "usp_Claim_SetStatus",
-   "pokryti": "navrh",
-   "stav": "živá",
-   "volani_6_tydnu": 21,
-   "zapisuje": [
-    "Claim",
-    "ClaimStatusHistory",
-    "StockLevel"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel"
-   ]
-  }
- ],
- "pruh_core": {
-  "brana": {
-   "kdo_slouci": "vlastník po převzetí PR; první úkol agenta je doplnit charakterizační testy",
-   "kdo_spusti_agenta": "kdokoli (záměr a akceptační kritéria)",
-   "pr": "vždy draft; brána jen okomentuje dopad a chybějící důkazy"
-  },
-  "chybi_k_dalsimu_stavu": [
-   "ověřené pokrytí živých procedur ≥ 80 % (0 z 18 (0 %))",
-   "všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …)"
-  ],
-  "popis": "jen draft PR",
-  "pravidla": [
-   {
-    "detail": "Poprodej (fiktivní)",
-    "id": "R1",
-    "pravidlo": "doména má vlastnický tým",
-    "pro": "jen_draft_pr",
-    "splneno": true
-   },
-   {
-    "detail": "ano",
-    "id": "R2",
-    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-    "pro": "jen_draft_pr",
-    "splneno": true
-   },
-   {
-    "detail": "0 z 18 (0 %)",
-    "id": "R3",
-    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "chybí 13: usp_Claim_ClaimReason_Cleanup, usp_Claim_ClaimReason_Hourly, usp_Claim_ClaimStatusHistory_Cleanup, usp_Claim_ClaimStatusHistory_Confirm, usp_Claim_ClaimStatusHistory_Delete, usp_Claim_ClaimStatusHistory_Merge …",
-    "id": "R4",
-    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "žádné",
-    "id": "R5",
-    "pravidlo": "blokujících slepých míst ≤ 0",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": true
-   }
-  ],
-  "stav": "jen_draft_pr"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
  },
- "schema": "mapa-monolitu/dukazy@1",
- "slepa_mista": [
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_ClaimItem_GetByCode",
-   "popis": "dynamické SQL, cíle jdou vyčíst z literálů",
-   "typ": "dynamicke_sql_z_literalu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_Search",
-   "popis": "dynamické SQL, cíle jdou vyčíst z literálů",
-   "typ": "dynamicke_sql_z_literalu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_Claim_Get",
-   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
-   "typ": "volani_bez_schematu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_ClaimReason_Cleanup",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_ClaimReason_Hourly",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_ClaimStatusHistory_Cleanup",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_ClaimStatusHistory_Confirm",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_Claim_Archive",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_Create",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_GetDetail",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_OverdueCheck",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_Search",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Claim_SetStatus",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  }
- ],
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "tabulky": [
+ "tables": [
   "Claim",
   "ClaimDocument",
   "ClaimItem",
@@ -517,10 +523,5 @@
   "ClaimStatusHistory",
   "ReturnRequest",
   "ServiceCenter"
- ],
- "vlastnik": {
-  "github_tym": "kompas/poprodej",
-  "nazev": "Reklamace",
-  "tym": "Poprodej (fiktivní)"
- }
+ ]
 }

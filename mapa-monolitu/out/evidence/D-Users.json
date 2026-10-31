@@ -1,27 +1,131 @@
 {
- "domena": "D:Users",
- "nazev": null,
- "objekty": [
+ "blind_spots": [
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_User_Get",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_User_Save",
+   "type": "entry_outside_catalog"
+  }
+ ],
+ "core_lane": {
+  "autonomy_level": "L0",
+  "gate": {
+   "pr": "nevzniká",
+   "who_merges": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "who_runs_agent": "nikdo; intake odpoví, co chybí"
+  },
+  "label": "closed",
+  "missing_for_next_state": [
+   "doména má owning team (owning team není určen)",
+   "doména je mezi domain candidates (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "owning team není určen",
+    "id": "R1",
+    "met": false,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "malý shluk: posoudit jako součást sousední domény",
+    "id": "R2",
+    "met": false,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 2 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "chybí 1: usp_User_Save",
+    "id": "R4",
+    "met": false,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "žádné",
+    "id": "R5",
+    "met": true,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "closed"
+ },
+ "coverage": {
+  "draft": 0,
+  "live_procedures": 2,
+  "missing": 2,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 1,
+  "writing_unverified": [
+   "usp_User_Save"
+  ]
+ },
+ "domain": "D:Users",
+ "name": null,
+ "objects": [
   "UserPermission",
   "Users",
   "usp_User_Get",
   "usp_User_Save"
  ],
- "pokryti": {
-  "chybi": 2,
-  "navrh": 0,
-  "overene_pokryti": 0.0,
-  "overeno": 0,
-  "zapisujici": 1,
-  "zapisujici_neoverene": [
-   "usp_User_Save"
-  ],
-  "zive_procedury": 2
- },
- "pripravenost": {
-  "poradi": null,
-  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
-  "prispevky": {
+ "owner": null,
+ "procedures": [
+  {
+   "calls_6_weeks": 45,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_User_Get",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 9290,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_User_Save",
+   "status": "živá",
+   "writes": [
+    "UserPermission",
+    "Users"
+   ],
+   "writes_foreign": []
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 0.0,
+   "bonus_readonly": 0.5,
+   "data_size": 0.319,
+   "dynamic_sql": 0.0,
+   "external_calls": 0.667,
+   "foreign_reads": 0.0,
+   "foreign_writes": 0.0,
+   "inbound_reads": 0.75,
+   "inbound_writes": 0.0
+  },
+  "contributions": {
    "bonus_dead": 0.0,
    "bonus_readonly": 5.0,
    "data_size": -3.2,
@@ -32,122 +136,19 @@
    "inbound_reads": -7.5,
    "inbound_writes": -0.0
   },
-  "skore": 87.6,
-  "slozky": {
-   "bonus_dead": 0.0,
-   "bonus_readonly": 0.5,
-   "data_size": 0.319,
-   "dynamic_sql": 0.0,
-   "external_calls": 0.667,
-   "foreign_reads": 0.0,
-   "foreign_writes": 0.0,
-   "inbound_reads": 0.75,
-   "inbound_writes": 0.0
-  }
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": null,
+  "score": 87.6
  },
- "procedury": [
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_User_Get",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 45,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_User_Save",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 9290,
-   "zapisuje": [
-    "UserPermission",
-    "Users"
-   ],
-   "zapisuje_cizi": []
-  }
- ],
- "pruh_core": {
-  "brana": {
-   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
-   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
-   "pr": "nevzniká"
-  },
-  "chybi_k_dalsimu_stavu": [
-   "doména má vlastnický tým (vlastník není určen)",
-   "doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (malý shluk: posoudit jako součást sousední domény)"
-  ],
-  "popis": "zavřený",
-  "pravidla": [
-   {
-    "detail": "vlastník není určen",
-    "id": "R1",
-    "pravidlo": "doména má vlastnický tým",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "malý shluk: posoudit jako součást sousední domény",
-    "id": "R2",
-    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "0 z 2 (0 %)",
-    "id": "R3",
-    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "chybí 1: usp_User_Save",
-    "id": "R4",
-    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "žádné",
-    "id": "R5",
-    "pravidlo": "blokujících slepých míst ≤ 0",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": true
-   }
-  ],
-  "stav": "zavreny"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
  },
- "schema": "mapa-monolitu/dukazy@1",
- "slepa_mista": [
-  {
-   "blokujici": false,
-   "objekt": "usp_User_Get",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_User_Save",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  }
- ],
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "tabulky": [
+ "tables": [
   "UserPermission",
   "Users"
- ],
- "vlastnik": null
+ ]
 }

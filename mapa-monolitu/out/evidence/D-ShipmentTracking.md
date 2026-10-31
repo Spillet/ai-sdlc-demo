@@ -1,35 +1,35 @@
-# Balíček důkazů: D:ShipmentTracking
+# Evidence pack: D:ShipmentTracking
 
-Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `3a31a99461f1…`). Strojová verze: `D-ShipmentTracking.json` (schéma `mapa-monolitu/dukazy@1`).
+Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `fed7344328f4…`). Strojová verze: `D-ShipmentTracking.json` (schéma `mapa-monolitu/evidence-pack@2`).
 
-## Pruh core: **zavřený**
+## Core lane: **closed** (autonomy level L0)
 
 - Kdo spustí agenta: nikdo; intake odpoví, co chybí
 - PR: nevzniká
-- Kdo sloučí: jen vlastník ručně mimo AI pipeline (pokud existuje)
-- Vlastník: neurčen
+- Kdo udělá merge: jen vlastník ručně mimo AI pipeline (pokud existuje)
+- Owning team: neurčen
 
 | Pravidlo | Pro stav | Splněno | Detail |
 |---|---|---|---|
-| R1 doména má vlastnický tým | jen draft PR | **ne** | vlastník není určen |
-| R2 doména je kandidát na vyjmutí (ne úklid, ne malý shluk) | jen draft PR | ano | ano |
-| R3 ověřené pokrytí živých procedur ≥ 80 % | otevřený s vlastníkem | **ne** | 0 z 23 (0 %) |
-| R4 všechny zapisující procedury mají zelený charakterizační test | otevřený s vlastníkem | **ne** | chybí 19: usp_Ship_CarrierService_Cancel, usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_GLS_old, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna … |
-| R5 blokujících slepých míst ≤ 0 | otevřený s vlastníkem | ano | žádné |
+| R1 doména má owning team | draft-only | **ne** | owning team není určen |
+| R2 doména je mezi domain candidates (ne úklid, ne malý shluk) | draft-only | ano | ano |
+| R3 ověřené pokrytí živých procedur ≥ 80 % | open | **ne** | 0 z 23 (0 %) |
+| R4 všechny zapisující procedury mají zelený characterization test | open | **ne** | chybí 19: usp_Ship_CarrierService_Cancel, usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_GLS_old, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna … |
+| R5 blokujících blind spots ≤ 0 | open | ano | žádné |
 
 **Co chybí k dalšímu stavu:**
 
-- doména má vlastnický tým (vlastník není určen)
+- doména má owning team (owning team není určen)
 
-## Připravenost k vyjmutí
+## Extraction readiness score
 
-Skóre 64.7, pořadí 9. Skóre řadí domény k vyjmutí, stav pruhu neurčuje.
+Skóre 64.7, pořadí 9. Extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje.
 
-## Pokrytí charakterizačními testy
+## Pokrytí characterization tests
 
-Živých procedur 23: ověřeno 0, jen návrh 0, chybí 23. Zapisujících 19, z toho bez ověřeného testu 19.
+Živých procedur 23: verified 0, draft 0, missing 23. Zapisujících 19, z toho bez ověřeného testu 19.
 
-Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh pruh neotevře.
+Draft = test existuje, ale nemá doložený zelený běh (`run.json`). Draft core lane neotevře.
 
 | Procedura | Stav | Golden master | tSQLt | Zapisuje | Volání / 6 týdnů |
 |---|---|---|---|---|---:|
@@ -58,25 +58,25 @@ Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh p
 | `usp_Ship_Shipment_Save` | živá | – | – | **Shipment** | 1 060 |
 | `usp_Ship_Shipment_Update` | živá | – | – | **Orders**, **Shipment** | 48 |
 
-## Slepá místa
+## Blind spots
 
 | Objekt | Typ | Blokuje otevření | Popis |
 |---|---|---|---|
-| `usp_Ship_SendToCarrier` | dynamicke_sql_slepe | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna (jen v okně měření) |
-| `usp_Ship_ShipmentTracking_Delete` | dynamicke_sql_slepe | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: ShipmentItem (jen v okně měření) |
-| `usp_Ship_Shipment_Nightly` | dynamicke_sql_slepe | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: ShipmentTracking (jen v okně měření) |
-| `usp_Ship_Shipment_Save` | dynamicke_sql_z_literalu | ne | dynamické SQL, cíle jdou vyčíst z literálů |
-| `usp_Ship_CarrierService_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Ship_Carrier_CeskaPosta` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Ship_Carrier_GLS_old` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Ship_Carrier_PPL` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Ship_DeliverySlot_Cleanup` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Ship_DeliverySlot_Close` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Ship_DeliverySlot_List` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Ship_SendToCarrier` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Ship_ShipmentItem_Cleanup` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Ship_ShipmentItem_Dispatch` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Ship_Shipment_Nightly` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Ship_Shipment_Rebuild` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_SendToCarrier` | dynamic_sql_blind | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna (jen v okně měření) |
+| `usp_Ship_ShipmentTracking_Delete` | dynamic_sql_blind | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: ShipmentItem (jen v okně měření) |
+| `usp_Ship_Shipment_Nightly` | dynamic_sql_blind | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: ShipmentTracking (jen v okně měření) |
+| `usp_Ship_Shipment_Save` | dynamic_sql_literal | ne | dynamické SQL, cíle jdou vyčíst z literálů |
+| `usp_Ship_CarrierService_Cancel` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_Carrier_CeskaPosta` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_Carrier_GLS_old` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_Carrier_PPL` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_DeliverySlot_Cleanup` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Ship_DeliverySlot_Close` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_DeliverySlot_List` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_SendToCarrier` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_ShipmentItem_Cleanup` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Ship_ShipmentItem_Dispatch` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Ship_Shipment_Nightly` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Ship_Shipment_Rebuild` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
 
 Tučně v tabulce procedur = zápis do tabulky jiné domény nebo sdílené tabulky.

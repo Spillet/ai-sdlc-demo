@@ -1,35 +1,35 @@
-# Balíček důkazů: D:OrderNote
+# Evidence pack: D:OrderNote
 
-Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `3a31a99461f1…`). Strojová verze: `D-OrderNote.json` (schéma `mapa-monolitu/dukazy@1`).
+Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `fed7344328f4…`). Strojová verze: `D-OrderNote.json` (schéma `mapa-monolitu/evidence-pack@2`).
 
-## Pruh core: **zavřený**
+## Core lane: **closed** (autonomy level L0)
 
 - Kdo spustí agenta: nikdo; intake odpoví, co chybí
 - PR: nevzniká
-- Kdo sloučí: jen vlastník ručně mimo AI pipeline (pokud existuje)
-- Vlastník: neurčen
+- Kdo udělá merge: jen vlastník ručně mimo AI pipeline (pokud existuje)
+- Owning team: neurčen
 
 | Pravidlo | Pro stav | Splněno | Detail |
 |---|---|---|---|
-| R1 doména má vlastnický tým | jen draft PR | **ne** | vlastník není určen |
-| R2 doména je kandidát na vyjmutí (ne úklid, ne malý shluk) | jen draft PR | ano | ano |
-| R3 ověřené pokrytí živých procedur ≥ 80 % | otevřený s vlastníkem | **ne** | 0 z 38 (0 %) |
-| R4 všechny zapisující procedury mají zelený charakterizační test | otevřený s vlastníkem | **ne** | chybí 28: spSklad_Warehouse_Update, usp_Inv_Invoice_SetStatus, usp_Inv_Invoice_Update, usp_Order_Cancel, usp_Order_CartItem_Archive, usp_Order_CartItem_Cleanup … |
-| R5 blokujících slepých míst ≤ 0 | otevřený s vlastníkem | **ne** | usp_Order_Export, usp_Order_OrderEvent_MonthClose, usp_Order_OrderNote_Nightly, usp_Order_OrderStatusHistory_Archive |
+| R1 doména má owning team | draft-only | **ne** | owning team není určen |
+| R2 doména je mezi domain candidates (ne úklid, ne malý shluk) | draft-only | ano | ano |
+| R3 ověřené pokrytí živých procedur ≥ 80 % | open | **ne** | 0 z 38 (0 %) |
+| R4 všechny zapisující procedury mají zelený characterization test | open | **ne** | chybí 28: spSklad_Warehouse_Update, usp_Inv_Invoice_SetStatus, usp_Inv_Invoice_Update, usp_Order_Cancel, usp_Order_CartItem_Archive, usp_Order_CartItem_Cleanup … |
+| R5 blokujících blind spots ≤ 0 | open | **ne** | usp_Order_Export, usp_Order_OrderEvent_MonthClose, usp_Order_OrderNote_Nightly, usp_Order_OrderStatusHistory_Archive |
 
 **Co chybí k dalšímu stavu:**
 
-- doména má vlastnický tým (vlastník není určen)
+- doména má owning team (owning team není určen)
 
-## Připravenost k vyjmutí
+## Extraction readiness score
 
-Skóre 57.3, pořadí 10. Skóre řadí domény k vyjmutí, stav pruhu neurčuje.
+Skóre 57.3, pořadí 10. Extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje.
 
-## Pokrytí charakterizačními testy
+## Pokrytí characterization tests
 
-Živých procedur 38: ověřeno 0, jen návrh 0, chybí 38. Zapisujících 28, z toho bez ověřeného testu 28.
+Živých procedur 38: verified 0, draft 0, missing 38. Zapisujících 28, z toho bez ověřeného testu 28.
 
-Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh pruh neotevře.
+Draft = test existuje, ale nemá doložený zelený běh (`run.json`). Draft core lane neotevře.
 
 | Procedura | Stav | Golden master | tSQLt | Zapisuje | Volání / 6 týdnů |
 |---|---|---|---|---|---:|
@@ -72,37 +72,37 @@ Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh p
 | `usp_Pay_Payment_Delete` | živá | – | – | Invoice, **Payment** | 9 939 |
 | `usp_Ship_Shipment_Approve` | živá | – | – | **Shipment** | 730 |
 
-## Slepá místa
+## Blind spots
 
 | Objekt | Typ | Blokuje otevření | Popis |
 |---|---|---|---|
-| `usp_Order_Export` | jina_databaze | **ano** | zápis do Archive.dbo.Orders (katalog nemá ID) |
-| `usp_Order_OrderEvent_MonthClose` | jina_databaze | **ano** | zápis do Accounting.dbo.OrderEvent_Archive (katalog nemá ID) |
-| `usp_Order_OrderNote_Nightly` | jina_databaze | **ano** | zápis do Accounting.dbo.OrderNote_Archive (katalog nemá ID) |
-| `usp_Order_OrderStatusHistory_Archive` | jina_databaze | **ano** | zápis do DWH.dbo.OrderStatusHistory_Archive (katalog nemá ID) |
-| `usp_Inv_Invoice_Update` | dynamicke_sql_slepe | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: ExchangeRate (jen v okně měření) |
-| `usp_Order_OrderEvent_Cancel` | dynamicke_sql_slepe | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: OrderNote (jen v okně měření) |
-| `usp_Order_Cart_Get` | dynamicke_sql_z_literalu | ne | dynamické SQL, cíle jdou vyčíst z literálů |
-| `usp_Order_OrderEvent_Find` | dynamicke_sql_z_literalu | ne | dynamické SQL, cíle jdou vyčíst z literálů |
-| `usp_Order_OrderNote_Check` | dynamicke_sql_z_literalu | ne | dynamické SQL, cíle jdou vyčíst z literálů |
-| `usp_Order_Cancel` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
-| `usp_Order_CartItem_Cleanup` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
-| `usp_Order_Create` | volani_bez_schematu | ne | volá spSklad_StockMovement_Update bez schématu (is_caller_dependent) |
-| `usp_Order_Create` | volani_bez_schematu | ne | volá usp_Cust_LoyaltyAccount_Merge bez schématu (is_caller_dependent) |
-| `usp_Order_Recalc` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
-| `usp_Order_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Order_CartItem_Archive` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Order_CartItem_Cleanup` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Order_Create` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Order_Dispatch` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Order_Export` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Order_OrderEvent_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Order_OrderEvent_MonthClose` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Order_OrderEvent_Sync` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Order_OrderItem_Nightly` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Order_OrderNote_Check` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Order_OrderNote_Nightly` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Order_OrderStatusHistory_Archive` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Order_Sync` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Order_Export` | cross_database | **ano** | zápis do Archive.dbo.Orders (katalog nemá ID) |
+| `usp_Order_OrderEvent_MonthClose` | cross_database | **ano** | zápis do Accounting.dbo.OrderEvent_Archive (katalog nemá ID) |
+| `usp_Order_OrderNote_Nightly` | cross_database | **ano** | zápis do Accounting.dbo.OrderNote_Archive (katalog nemá ID) |
+| `usp_Order_OrderStatusHistory_Archive` | cross_database | **ano** | zápis do DWH.dbo.OrderStatusHistory_Archive (katalog nemá ID) |
+| `usp_Order_Cancel` | caller_dependent | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `usp_Order_CartItem_Cleanup` | caller_dependent | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `usp_Order_Create` | caller_dependent | ne | volá spSklad_StockMovement_Update bez schématu (is_caller_dependent) |
+| `usp_Order_Create` | caller_dependent | ne | volá usp_Cust_LoyaltyAccount_Merge bez schématu (is_caller_dependent) |
+| `usp_Order_Recalc` | caller_dependent | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `usp_Inv_Invoice_Update` | dynamic_sql_blind | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: ExchangeRate (jen v okně měření) |
+| `usp_Order_OrderEvent_Cancel` | dynamic_sql_blind | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: OrderNote (jen v okně měření) |
+| `usp_Order_Cart_Get` | dynamic_sql_literal | ne | dynamické SQL, cíle jdou vyčíst z literálů |
+| `usp_Order_OrderEvent_Find` | dynamic_sql_literal | ne | dynamické SQL, cíle jdou vyčíst z literálů |
+| `usp_Order_OrderNote_Check` | dynamic_sql_literal | ne | dynamické SQL, cíle jdou vyčíst z literálů |
+| `usp_Order_Cancel` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Order_CartItem_Archive` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Order_CartItem_Cleanup` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Order_Create` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Order_Dispatch` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Order_Export` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Order_OrderEvent_Cancel` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Order_OrderEvent_MonthClose` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Order_OrderEvent_Sync` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Order_OrderItem_Nightly` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Order_OrderNote_Check` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Order_OrderNote_Nightly` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Order_OrderStatusHistory_Archive` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Order_Sync` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
 
 Tučně v tabulce procedur = zápis do tabulky jiné domény nebo sdílené tabulky.

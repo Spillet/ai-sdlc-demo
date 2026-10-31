@@ -1,42 +1,42 @@
-# Balíček důkazů: D:ImportProduct
+# Evidence pack: D:ImportProduct
 
-Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `3a31a99461f1…`). Strojová verze: `D-ImportProduct.json` (schéma `mapa-monolitu/dukazy@1`).
+Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `fed7344328f4…`). Strojová verze: `D-ImportProduct.json` (schéma `mapa-monolitu/evidence-pack@2`).
 
-## Pruh core: **zavřený**
+## Core lane: **closed** (autonomy level L0)
 
 - Kdo spustí agenta: nikdo; intake odpoví, co chybí
 - PR: nevzniká
-- Kdo sloučí: jen vlastník ručně mimo AI pipeline (pokud existuje)
-- Vlastník: neurčen
+- Kdo udělá merge: jen vlastník ručně mimo AI pipeline (pokud existuje)
+- Owning team: neurčen
 
 | Pravidlo | Pro stav | Splněno | Detail |
 |---|---|---|---|
-| R1 doména má vlastnický tým | jen draft PR | **ne** | vlastník není určen |
-| R2 doména je kandidát na vyjmutí (ne úklid, ne malý shluk) | jen draft PR | **ne** | úklid: většina procedur je mrtvá, vypnout místo měnit |
-| R3 ověřené pokrytí živých procedur ≥ 80 % | otevřený s vlastníkem | **ne** | 0 z 0 (0 %) |
-| R4 všechny zapisující procedury mají zelený charakterizační test | otevřený s vlastníkem | ano | ano |
-| R5 blokujících slepých míst ≤ 0 | otevřený s vlastníkem | ano | žádné |
+| R1 doména má owning team | draft-only | **ne** | owning team není určen |
+| R2 doména je mezi domain candidates (ne úklid, ne malý shluk) | draft-only | **ne** | úklid: většina procedur je mrtvá, vypnout místo měnit |
+| R3 ověřené pokrytí živých procedur ≥ 80 % | open | **ne** | 0 z 0 (0 %) |
+| R4 všechny zapisující procedury mají zelený characterization test | open | ano | ano |
+| R5 blokujících blind spots ≤ 0 | open | ano | žádné |
 
 **Co chybí k dalšímu stavu:**
 
-- doména má vlastnický tým (vlastník není určen)
-- doména je kandidát na vyjmutí (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)
+- doména má owning team (owning team není určen)
+- doména je mezi domain candidates (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)
 
-## Připravenost k vyjmutí
+## Extraction readiness score
 
-Skóre 100.0, mimo pořadí. Skóre řadí domény k vyjmutí, stav pruhu neurčuje.
+Skóre 100.0, mimo pořadí. Extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje.
 
-## Pokrytí charakterizačními testy
+## Pokrytí characterization tests
 
-Živých procedur 0: ověřeno 0, jen návrh 0, chybí 0. Zapisujících 0, z toho bez ověřeného testu 0.
+Živých procedur 0: verified 0, draft 0, missing 0. Zapisujících 0, z toho bez ověřeného testu 0.
 
-Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh pruh neotevře.
+Draft = test existuje, ale nemá doložený zelený běh (`run.json`). Draft core lane neotevře.
 
 | Procedura | Stav | Golden master | tSQLt | Zapisuje | Volání / 6 týdnů |
 |---|---|---|---|---|---:|
 | `usp_Migr2019_Orders` | mrtvá | – | – | **Customer**, ImportProduct | 0 |
 
-## Slepá místa
+## Blind spots
 
 Žádná.
 

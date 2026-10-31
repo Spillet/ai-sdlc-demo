@@ -1,7 +1,150 @@
 {
- "domena": "D:CustomerAddress",
- "nazev": null,
- "objekty": [
+ "blind_spots": [
+  {
+   "blocking": true,
+   "description": "zápis do DWH.dbo.Customer_Archive (katalog nemá ID)",
+   "object": "usp_Cust_Customer_Nightly",
+   "type": "cross_database"
+  },
+  {
+   "blocking": false,
+   "description": "volá usp_Cust_Customer_Insert bez schématu (is_caller_dependent)",
+   "object": "usp_Cust_CustomerSegment_Dispatch",
+   "type": "caller_dependent"
+  },
+  {
+   "blocking": false,
+   "description": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "object": "usp_Cust_Customer_Recalc",
+   "type": "caller_dependent"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Cust_CustomerAddress_Confirm",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Cust_CustomerAddress_Dispatch",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Cust_CustomerContact_MonthClose",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Cust_CustomerSegment_Dispatch",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Cust_Customer_MonthClose",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Cust_Customer_Nightly",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Cust_Customer_Rebuild",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_Shipment_List",
+   "type": "entry_outside_catalog"
+  }
+ ],
+ "core_lane": {
+  "autonomy_level": "L0",
+  "gate": {
+   "pr": "nevzniká",
+   "who_merges": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "who_runs_agent": "nikdo; intake odpoví, co chybí"
+  },
+  "label": "closed",
+  "missing_for_next_state": [
+   "doména má owning team (owning team není určen)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "owning team není určen",
+    "id": "R1",
+    "met": false,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "ano",
+    "id": "R2",
+    "met": true,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 19 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "chybí 15: usp_Cust_CustomerAddress_Close, usp_Cust_CustomerAddress_Confirm, usp_Cust_CustomerAddress_Dispatch, usp_Cust_CustomerContact_MonthClose, usp_Cust_CustomerSegment_Close, usp_Cust_CustomerSegment_Dispatch …",
+    "id": "R4",
+    "met": false,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "usp_Cust_Customer_Nightly",
+    "id": "R5",
+    "met": false,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "closed"
+ },
+ "coverage": {
+  "draft": 0,
+  "live_procedures": 19,
+  "missing": 19,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 15,
+  "writing_unverified": [
+   "usp_Cust_CustomerAddress_Close",
+   "usp_Cust_CustomerAddress_Confirm",
+   "usp_Cust_CustomerAddress_Dispatch",
+   "usp_Cust_CustomerContact_MonthClose",
+   "usp_Cust_CustomerSegment_Close",
+   "usp_Cust_CustomerSegment_Dispatch",
+   "usp_Cust_Customer_Approve",
+   "usp_Cust_Customer_Insert",
+   "usp_Cust_Customer_Merge",
+   "usp_Cust_Customer_MonthClose",
+   "usp_Cust_Customer_Nightly",
+   "usp_Cust_Customer_Rebuild",
+   "usp_Cust_Customer_Recalc",
+   "usp_Cust_Customer_Save",
+   "usp_Cust_LoyaltyAccount_Merge"
+  ]
+ },
+ "domain": "D:CustomerAddress",
+ "name": null,
+ "objects": [
   "Consent",
   "CustomerAddress",
   "CustomerContact",
@@ -34,35 +177,339 @@
   "usp_Ship_Shipment_List",
   "Customer"
  ],
- "pokryti": {
-  "chybi": 19,
-  "navrh": 0,
-  "overene_pokryti": 0.0,
-  "overeno": 0,
-  "zapisujici": 15,
-  "zapisujici_neoverene": [
-   "usp_Cust_CustomerAddress_Close",
-   "usp_Cust_CustomerAddress_Confirm",
-   "usp_Cust_CustomerAddress_Dispatch",
-   "usp_Cust_CustomerContact_MonthClose",
-   "usp_Cust_CustomerSegment_Close",
-   "usp_Cust_CustomerSegment_Dispatch",
-   "usp_Cust_Customer_Approve",
-   "usp_Cust_Customer_Insert",
-   "usp_Cust_Customer_Merge",
-   "usp_Cust_Customer_MonthClose",
-   "usp_Cust_Customer_Nightly",
-   "usp_Cust_Customer_Rebuild",
-   "usp_Cust_Customer_Recalc",
-   "usp_Cust_Customer_Save",
-   "usp_Cust_LoyaltyAccount_Merge"
-  ],
-  "zive_procedury": 19
- },
- "pripravenost": {
-  "poradi": 6,
-  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
-  "prispevky": {
+ "owner": null,
+ "procedures": [
+  {
+   "calls_6_weeks": 1852,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_CustomerAddress_Close",
+   "status": "živá",
+   "writes": [
+    "CustomerAddress"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2112,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_CustomerAddress_Confirm",
+   "status": "živá",
+   "writes": [
+    "CustomerContact",
+    "LoyaltyTransaction"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2974,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_CustomerAddress_Dispatch",
+   "status": "živá",
+   "writes": [
+    "LoyaltyAccount",
+    "LoyaltyTransaction"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 10426,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_CustomerAddress_List",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1008,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_CustomerContact_MonthClose",
+   "status": "živá",
+   "writes": [
+    "Consent",
+    "CustomerAddress",
+    "LoyaltyAccount"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1111,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_CustomerSegment_Close",
+   "status": "živá",
+   "writes": [
+    "CustomerSegment"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_CustomerSegment_Delete",
+   "status": "mrtvá",
+   "writes": [
+    "CustomerSegment"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 233,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_CustomerSegment_Dispatch",
+   "status": "živá",
+   "writes": [
+    "Customer",
+    "CustomerAddress"
+   ],
+   "writes_foreign": [
+    "Customer"
+   ]
+  },
+  {
+   "calls_6_weeks": 2842,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Approve",
+   "status": "živá",
+   "writes": [
+    "Customer"
+   ],
+   "writes_foreign": [
+    "Customer"
+   ]
+  },
+  {
+   "calls_6_weeks": 4122,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Find",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 19297,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Insert",
+   "status": "živá",
+   "writes": [
+    "Customer"
+   ],
+   "writes_foreign": [
+    "Customer"
+   ]
+  },
+  {
+   "calls_6_weeks": 1555,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Merge",
+   "status": "živá",
+   "writes": [
+    "Customer"
+   ],
+   "writes_foreign": [
+    "Customer"
+   ]
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_MonthClose",
+   "status": "živá",
+   "writes": [
+    "Consent",
+    "CustomerAddress",
+    "LoyaltyTransaction"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1008,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Nightly",
+   "status": "živá",
+   "writes": [
+    "Consent",
+    "CustomerSegment",
+    "LoyaltyTransaction",
+    "Orders"
+   ],
+   "writes_foreign": [
+    "Orders"
+   ]
+  },
+  {
+   "calls_6_weeks": 33813,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Rebuild",
+   "status": "živá",
+   "writes": [
+    "CustomerAddress",
+    "CustomerSegment"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 787,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Recalc",
+   "status": "živá",
+   "writes": [
+    "Customer",
+    "CustomerSegment",
+    "Orders"
+   ],
+   "writes_foreign": [
+    "Customer",
+    "Orders"
+   ]
+  },
+  {
+   "calls_6_weeks": 13802,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Save",
+   "status": "živá",
+   "writes": [
+    "Customer"
+   ],
+   "writes_foreign": [
+    "Customer"
+   ]
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_Customer_Sync",
+   "status": "mrtvá",
+   "writes": [
+    "Customer",
+    "LoyaltyAccount"
+   ],
+   "writes_foreign": [
+    "Customer"
+   ]
+  },
+  {
+   "calls_6_weeks": 29294,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_LoyaltyAccount_Merge",
+   "status": "živá",
+   "writes": [
+    "LoyaltyAccount"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 12778,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Cust_LoyaltyTransaction_GetByCode",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 103,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Shipment_List",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 0.083,
+   "bonus_readonly": 0.182,
+   "data_size": 0.515,
+   "dynamic_sql": 0.0,
+   "external_calls": 0.485,
+   "foreign_reads": 0.418,
+   "foreign_writes": 0.31,
+   "inbound_reads": 0.637,
+   "inbound_writes": 0.133
+  },
+  "contributions": {
    "bonus_dead": 0.4,
    "bonus_readonly": 1.8,
    "data_size": -5.1,
@@ -73,463 +520,18 @@
    "inbound_reads": -6.4,
    "inbound_writes": -2.0
   },
-  "skore": 71.9,
-  "slozky": {
-   "bonus_dead": 0.083,
-   "bonus_readonly": 0.182,
-   "data_size": 0.515,
-   "dynamic_sql": 0.0,
-   "external_calls": 0.485,
-   "foreign_reads": 0.418,
-   "foreign_writes": 0.31,
-   "inbound_reads": 0.637,
-   "inbound_writes": 0.133
-  }
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": 6,
+  "score": 71.9
  },
- "procedury": [
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_CustomerAddress_Close",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1852,
-   "zapisuje": [
-    "CustomerAddress"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_CustomerAddress_Confirm",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2112,
-   "zapisuje": [
-    "CustomerContact",
-    "LoyaltyTransaction"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_CustomerAddress_Dispatch",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2974,
-   "zapisuje": [
-    "LoyaltyAccount",
-    "LoyaltyTransaction"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_CustomerAddress_List",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 10426,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_CustomerContact_MonthClose",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1008,
-   "zapisuje": [
-    "Consent",
-    "CustomerAddress",
-    "LoyaltyAccount"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_CustomerSegment_Close",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1111,
-   "zapisuje": [
-    "CustomerSegment"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_CustomerSegment_Delete",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "CustomerSegment"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_CustomerSegment_Dispatch",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 233,
-   "zapisuje": [
-    "Customer",
-    "CustomerAddress"
-   ],
-   "zapisuje_cizi": [
-    "Customer"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Approve",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2842,
-   "zapisuje": [
-    "Customer"
-   ],
-   "zapisuje_cizi": [
-    "Customer"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Find",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4122,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Insert",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 19297,
-   "zapisuje": [
-    "Customer"
-   ],
-   "zapisuje_cizi": [
-    "Customer"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Merge",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1555,
-   "zapisuje": [
-    "Customer"
-   ],
-   "zapisuje_cizi": [
-    "Customer"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_MonthClose",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "Consent",
-    "CustomerAddress",
-    "LoyaltyTransaction"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Nightly",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1008,
-   "zapisuje": [
-    "Consent",
-    "CustomerSegment",
-    "LoyaltyTransaction",
-    "Orders"
-   ],
-   "zapisuje_cizi": [
-    "Orders"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Rebuild",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 33813,
-   "zapisuje": [
-    "CustomerAddress",
-    "CustomerSegment"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Recalc",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 787,
-   "zapisuje": [
-    "Customer",
-    "CustomerSegment",
-    "Orders"
-   ],
-   "zapisuje_cizi": [
-    "Customer",
-    "Orders"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Save",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 13802,
-   "zapisuje": [
-    "Customer"
-   ],
-   "zapisuje_cizi": [
-    "Customer"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_Customer_Sync",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "Customer",
-    "LoyaltyAccount"
-   ],
-   "zapisuje_cizi": [
-    "Customer"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_LoyaltyAccount_Merge",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 29294,
-   "zapisuje": [
-    "LoyaltyAccount"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Cust_LoyaltyTransaction_GetByCode",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 12778,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Shipment_List",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 103,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  }
- ],
- "pruh_core": {
-  "brana": {
-   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
-   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
-   "pr": "nevzniká"
-  },
-  "chybi_k_dalsimu_stavu": [
-   "doména má vlastnický tým (vlastník není určen)"
-  ],
-  "popis": "zavřený",
-  "pravidla": [
-   {
-    "detail": "vlastník není určen",
-    "id": "R1",
-    "pravidlo": "doména má vlastnický tým",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "ano",
-    "id": "R2",
-    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-    "pro": "jen_draft_pr",
-    "splneno": true
-   },
-   {
-    "detail": "0 z 19 (0 %)",
-    "id": "R3",
-    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "chybí 15: usp_Cust_CustomerAddress_Close, usp_Cust_CustomerAddress_Confirm, usp_Cust_CustomerAddress_Dispatch, usp_Cust_CustomerContact_MonthClose, usp_Cust_CustomerSegment_Close, usp_Cust_CustomerSegment_Dispatch …",
-    "id": "R4",
-    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "usp_Cust_Customer_Nightly",
-    "id": "R5",
-    "pravidlo": "blokujících slepých míst ≤ 0",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   }
-  ],
-  "stav": "zavreny"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
  },
- "schema": "mapa-monolitu/dukazy@1",
- "slepa_mista": [
-  {
-   "blokujici": true,
-   "objekt": "usp_Cust_Customer_Nightly",
-   "popis": "zápis do DWH.dbo.Customer_Archive (katalog nemá ID)",
-   "typ": "jina_databaze"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_CustomerSegment_Dispatch",
-   "popis": "volá usp_Cust_Customer_Insert bez schématu (is_caller_dependent)",
-   "typ": "volani_bez_schematu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_Customer_Recalc",
-   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
-   "typ": "volani_bez_schematu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_CustomerAddress_Confirm",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_CustomerAddress_Dispatch",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_CustomerContact_MonthClose",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_CustomerSegment_Dispatch",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_Customer_MonthClose",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_Customer_Nightly",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Cust_Customer_Rebuild",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_Shipment_List",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  }
- ],
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "tabulky": [
+ "tables": [
   "Consent",
   "Customer",
   "CustomerAddress",
@@ -537,6 +539,5 @@
   "CustomerSegment",
   "LoyaltyAccount",
   "LoyaltyTransaction"
- ],
- "vlastnik": null
+ ]
 }

@@ -1,7 +1,228 @@
 {
- "domena": "D:Warehouse",
- "nazev": null,
- "objekty": [
+ "blind_spots": [
+  {
+   "blocking": true,
+   "description": "jméno objektu se skládá za běhu a běh žádný cíl nezachytil",
+   "object": "usp_Import_Stock",
+   "type": "dynamic_sql_blind"
+  },
+  {
+   "blocking": false,
+   "description": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "object": "spSklad_Warehouse_Delete",
+   "type": "caller_dependent"
+  },
+  {
+   "blocking": false,
+   "description": "dynamické SQL, cíle jdou vyčíst z literálů",
+   "object": "spSklad_Warehouse_SetStatus",
+   "type": "dynamic_sql_literal"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "spSklad_InventoryCount_Cancel",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "spSklad_InventoryCount_Check",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "spSklad_InventoryCount_Nightly",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "spSklad_StockLevel_Close",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "spSklad_StockLevel_Delete",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "spSklad_StockReservation_Export",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "spSklad_Warehouse_Approve",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "spSklad_Warehouse_Delete",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "spSklad_Warehouse_Export",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "spSklad_Warehouse_SetStatus",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Import_Stock",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Po_GoodsReceipt_Get",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Po_GoodsReceipt_GetDetail",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Po_GoodsReceipt_Sync",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Po_Supplier_Cancel",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Po_Supplier_Close",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Po_Supplier_Dispatch",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Po_Supplier_Hourly",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Po_Supplier_SetStatus",
+   "type": "entry_outside_catalog"
+  }
+ ],
+ "core_lane": {
+  "autonomy_level": "L0",
+  "gate": {
+   "pr": "nevzniká",
+   "who_merges": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "who_runs_agent": "nikdo; intake odpoví, co chybí"
+  },
+  "label": "closed",
+  "missing_for_next_state": [
+   "doména má owning team (owning team není určen)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "owning team není určen",
+    "id": "R1",
+    "met": false,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "ano",
+    "id": "R2",
+    "met": true,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 41 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "chybí 27: spSklad_InventoryCount_Cancel, spSklad_InventoryCount_Merge, spSklad_InventoryCount_Nightly, spSklad_StockLevel_Close, spSklad_StockLevel_Delete, spSklad_StockLevel_Save …",
+    "id": "R4",
+    "met": false,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "usp_Import_Stock",
+    "id": "R5",
+    "met": false,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "closed"
+ },
+ "coverage": {
+  "draft": 0,
+  "live_procedures": 41,
+  "missing": 41,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 27,
+  "writing_unverified": [
+   "spSklad_InventoryCount_Cancel",
+   "spSklad_InventoryCount_Merge",
+   "spSklad_InventoryCount_Nightly",
+   "spSklad_StockLevel_Close",
+   "spSklad_StockLevel_Delete",
+   "spSklad_StockLevel_Save",
+   "spSklad_StockLevel_Update",
+   "spSklad_StockMovement_Update",
+   "spSklad_StockReservation_Export",
+   "spSklad_Warehouse_Approve",
+   "spSklad_Warehouse_Delete",
+   "spSklad_Warehouse_Export",
+   "spSklad_Warehouse_Import",
+   "spSklad_Warehouse_Save",
+   "spSklad_Warehouse_SetStatus",
+   "usp_Import_Stock",
+   "usp_Po_GoodsReceiptItem_Close",
+   "usp_Po_GoodsReceipt_Sync",
+   "usp_Po_PurchaseOrderItem_Delete",
+   "usp_Po_PurchaseOrderItem_Insert",
+   "usp_Po_SupplierProduct_Delete",
+   "usp_Po_Supplier_Cancel",
+   "usp_Po_Supplier_Close",
+   "usp_Po_Supplier_Dispatch",
+   "usp_Po_Supplier_Hourly",
+   "usp_Po_Supplier_Recalc",
+   "usp_Po_Supplier_SetStatus"
+  ]
+ },
+ "domain": "D:Warehouse",
+ "name": null,
+ "objects": [
   "GoodsReceipt",
   "GoodsReceiptItem",
   "ImportPrice",
@@ -68,47 +289,722 @@
   "Product",
   "StockLevel"
  ],
- "pokryti": {
-  "chybi": 41,
-  "navrh": 0,
-  "overene_pokryti": 0.0,
-  "overeno": 0,
-  "zapisujici": 27,
-  "zapisujici_neoverene": [
-   "spSklad_InventoryCount_Cancel",
-   "spSklad_InventoryCount_Merge",
-   "spSklad_InventoryCount_Nightly",
-   "spSklad_StockLevel_Close",
-   "spSklad_StockLevel_Delete",
-   "spSklad_StockLevel_Save",
-   "spSklad_StockLevel_Update",
-   "spSklad_StockMovement_Update",
-   "spSklad_StockReservation_Export",
-   "spSklad_Warehouse_Approve",
-   "spSklad_Warehouse_Delete",
-   "spSklad_Warehouse_Export",
-   "spSklad_Warehouse_Import",
-   "spSklad_Warehouse_Save",
-   "spSklad_Warehouse_SetStatus",
-   "usp_Import_Stock",
-   "usp_Po_GoodsReceiptItem_Close",
-   "usp_Po_GoodsReceipt_Sync",
-   "usp_Po_PurchaseOrderItem_Delete",
-   "usp_Po_PurchaseOrderItem_Insert",
-   "usp_Po_SupplierProduct_Delete",
-   "usp_Po_Supplier_Cancel",
-   "usp_Po_Supplier_Close",
-   "usp_Po_Supplier_Dispatch",
-   "usp_Po_Supplier_Hourly",
-   "usp_Po_Supplier_Recalc",
-   "usp_Po_Supplier_SetStatus"
-  ],
-  "zive_procedury": 41
- },
- "pripravenost": {
-  "poradi": 8,
-  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
-  "prispevky": {
+ "owner": null,
+ "procedures": [
+  {
+   "calls_6_weeks": 19428,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_InventoryCount_Cancel",
+   "status": "živá",
+   "writes": [
+    "StockLevel",
+    "StockReservation"
+   ],
+   "writes_foreign": [
+    "StockLevel",
+    "StockReservation"
+   ]
+  },
+  {
+   "calls_6_weeks": 27383,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_InventoryCount_Check",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4029,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_InventoryCount_Merge",
+   "status": "živá",
+   "writes": [
+    "InventoryCount"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_InventoryCount_Nightly",
+   "status": "živá",
+   "writes": [
+    "InventoryCountItem",
+    "Location",
+    "Product"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 45123,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Location_Get",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Location_Update",
+   "status": "mrtvá",
+   "writes": [
+    "Location"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 8152,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockLevel_Close",
+   "status": "živá",
+   "writes": [
+    "StockLevel"
+   ],
+   "writes_foreign": [
+    "StockLevel"
+   ]
+  },
+  {
+   "calls_6_weeks": 899,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockLevel_Delete",
+   "status": "živá",
+   "writes": [
+    "Location",
+    "StockLevel"
+   ],
+   "writes_foreign": [
+    "StockLevel"
+   ]
+  },
+  {
+   "calls_6_weeks": 1,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockLevel_Get",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockLevel_GetByCode",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 18271,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockLevel_List",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 566,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockLevel_Overview",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 3653,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockLevel_Save",
+   "status": "živá",
+   "writes": [
+    "Product",
+    "StockLevel"
+   ],
+   "writes_foreign": [
+    "Product",
+    "StockLevel"
+   ]
+  },
+  {
+   "calls_6_weeks": 6177,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockLevel_Update",
+   "status": "živá",
+   "writes": [
+    "StockLevel"
+   ],
+   "writes_foreign": [
+    "StockLevel"
+   ]
+  },
+  {
+   "calls_6_weeks": 32530,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockMovement_Update",
+   "status": "živá",
+   "writes": [
+    "StockMovement"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4032,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_StockReservation_Export",
+   "status": "živá",
+   "writes": [
+    "PurchaseOrder",
+    "StockMovement"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 8923,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Approve",
+   "status": "živá",
+   "writes": [
+    "StockMovement",
+    "Warehouse"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Cancel",
+   "status": "mrtvá",
+   "writes": [
+    "Orders",
+    "StockLevel",
+    "Warehouse"
+   ],
+   "writes_foreign": [
+    "Orders",
+    "StockLevel"
+   ]
+  },
+  {
+   "calls_6_weeks": 2741,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Check",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 3217,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Delete",
+   "status": "živá",
+   "writes": [
+    "StockMovement",
+    "Warehouse"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Export",
+   "status": "živá",
+   "writes": [
+    "InventoryCountItem",
+    "Location",
+    "Product"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 715,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_GetByCode",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 14622,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Import",
+   "status": "živá",
+   "writes": [
+    "PurchaseOrder",
+    "Warehouse"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Overview",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Process",
+   "status": "mrtvá",
+   "writes": [
+    "PurchaseOrder",
+    "StockLevel",
+    "StockReservation"
+   ],
+   "writes_foreign": [
+    "StockLevel",
+    "StockReservation"
+   ]
+  },
+  {
+   "calls_6_weeks": 6974,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_Save",
+   "status": "živá",
+   "writes": [
+    "Warehouse"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 27941,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "spSklad_Warehouse_SetStatus",
+   "status": "živá",
+   "writes": [
+    "InventoryCountItem",
+    "Warehouse"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Import_Product",
+   "status": "mrtvá",
+   "writes": [
+    "ImportPrice"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1008,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Import_Stock",
+   "status": "živá",
+   "writes": [
+    "ImportPrice",
+    "StockLevel"
+   ],
+   "writes_foreign": [
+    "StockLevel"
+   ]
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Migr2019_Product",
+   "status": "mrtvá",
+   "writes": [
+    "ImportPrice"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Old_CustomerMerge",
+   "status": "mrtvá",
+   "writes": [
+    "ImportStock",
+    "Product"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 2669,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_GoodsReceiptItem_Close",
+   "status": "živá",
+   "writes": [
+    "GoodsReceiptItem"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 197,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_GoodsReceipt_Get",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 9369,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_GoodsReceipt_GetDetail",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 26501,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_GoodsReceipt_Sync",
+   "status": "živá",
+   "writes": [
+    "Product",
+    "PurchaseOrder",
+    "SupplierProduct"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 2820,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_PurchaseOrderItem_Delete",
+   "status": "živá",
+   "writes": [
+    "Product",
+    "PurchaseOrderItem",
+    "Supplier"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 4064,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_PurchaseOrderItem_Insert",
+   "status": "živá",
+   "writes": [
+    "Product",
+    "PurchaseOrderItem"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 8031,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_PurchaseOrder_List",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 23461,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_SupplierProduct_Delete",
+   "status": "živá",
+   "writes": [
+    "GoodsReceipt",
+    "Product",
+    "SupplierProduct"
+   ],
+   "writes_foreign": [
+    "Product"
+   ]
+  },
+  {
+   "calls_6_weeks": 15146,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_SupplierProduct_GetDetail",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 317,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_Supplier_Cancel",
+   "status": "živá",
+   "writes": [
+    "PurchaseOrder",
+    "StockLevel",
+    "SupplierProduct"
+   ],
+   "writes_foreign": [
+    "StockLevel"
+   ]
+  },
+  {
+   "calls_6_weeks": 31058,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_Supplier_Close",
+   "status": "živá",
+   "writes": [
+    "Supplier",
+    "SupplierProduct"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2178,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_Supplier_Dispatch",
+   "status": "živá",
+   "writes": [
+    "PurchaseOrder",
+    "Supplier"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 17973,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_Supplier_GetDetail",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4032,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_Supplier_Hourly",
+   "status": "živá",
+   "writes": [
+    "PurchaseOrder",
+    "StockLevel",
+    "SupplierProduct"
+   ],
+   "writes_foreign": [
+    "StockLevel"
+   ]
+  },
+  {
+   "calls_6_weeks": 758,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_Supplier_Recalc",
+   "status": "živá",
+   "writes": [
+    "Supplier"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 18212,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Po_Supplier_SetStatus",
+   "status": "živá",
+   "writes": [
+    "PurchaseOrderItem",
+    "Supplier"
+   ],
+   "writes_foreign": []
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 0.12,
+   "bonus_readonly": 0.318,
+   "data_size": 0.983,
+   "dynamic_sql": 0.205,
+   "external_calls": 0.379,
+   "foreign_reads": 0.466,
+   "foreign_writes": 0.291,
+   "inbound_reads": 0.398,
+   "inbound_writes": 0.182
+  },
+  "contributions": {
    "bonus_dead": 0.6,
    "bonus_readonly": 3.2,
    "data_size": -9.8,
@@ -119,912 +1015,18 @@
    "inbound_reads": -4.0,
    "inbound_writes": -2.7
   },
-  "skore": 69.5,
-  "slozky": {
-   "bonus_dead": 0.12,
-   "bonus_readonly": 0.318,
-   "data_size": 0.983,
-   "dynamic_sql": 0.205,
-   "external_calls": 0.379,
-   "foreign_reads": 0.466,
-   "foreign_writes": 0.291,
-   "inbound_reads": 0.398,
-   "inbound_writes": 0.182
-  }
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": 8,
+  "score": 69.5
  },
- "procedury": [
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_InventoryCount_Cancel",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 19428,
-   "zapisuje": [
-    "StockLevel",
-    "StockReservation"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel",
-    "StockReservation"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_InventoryCount_Check",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 27383,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_InventoryCount_Merge",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4029,
-   "zapisuje": [
-    "InventoryCount"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_InventoryCount_Nightly",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2,
-   "zapisuje": [
-    "InventoryCountItem",
-    "Location",
-    "Product"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Location_Get",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 45123,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Location_Update",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "Location"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockLevel_Close",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 8152,
-   "zapisuje": [
-    "StockLevel"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockLevel_Delete",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 899,
-   "zapisuje": [
-    "Location",
-    "StockLevel"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockLevel_Get",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockLevel_GetByCode",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockLevel_List",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 18271,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockLevel_Overview",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 566,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockLevel_Save",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 3653,
-   "zapisuje": [
-    "Product",
-    "StockLevel"
-   ],
-   "zapisuje_cizi": [
-    "Product",
-    "StockLevel"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockLevel_Update",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 6177,
-   "zapisuje": [
-    "StockLevel"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockMovement_Update",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 32530,
-   "zapisuje": [
-    "StockMovement"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_StockReservation_Export",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4032,
-   "zapisuje": [
-    "PurchaseOrder",
-    "StockMovement"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Approve",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 8923,
-   "zapisuje": [
-    "StockMovement",
-    "Warehouse"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Cancel",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "Orders",
-    "StockLevel",
-    "Warehouse"
-   ],
-   "zapisuje_cizi": [
-    "Orders",
-    "StockLevel"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Check",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2741,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Delete",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 3217,
-   "zapisuje": [
-    "StockMovement",
-    "Warehouse"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Export",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2,
-   "zapisuje": [
-    "InventoryCountItem",
-    "Location",
-    "Product"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_GetByCode",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 715,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Import",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 14622,
-   "zapisuje": [
-    "PurchaseOrder",
-    "Warehouse"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Overview",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Process",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "PurchaseOrder",
-    "StockLevel",
-    "StockReservation"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel",
-    "StockReservation"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_Save",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 6974,
-   "zapisuje": [
-    "Warehouse"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "spSklad_Warehouse_SetStatus",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 27941,
-   "zapisuje": [
-    "InventoryCountItem",
-    "Warehouse"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Import_Product",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "ImportPrice"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Import_Stock",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1008,
-   "zapisuje": [
-    "ImportPrice",
-    "StockLevel"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Migr2019_Product",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "ImportPrice"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Old_CustomerMerge",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "ImportStock",
-    "Product"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_GoodsReceiptItem_Close",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2669,
-   "zapisuje": [
-    "GoodsReceiptItem"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_GoodsReceipt_Get",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 197,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_GoodsReceipt_GetDetail",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 9369,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_GoodsReceipt_Sync",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 26501,
-   "zapisuje": [
-    "Product",
-    "PurchaseOrder",
-    "SupplierProduct"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_PurchaseOrderItem_Delete",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2820,
-   "zapisuje": [
-    "Product",
-    "PurchaseOrderItem",
-    "Supplier"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_PurchaseOrderItem_Insert",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4064,
-   "zapisuje": [
-    "Product",
-    "PurchaseOrderItem"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_PurchaseOrder_List",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 8031,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_SupplierProduct_Delete",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 23461,
-   "zapisuje": [
-    "GoodsReceipt",
-    "Product",
-    "SupplierProduct"
-   ],
-   "zapisuje_cizi": [
-    "Product"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_SupplierProduct_GetDetail",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 15146,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_Supplier_Cancel",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 317,
-   "zapisuje": [
-    "PurchaseOrder",
-    "StockLevel",
-    "SupplierProduct"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_Supplier_Close",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 31058,
-   "zapisuje": [
-    "Supplier",
-    "SupplierProduct"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_Supplier_Dispatch",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2178,
-   "zapisuje": [
-    "PurchaseOrder",
-    "Supplier"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_Supplier_GetDetail",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 17973,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_Supplier_Hourly",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4032,
-   "zapisuje": [
-    "PurchaseOrder",
-    "StockLevel",
-    "SupplierProduct"
-   ],
-   "zapisuje_cizi": [
-    "StockLevel"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_Supplier_Recalc",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 758,
-   "zapisuje": [
-    "Supplier"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Po_Supplier_SetStatus",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 18212,
-   "zapisuje": [
-    "PurchaseOrderItem",
-    "Supplier"
-   ],
-   "zapisuje_cizi": []
-  }
- ],
- "pruh_core": {
-  "brana": {
-   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
-   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
-   "pr": "nevzniká"
-  },
-  "chybi_k_dalsimu_stavu": [
-   "doména má vlastnický tým (vlastník není určen)"
-  ],
-  "popis": "zavřený",
-  "pravidla": [
-   {
-    "detail": "vlastník není určen",
-    "id": "R1",
-    "pravidlo": "doména má vlastnický tým",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "ano",
-    "id": "R2",
-    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-    "pro": "jen_draft_pr",
-    "splneno": true
-   },
-   {
-    "detail": "0 z 41 (0 %)",
-    "id": "R3",
-    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "chybí 27: spSklad_InventoryCount_Cancel, spSklad_InventoryCount_Merge, spSklad_InventoryCount_Nightly, spSklad_StockLevel_Close, spSklad_StockLevel_Delete, spSklad_StockLevel_Save …",
-    "id": "R4",
-    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "usp_Import_Stock",
-    "id": "R5",
-    "pravidlo": "blokujících slepých míst ≤ 0",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   }
-  ],
-  "stav": "zavreny"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
  },
- "schema": "mapa-monolitu/dukazy@1",
- "slepa_mista": [
-  {
-   "blokujici": true,
-   "objekt": "usp_Import_Stock",
-   "popis": "jméno objektu se skládá za běhu a běh žádný cíl nezachytil",
-   "typ": "dynamicke_sql_slepe"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_Warehouse_SetStatus",
-   "popis": "dynamické SQL, cíle jdou vyčíst z literálů",
-   "typ": "dynamicke_sql_z_literalu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_Warehouse_Delete",
-   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
-   "typ": "volani_bez_schematu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_InventoryCount_Cancel",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_InventoryCount_Check",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_InventoryCount_Nightly",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_StockLevel_Close",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_StockLevel_Delete",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_StockReservation_Export",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_Warehouse_Approve",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_Warehouse_Delete",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_Warehouse_Export",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "spSklad_Warehouse_SetStatus",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Import_Stock",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Po_GoodsReceipt_Get",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Po_GoodsReceipt_GetDetail",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Po_GoodsReceipt_Sync",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Po_Supplier_Cancel",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Po_Supplier_Close",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Po_Supplier_Dispatch",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Po_Supplier_Hourly",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Po_Supplier_SetStatus",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  }
- ],
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "tabulky": [
+ "tables": [
   "GoodsReceipt",
   "GoodsReceiptItem",
   "ImportPrice",
@@ -1040,6 +1042,5 @@
   "Supplier",
   "SupplierProduct",
   "Warehouse"
- ],
- "vlastnik": null
+ ]
 }

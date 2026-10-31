@@ -1,37 +1,37 @@
-# Balíček důkazů: D:Category (Katalog)
+# Evidence pack: D:Category (Katalog)
 
-Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `3a31a99461f1…`). Strojová verze: `D-Category.json` (schéma `mapa-monolitu/dukazy@1`).
+Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `fed7344328f4…`). Strojová verze: `D-Category.json` (schéma `mapa-monolitu/evidence-pack@2`).
 
-## Pruh core: **jen draft PR**
+## Core lane: **draft-only** (autonomy level L1)
 
 - Kdo spustí agenta: kdokoli (záměr a akceptační kritéria)
-- PR: vždy draft; brána jen okomentuje dopad a chybějící důkazy
-- Kdo sloučí: vlastník po převzetí PR; první úkol agenta je doplnit charakterizační testy
-- Vlastník: Katalog a obsah (fiktivní)
+- PR: vždy draft; risk gate jen okomentuje dopad a chybějící důkazy
+- Kdo udělá merge: vlastník po převzetí PR; první úkol agenta je doplnit characterization tests
+- Owning team: Katalog a obsah (fiktivní)
 
 | Pravidlo | Pro stav | Splněno | Detail |
 |---|---|---|---|
-| R1 doména má vlastnický tým | jen draft PR | ano | Katalog a obsah (fiktivní) |
-| R2 doména je kandidát na vyjmutí (ne úklid, ne malý shluk) | jen draft PR | ano | ano |
-| R3 ověřené pokrytí živých procedur ≥ 80 % | otevřený s vlastníkem | **ne** | 0 z 25 (0 %) |
-| R4 všechny zapisující procedury mají zelený charakterizační test | otevřený s vlastníkem | **ne** | chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve … |
-| R5 blokujících slepých míst ≤ 0 | otevřený s vlastníkem | **ne** | usp_Product_ProductAttribute_Cleanup |
+| R1 doména má owning team | draft-only | ano | Katalog a obsah (fiktivní) |
+| R2 doména je mezi domain candidates (ne úklid, ne malý shluk) | draft-only | ano | ano |
+| R3 ověřené pokrytí živých procedur ≥ 80 % | open | **ne** | 0 z 25 (0 %) |
+| R4 všechny zapisující procedury mají zelený characterization test | open | **ne** | chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve … |
+| R5 blokujících blind spots ≤ 0 | open | **ne** | usp_Product_ProductAttribute_Cleanup |
 
 **Co chybí k dalšímu stavu:**
 
 - ověřené pokrytí živých procedur ≥ 80 % (0 z 25 (0 %))
-- všechny zapisující procedury mají zelený charakterizační test (chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …)
-- blokujících slepých míst ≤ 0 (usp_Product_ProductAttribute_Cleanup)
+- všechny zapisující procedury mají zelený characterization test (chybí 13: usp_Product_AttributeDef_Process, usp_Product_Brand_Cleanup, usp_Product_Brand_Insert, usp_Product_Category_Nightly, usp_Product_Category_Update, usp_Product_ProductAttribute_Approve …)
+- blokujících blind spots ≤ 0 (usp_Product_ProductAttribute_Cleanup)
 
-## Připravenost k vyjmutí
+## Extraction readiness score
 
-Skóre 81.6, pořadí 2. Skóre řadí domény k vyjmutí, stav pruhu neurčuje.
+Skóre 81.6, pořadí 2. Extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje.
 
-## Pokrytí charakterizačními testy
+## Pokrytí characterization tests
 
-Živých procedur 25: ověřeno 0, jen návrh 0, chybí 25. Zapisujících 13, z toho bez ověřeného testu 13.
+Živých procedur 25: verified 0, draft 0, missing 25. Zapisujících 13, z toho bez ověřeného testu 13.
 
-Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh pruh neotevře.
+Draft = test existuje, ale nemá doložený zelený běh (`run.json`). Draft core lane neotevře.
 
 | Procedura | Stav | Golden master | tSQLt | Zapisuje | Volání / 6 týdnů |
 |---|---|---|---|---|---:|
@@ -61,25 +61,25 @@ Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh p
 | `usp_Product_Product_Rebuild` | živá | – | – | Brand, Category, ProductText, **StockLevel** | 181 616 |
 | `usp_Product_Product_Search` | živá | – | – | – | 177 |
 
-## Slepá místa
+## Blind spots
 
 | Objekt | Typ | Blokuje otevření | Popis |
 |---|---|---|---|
-| `usp_Product_ProductAttribute_Cleanup` | jina_databaze | **ano** | zápis do Archive.dbo.ProductAttribute_Archive (katalog nemá ID) |
-| `usp_Product_Product_Rebuild` | dynamicke_sql_slepe | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: Category (jen v okně měření) |
-| `usp_Product_ProductAttribute_Process` | jen_za_behu | ne | volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví |
-| `usp_Product_Product_Dispatch` | jen_za_behu | ne | volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví |
-| `usp_Product_Product_Find` | jen_za_behu | ne | volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví |
-| `usp_Product_Product_Rebuild` | jen_za_behu | ne | volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví |
-| `usp_Product_Brand_Insert` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
-| `usp_Product_Product_Cancel` | volani_bez_schematu | ne | volá usp_Product_Brand_List bez schématu (is_caller_dependent) |
-| `usp_Product_Product_Dispatch` | volani_bez_schematu | ne | volá usp_Product_Brand_GetByCode bez schématu (is_caller_dependent) |
-| `usp_Product_AttributeDef_Process` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Product_Brand_Cleanup` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Product_Category_Nightly` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Product_ProductAttribute_Cleanup` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Product_ProductCategory_GetByCode` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Product_Product_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Product_Product_Confirm` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Product_ProductAttribute_Cleanup` | cross_database | **ano** | zápis do Archive.dbo.ProductAttribute_Archive (katalog nemá ID) |
+| `usp_Product_Brand_Insert` | caller_dependent | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `usp_Product_Product_Cancel` | caller_dependent | ne | volá usp_Product_Brand_List bez schématu (is_caller_dependent) |
+| `usp_Product_Product_Dispatch` | caller_dependent | ne | volá usp_Product_Brand_GetByCode bez schématu (is_caller_dependent) |
+| `usp_Product_Product_Rebuild` | dynamic_sql_blind | ne | jméno objektu se skládá za běhu; cíle viděné za běhu: Category (jen v okně měření) |
+| `usp_Product_AttributeDef_Process` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Product_Brand_Cleanup` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Product_Category_Nightly` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Product_ProductAttribute_Cleanup` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Product_ProductCategory_GetByCode` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Product_Product_Cancel` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Product_Product_Confirm` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Product_ProductAttribute_Process` | runtime_only | ne | volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví |
+| `usp_Product_Product_Dispatch` | runtime_only | ne | volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví |
+| `usp_Product_Product_Find` | runtime_only | ne | volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví |
+| `usp_Product_Product_Rebuild` | runtime_only | ne | volajícího zná jen běh (Kompas.Web.Api); klient ani plánovač o něm neví |
 
 Tučně v tabulce procedur = zápis do tabulky jiné domény nebo sdílené tabulky.

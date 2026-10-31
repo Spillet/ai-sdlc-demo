@@ -1,7 +1,388 @@
 {
- "domena": "D:RptDailySales",
- "nazev": null,
- "objekty": [
+ "blind_spots": [
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Customers_RptDailySales",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Dispatch",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Export_Accounting",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Export_Email",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Export_Heureka",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Export_RptDailySales",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Export_Sales_2026",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Kpi_ExportQueue",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Kpi_RptDailySales",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Margin_RptDailySales",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Margin_Sales_2024",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_RptDailySales_Cleanup",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_RptDailySales_Export",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_RptDailySales_List",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_RptDailySales_MonthClose",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_RptStockSnapshot_Cleanup",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_RptStockSnapshot_MonthClose",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Sales_2024_Cleanup",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Sales_2026_MonthClose",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Stock_RptDailySales",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
+   "object": "usp_Rpt_Weekly_RptDailySales",
+   "type": "client_composed_name"
+  },
+  {
+   "blocking": true,
+   "description": "zápis do Accounting.dbo.RptDailySales (katalog nemá ID)",
+   "object": "usp_Rpt_RptDailySales_Export",
+   "type": "cross_database"
+  },
+  {
+   "blocking": true,
+   "description": "zápis do Archive.dbo.RptStockSnapshot (katalog nemá ID)",
+   "object": "usp_Rpt_RptStockSnapshot_MonthClose",
+   "type": "cross_database"
+  },
+  {
+   "blocking": false,
+   "description": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
+   "object": "usp_Rpt_Kpi_RptDailySales",
+   "type": "caller_dependent"
+  },
+  {
+   "blocking": false,
+   "description": "jméno objektu se skládá za běhu; cíle viděné za běhu: usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka (jen v okně měření)",
+   "object": "usp_Rpt_Dispatch",
+   "type": "dynamic_sql_blind"
+  },
+  {
+   "blocking": false,
+   "description": "jméno objektu se skládá za běhu; cíle viděné za běhu: Orders, Sales_2025, Sales_2026 (jen v okně měření)",
+   "object": "usp_Rpt_Margin_RptDailySales",
+   "type": "dynamic_sql_blind"
+  },
+  {
+   "blocking": false,
+   "description": "jméno objektu se skládá za běhu; cíle viděné za běhu: Orders, Sales_2025, Sales_2026 (jen v okně měření)",
+   "object": "usp_Rpt_Margin_Sales_2024",
+   "type": "dynamic_sql_blind"
+  },
+  {
+   "blocking": false,
+   "description": "jméno objektu se skládá za běhu; cíle viděné za běhu: Orders, Sales_2025, Sales_2026 (jen v okně měření)",
+   "object": "usp_Rpt_RptDailySales_MonthClose",
+   "type": "dynamic_sql_blind"
+  },
+  {
+   "blocking": false,
+   "description": "dynamické SQL, cíle jdou vyčíst z literálů",
+   "object": "usp_Rpt_Customers_RptDailySales",
+   "type": "dynamic_sql_literal"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Customers_RptDailySales",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_Dispatch",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_Export_Heureka",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Export_RptDailySales",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Export_Sales_2026",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Kpi_ExportQueue",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Kpi_RptDailySales",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Margin_RptDailySales",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Margin_Sales_2024",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_RptDailySales_Cleanup",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_RptDailySales_Export",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_RptDailySales_MonthClose",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_RptStockSnapshot_Cleanup",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_RptStockSnapshot_MonthClose",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_Sales_2024_Cleanup",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Rpt_Sales_2026_MonthClose",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Stock_RptDailySales",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Rpt_Weekly_RptDailySales",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "volajícího zná jen běh (vnořené volání); klient ani plánovač o něm neví",
+   "object": "usp_Rpt_Export_Accounting",
+   "type": "runtime_only"
+  },
+  {
+   "blocking": false,
+   "description": "volajícího zná jen běh (vnořené volání); klient ani plánovač o něm neví",
+   "object": "usp_Rpt_Export_Email",
+   "type": "runtime_only"
+  },
+  {
+   "blocking": false,
+   "description": "job KOMPAS - Feed Heureka volá proceduru z kroku PowerShell",
+   "object": "usp_Rpt_Export_Heureka",
+   "type": "scheduler_non_tsql"
+  }
+ ],
+ "core_lane": {
+  "autonomy_level": "L0",
+  "gate": {
+   "pr": "nevzniká",
+   "who_merges": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "who_runs_agent": "nikdo; intake odpoví, co chybí"
+  },
+  "label": "closed",
+  "missing_for_next_state": [
+   "doména má owning team (owning team není určen)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "owning team není určen",
+    "id": "R1",
+    "met": false,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "ano",
+    "id": "R2",
+    "met": true,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 21 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "chybí 19: usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka, usp_Rpt_Export_RptDailySales …",
+    "id": "R4",
+    "met": false,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka, usp_Rpt_Export_RptDailySales, usp_Rpt_Export_Sales_2026, usp_Rpt_Kpi_ExportQueue, usp_Rpt_Kpi_RptDailySales, usp_Rpt_Margin_RptDailySales, usp_Rpt_Margin_Sales_2024, usp_Rpt_RptDailySales_Cleanup, usp_Rpt_RptDailySales_Export, usp_Rpt_RptDailySales_List, usp_Rpt_RptDailySales_MonthClose, usp_Rpt_RptStockSnapshot_Cleanup, usp_Rpt_RptStockSnapshot_MonthClose, usp_Rpt_Sales_2024_Cleanup, usp_Rpt_Sales_2026_MonthClose, usp_Rpt_Stock_RptDailySales, usp_Rpt_Weekly_RptDailySales",
+    "id": "R5",
+    "met": false,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "closed"
+ },
+ "coverage": {
+  "draft": 0,
+  "live_procedures": 21,
+  "missing": 21,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 19,
+  "writing_unverified": [
+   "usp_Rpt_Customers_RptDailySales",
+   "usp_Rpt_Dispatch",
+   "usp_Rpt_Export_Accounting",
+   "usp_Rpt_Export_Email",
+   "usp_Rpt_Export_Heureka",
+   "usp_Rpt_Export_RptDailySales",
+   "usp_Rpt_Export_Sales_2026",
+   "usp_Rpt_Kpi_RptDailySales",
+   "usp_Rpt_Margin_RptDailySales",
+   "usp_Rpt_Margin_Sales_2024",
+   "usp_Rpt_RptDailySales_Cleanup",
+   "usp_Rpt_RptDailySales_Export",
+   "usp_Rpt_RptDailySales_MonthClose",
+   "usp_Rpt_RptStockSnapshot_Cleanup",
+   "usp_Rpt_RptStockSnapshot_MonthClose",
+   "usp_Rpt_Sales_2024_Cleanup",
+   "usp_Rpt_Sales_2026_MonthClose",
+   "usp_Rpt_Stock_RptDailySales",
+   "usp_Rpt_Weekly_RptDailySales"
+  ]
+ },
+ "domain": "D:RptDailySales",
+ "name": null,
+ "objects": [
   "ExportQueue",
   "RptCustomerKpi",
   "RptDailySales",
@@ -34,39 +415,350 @@
   "usp_Rpt_Stock_RptDailySales",
   "usp_Rpt_Weekly_RptDailySales"
  ],
- "pokryti": {
-  "chybi": 21,
-  "navrh": 0,
-  "overene_pokryti": 0.0,
-  "overeno": 0,
-  "zapisujici": 19,
-  "zapisujici_neoverene": [
-   "usp_Rpt_Customers_RptDailySales",
-   "usp_Rpt_Dispatch",
-   "usp_Rpt_Export_Accounting",
-   "usp_Rpt_Export_Email",
-   "usp_Rpt_Export_Heureka",
-   "usp_Rpt_Export_RptDailySales",
-   "usp_Rpt_Export_Sales_2026",
-   "usp_Rpt_Kpi_RptDailySales",
-   "usp_Rpt_Margin_RptDailySales",
-   "usp_Rpt_Margin_Sales_2024",
-   "usp_Rpt_RptDailySales_Cleanup",
-   "usp_Rpt_RptDailySales_Export",
-   "usp_Rpt_RptDailySales_MonthClose",
-   "usp_Rpt_RptStockSnapshot_Cleanup",
-   "usp_Rpt_RptStockSnapshot_MonthClose",
-   "usp_Rpt_Sales_2024_Cleanup",
-   "usp_Rpt_Sales_2026_MonthClose",
-   "usp_Rpt_Stock_RptDailySales",
-   "usp_Rpt_Weekly_RptDailySales"
-  ],
-  "zive_procedury": 21
- },
- "pripravenost": {
-  "poradi": 5,
-  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
-  "prispevky": {
+ "owner": null,
+ "procedures": [
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Customers_ExportQueue",
+   "status": "mrtvá",
+   "writes": [
+    "RptStockSnapshot"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 292,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Customers_RptDailySales",
+   "status": "živá",
+   "writes": [
+    "RptDailySales"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 12096,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Dispatch",
+   "status": "živá",
+   "writes": [
+    "ExportQueue"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 5851,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Export_Accounting",
+   "status": "živá",
+   "writes": [
+    "ExportQueue"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2050,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Export_Email",
+   "status": "živá",
+   "writes": [
+    "ExportQueue"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 3499,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Export_Heureka",
+   "status": "živá",
+   "writes": [
+    "ExportQueue"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 67,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Export_RptDailySales",
+   "status": "živá",
+   "writes": [
+    "RptDailySales"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 293,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Export_Sales_2026",
+   "status": "živá",
+   "writes": [
+    "RptDailySales"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Export_Supplier",
+   "status": "mrtvá",
+   "writes": [
+    "ExportQueue"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 142,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Kpi_ExportQueue",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 3685,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Kpi_RptDailySales",
+   "status": "živá",
+   "writes": [
+    "RptStockSnapshot"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 37301,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Margin_RptDailySales",
+   "status": "živá",
+   "writes": [
+    "RptDailySales",
+    "Sales_2025",
+    "Sales_2026"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 12393,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Margin_Sales_2024",
+   "status": "živá",
+   "writes": [
+    "Sales_2025",
+    "Sales_2026"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_RptDailySales_Cleanup",
+   "status": "živá",
+   "writes": [
+    "RptCustomerKpi",
+    "RptStockSnapshot",
+    "Sales_2023"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4032,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_RptDailySales_Export",
+   "status": "živá",
+   "writes": [
+    "RptCustomerKpi",
+    "Sales_2026"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 8068,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_RptDailySales_List",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1008,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_RptDailySales_MonthClose",
+   "status": "živá",
+   "writes": [
+    "ExportQueue",
+    "Sales_2025",
+    "Sales_2026"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_RptStockSnapshot_Cleanup",
+   "status": "živá",
+   "writes": [
+    "RptStockSnapshot",
+    "Sales_2024"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4032,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_RptStockSnapshot_MonthClose",
+   "status": "živá",
+   "writes": [
+    "RptDailySales"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Sales_2024_Cleanup",
+   "status": "živá",
+   "writes": [
+    "Sales_2024"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 2,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Sales_2026_MonthClose",
+   "status": "živá",
+   "writes": [
+    "ExportQueue",
+    "RptDailySales"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 5030,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Stock_RptDailySales",
+   "status": "živá",
+   "writes": [
+    "RptCustomerKpi"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 6894,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Rpt_Weekly_RptDailySales",
+   "status": "živá",
+   "writes": [
+    "RptStockSnapshot"
+   ],
+   "writes_foreign": []
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 0.087,
+   "bonus_readonly": 0.095,
+   "data_size": 0.695,
+   "dynamic_sql": 1.0,
+   "external_calls": 0.571,
+   "foreign_reads": 0.516,
+   "foreign_writes": 0.0,
+   "inbound_reads": 0.077,
+   "inbound_writes": 0.033
+  },
+  "contributions": {
    "bonus_dead": 0.4,
    "bonus_readonly": 1.0,
    "data_size": -6.9,
@@ -77,708 +769,18 @@
    "inbound_reads": -0.8,
    "inbound_writes": -0.5
   },
-  "skore": 72.3,
-  "slozky": {
-   "bonus_dead": 0.087,
-   "bonus_readonly": 0.095,
-   "data_size": 0.695,
-   "dynamic_sql": 1.0,
-   "external_calls": 0.571,
-   "foreign_reads": 0.516,
-   "foreign_writes": 0.0,
-   "inbound_reads": 0.077,
-   "inbound_writes": 0.033
-  }
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": 5,
+  "score": 72.3
  },
- "procedury": [
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Customers_ExportQueue",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "RptStockSnapshot"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Customers_RptDailySales",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 292,
-   "zapisuje": [
-    "RptDailySales"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Dispatch",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 12096,
-   "zapisuje": [
-    "ExportQueue"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Export_Accounting",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 5851,
-   "zapisuje": [
-    "ExportQueue"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Export_Email",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2050,
-   "zapisuje": [
-    "ExportQueue"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Export_Heureka",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 3499,
-   "zapisuje": [
-    "ExportQueue"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Export_RptDailySales",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 67,
-   "zapisuje": [
-    "RptDailySales"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Export_Sales_2026",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 293,
-   "zapisuje": [
-    "RptDailySales"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Export_Supplier",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [
-    "ExportQueue"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Kpi_ExportQueue",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 142,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Kpi_RptDailySales",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 3685,
-   "zapisuje": [
-    "RptStockSnapshot"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Margin_RptDailySales",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 37301,
-   "zapisuje": [
-    "RptDailySales",
-    "Sales_2025",
-    "Sales_2026"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Margin_Sales_2024",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 12393,
-   "zapisuje": [
-    "Sales_2025",
-    "Sales_2026"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_RptDailySales_Cleanup",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2,
-   "zapisuje": [
-    "RptCustomerKpi",
-    "RptStockSnapshot",
-    "Sales_2023"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_RptDailySales_Export",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4032,
-   "zapisuje": [
-    "RptCustomerKpi",
-    "Sales_2026"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_RptDailySales_List",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 8068,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_RptDailySales_MonthClose",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1008,
-   "zapisuje": [
-    "ExportQueue",
-    "Sales_2025",
-    "Sales_2026"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_RptStockSnapshot_Cleanup",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "RptStockSnapshot",
-    "Sales_2024"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_RptStockSnapshot_MonthClose",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4032,
-   "zapisuje": [
-    "RptDailySales"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Sales_2024_Cleanup",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "Sales_2024"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Sales_2026_MonthClose",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 2,
-   "zapisuje": [
-    "ExportQueue",
-    "RptDailySales"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Stock_RptDailySales",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 5030,
-   "zapisuje": [
-    "RptCustomerKpi"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Rpt_Weekly_RptDailySales",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 6894,
-   "zapisuje": [
-    "RptStockSnapshot"
-   ],
-   "zapisuje_cizi": []
-  }
- ],
- "pruh_core": {
-  "brana": {
-   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
-   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
-   "pr": "nevzniká"
-  },
-  "chybi_k_dalsimu_stavu": [
-   "doména má vlastnický tým (vlastník není určen)"
-  ],
-  "popis": "zavřený",
-  "pravidla": [
-   {
-    "detail": "vlastník není určen",
-    "id": "R1",
-    "pravidlo": "doména má vlastnický tým",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "ano",
-    "id": "R2",
-    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-    "pro": "jen_draft_pr",
-    "splneno": true
-   },
-   {
-    "detail": "0 z 21 (0 %)",
-    "id": "R3",
-    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "chybí 19: usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka, usp_Rpt_Export_RptDailySales …",
-    "id": "R4",
-    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "usp_Rpt_Customers_RptDailySales, usp_Rpt_Dispatch, usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka, usp_Rpt_Export_RptDailySales, usp_Rpt_Export_Sales_2026, usp_Rpt_Kpi_ExportQueue, usp_Rpt_Kpi_RptDailySales, usp_Rpt_Margin_RptDailySales, usp_Rpt_Margin_Sales_2024, usp_Rpt_RptDailySales_Cleanup, usp_Rpt_RptDailySales_Export, usp_Rpt_RptDailySales_List, usp_Rpt_RptDailySales_MonthClose, usp_Rpt_RptStockSnapshot_Cleanup, usp_Rpt_RptStockSnapshot_MonthClose, usp_Rpt_Sales_2024_Cleanup, usp_Rpt_Sales_2026_MonthClose, usp_Rpt_Stock_RptDailySales, usp_Rpt_Weekly_RptDailySales",
-    "id": "R5",
-    "pravidlo": "blokujících slepých míst ≤ 0",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   }
-  ],
-  "stav": "zavreny"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
  },
- "schema": "mapa-monolitu/dukazy@1",
- "slepa_mista": [
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_RptDailySales_Export",
-   "popis": "zápis do Accounting.dbo.RptDailySales (katalog nemá ID)",
-   "typ": "jina_databaze"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_RptStockSnapshot_MonthClose",
-   "popis": "zápis do Archive.dbo.RptStockSnapshot (katalog nemá ID)",
-   "typ": "jina_databaze"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Customers_RptDailySales",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Dispatch",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Export_Accounting",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Export_Email",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Export_Heureka",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Export_RptDailySales",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Export_Sales_2026",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Kpi_ExportQueue",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Kpi_RptDailySales",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Margin_RptDailySales",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Margin_Sales_2024",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_RptDailySales_Cleanup",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_RptDailySales_Export",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_RptDailySales_List",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_RptDailySales_MonthClose",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_RptStockSnapshot_Cleanup",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_RptStockSnapshot_MonthClose",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Sales_2024_Cleanup",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Sales_2026_MonthClose",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Stock_RptDailySales",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": true,
-   "objekt": "usp_Rpt_Weekly_RptDailySales",
-   "popis": "klient skládá jméno procedury ('usp_Rpt_' + cbReport.Text, src\\Konzole\\Reporty\\uReportRunner.pas:211); nevíme, které z nich volá",
-   "typ": "klient_sklada_jmeno"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Dispatch",
-   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: usp_Rpt_Export_Accounting, usp_Rpt_Export_Email, usp_Rpt_Export_Heureka (jen v okně měření)",
-   "typ": "dynamicke_sql_slepe"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Margin_RptDailySales",
-   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: Orders, Sales_2025, Sales_2026 (jen v okně měření)",
-   "typ": "dynamicke_sql_slepe"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Margin_Sales_2024",
-   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: Orders, Sales_2025, Sales_2026 (jen v okně měření)",
-   "typ": "dynamicke_sql_slepe"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_RptDailySales_MonthClose",
-   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: Orders, Sales_2025, Sales_2026 (jen v okně měření)",
-   "typ": "dynamicke_sql_slepe"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Customers_RptDailySales",
-   "popis": "dynamické SQL, cíle jdou vyčíst z literálů",
-   "typ": "dynamicke_sql_z_literalu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Export_Accounting",
-   "popis": "volajícího zná jen běh (vnořené volání); klient ani plánovač o něm neví",
-   "typ": "jen_za_behu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Export_Email",
-   "popis": "volajícího zná jen běh (vnořené volání); klient ani plánovač o něm neví",
-   "typ": "jen_za_behu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Export_Heureka",
-   "popis": "job KOMPAS - Feed Heureka volá proceduru z kroku PowerShell",
-   "typ": "planovac_mimo_tsql"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Kpi_RptDailySales",
-   "popis": "volá usp_Audit_Write bez schématu (is_caller_dependent)",
-   "typ": "volani_bez_schematu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Customers_RptDailySales",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Dispatch",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Export_Heureka",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Export_RptDailySales",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Export_Sales_2026",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Kpi_ExportQueue",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Kpi_RptDailySales",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Margin_RptDailySales",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Margin_Sales_2024",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_RptDailySales_Cleanup",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_RptDailySales_Export",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_RptDailySales_MonthClose",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_RptStockSnapshot_Cleanup",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_RptStockSnapshot_MonthClose",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Sales_2024_Cleanup",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Sales_2026_MonthClose",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Stock_RptDailySales",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Rpt_Weekly_RptDailySales",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  }
- ],
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "tabulky": [
+ "tables": [
   "ExportQueue",
   "RptCustomerKpi",
   "RptDailySales",
@@ -787,6 +789,5 @@
   "Sales_2024",
   "Sales_2025",
   "Sales_2026"
- ],
- "vlastnik": null
+ ]
 }

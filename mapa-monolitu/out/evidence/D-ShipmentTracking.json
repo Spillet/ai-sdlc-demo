@@ -1,7 +1,184 @@
 {
- "domena": "D:ShipmentTracking",
- "nazev": null,
- "objekty": [
+ "blind_spots": [
+  {
+   "blocking": false,
+   "description": "jméno objektu se skládá za běhu; cíle viděné za běhu: usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna (jen v okně měření)",
+   "object": "usp_Ship_SendToCarrier",
+   "type": "dynamic_sql_blind"
+  },
+  {
+   "blocking": false,
+   "description": "jméno objektu se skládá za běhu; cíle viděné za běhu: ShipmentItem (jen v okně měření)",
+   "object": "usp_Ship_ShipmentTracking_Delete",
+   "type": "dynamic_sql_blind"
+  },
+  {
+   "blocking": false,
+   "description": "jméno objektu se skládá za běhu; cíle viděné za běhu: ShipmentTracking (jen v okně měření)",
+   "object": "usp_Ship_Shipment_Nightly",
+   "type": "dynamic_sql_blind"
+  },
+  {
+   "blocking": false,
+   "description": "dynamické SQL, cíle jdou vyčíst z literálů",
+   "object": "usp_Ship_Shipment_Save",
+   "type": "dynamic_sql_literal"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_CarrierService_Cancel",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_Carrier_CeskaPosta",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_Carrier_GLS_old",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_Carrier_PPL",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Ship_DeliverySlot_Cleanup",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_DeliverySlot_Close",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_DeliverySlot_List",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_SendToCarrier",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Ship_ShipmentItem_Cleanup",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_ShipmentItem_Dispatch",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (agent)",
+   "object": "usp_Ship_Shipment_Nightly",
+   "type": "entry_outside_catalog"
+  },
+  {
+   "blocking": false,
+   "description": "vstupní bod mimo katalog (client)",
+   "object": "usp_Ship_Shipment_Rebuild",
+   "type": "entry_outside_catalog"
+  }
+ ],
+ "core_lane": {
+  "autonomy_level": "L0",
+  "gate": {
+   "pr": "nevzniká",
+   "who_merges": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "who_runs_agent": "nikdo; intake odpoví, co chybí"
+  },
+  "label": "closed",
+  "missing_for_next_state": [
+   "doména má owning team (owning team není určen)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "owning team není určen",
+    "id": "R1",
+    "met": false,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "ano",
+    "id": "R2",
+    "met": true,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 23 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "chybí 19: usp_Ship_CarrierService_Cancel, usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_GLS_old, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna …",
+    "id": "R4",
+    "met": false,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "žádné",
+    "id": "R5",
+    "met": true,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "closed"
+ },
+ "coverage": {
+  "draft": 0,
+  "live_procedures": 23,
+  "missing": 23,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 19,
+  "writing_unverified": [
+   "usp_Ship_CarrierService_Cancel",
+   "usp_Ship_Carrier_CeskaPosta",
+   "usp_Ship_Carrier_DPD",
+   "usp_Ship_Carrier_GLS_old",
+   "usp_Ship_Carrier_PPL",
+   "usp_Ship_Carrier_Zasilkovna",
+   "usp_Ship_DeliverySlot_Cleanup",
+   "usp_Ship_DeliverySlot_Close",
+   "usp_Ship_SendToCarrier",
+   "usp_Ship_ShipmentItem_Cleanup",
+   "usp_Ship_ShipmentItem_Dispatch",
+   "usp_Ship_ShipmentItem_Insert",
+   "usp_Ship_ShipmentTracking_Delete",
+   "usp_Ship_ShipmentTracking_Recalc",
+   "usp_Ship_Shipment_Insert",
+   "usp_Ship_Shipment_Nightly",
+   "usp_Ship_Shipment_Rebuild",
+   "usp_Ship_Shipment_Save",
+   "usp_Ship_Shipment_Update"
+  ]
+ },
+ "domain": "D:ShipmentTracking",
+ "name": null,
+ "objects": [
   "Carrier",
   "CarrierService",
   "DeliverySlot",
@@ -36,39 +213,391 @@
   "usp_Ship_Shipment_Update",
   "Shipment"
  ],
- "pokryti": {
-  "chybi": 23,
-  "navrh": 0,
-  "overene_pokryti": 0.0,
-  "overeno": 0,
-  "zapisujici": 19,
-  "zapisujici_neoverene": [
-   "usp_Ship_CarrierService_Cancel",
-   "usp_Ship_Carrier_CeskaPosta",
-   "usp_Ship_Carrier_DPD",
-   "usp_Ship_Carrier_GLS_old",
-   "usp_Ship_Carrier_PPL",
-   "usp_Ship_Carrier_Zasilkovna",
-   "usp_Ship_DeliverySlot_Cleanup",
-   "usp_Ship_DeliverySlot_Close",
-   "usp_Ship_SendToCarrier",
-   "usp_Ship_ShipmentItem_Cleanup",
-   "usp_Ship_ShipmentItem_Dispatch",
-   "usp_Ship_ShipmentItem_Insert",
-   "usp_Ship_ShipmentTracking_Delete",
-   "usp_Ship_ShipmentTracking_Recalc",
-   "usp_Ship_Shipment_Insert",
-   "usp_Ship_Shipment_Nightly",
-   "usp_Ship_Shipment_Rebuild",
-   "usp_Ship_Shipment_Save",
-   "usp_Ship_Shipment_Update"
-  ],
-  "zive_procedury": 23
- },
- "pripravenost": {
-  "poradi": 9,
-  "poznamka": "skóre řadí domény k vyjmutí, stav pruhu neurčuje",
-  "prispevky": {
+ "owner": null,
+ "procedures": [
+  {
+   "calls_6_weeks": 123,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_CarrierService_Cancel",
+   "status": "živá",
+   "writes": [
+    "CarrierService",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 4928,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Carrier_CeskaPosta",
+   "status": "živá",
+   "writes": [
+    "Shipment",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 1178,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Carrier_DPD",
+   "status": "živá",
+   "writes": [
+    "Shipment",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 170,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Carrier_GLS_old",
+   "status": "živá",
+   "writes": [
+    "Shipment",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Carrier_GetByCode",
+   "status": "mrtvá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 539,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Carrier_PPL",
+   "status": "živá",
+   "writes": [
+    "Shipment",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 180,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Carrier_Zasilkovna",
+   "status": "živá",
+   "writes": [
+    "Shipment",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_DeliverySlot_Cleanup",
+   "status": "živá",
+   "writes": [
+    "DeliverySlot",
+    "ShipmentItem"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 9152,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_DeliverySlot_Close",
+   "status": "živá",
+   "writes": [
+    "DeliverySlot"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 22,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_DeliverySlot_List",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1558,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_PickupPoint_GetByCode",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 38373,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_PickupPoint_GetDetail",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 447,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_SendToCarrier",
+   "status": "živá",
+   "writes": [
+    "ShipmentTracking"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_ShipmentItem_Cleanup",
+   "status": "živá",
+   "writes": [
+    "DeliverySlot",
+    "Shipment",
+    "ShipmentItem"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 1236,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_ShipmentItem_Dispatch",
+   "status": "živá",
+   "writes": [
+    "DeliverySlot",
+    "PickupPoint"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 292,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_ShipmentItem_Insert",
+   "status": "živá",
+   "writes": [
+    "ShipmentItem",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 887,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_ShipmentTracking_Delete",
+   "status": "živá",
+   "writes": [
+    "Orders",
+    "ShipmentItem",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": [
+    "Orders"
+   ]
+  },
+  {
+   "calls_6_weeks": 1067,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_ShipmentTracking_List",
+   "status": "živá",
+   "writes": [],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 1219,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_ShipmentTracking_Recalc",
+   "status": "živá",
+   "writes": [
+    "CarrierService",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": []
+  },
+  {
+   "calls_6_weeks": 177,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Shipment_Insert",
+   "status": "živá",
+   "writes": [
+    "CarrierService",
+    "Shipment"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 42,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Shipment_Nightly",
+   "status": "živá",
+   "writes": [
+    "Shipment",
+    "ShipmentTracking"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 1494,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Shipment_Rebuild",
+   "status": "živá",
+   "writes": [
+    "PickupPoint",
+    "Shipment"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 1060,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Shipment_Save",
+   "status": "živá",
+   "writes": [
+    "Shipment"
+   ],
+   "writes_foreign": [
+    "Shipment"
+   ]
+  },
+  {
+   "calls_6_weeks": 48,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Ship_Shipment_Update",
+   "status": "živá",
+   "writes": [
+    "Orders",
+    "Shipment"
+   ],
+   "writes_foreign": [
+    "Orders",
+    "Shipment"
+   ]
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 0.077,
+   "bonus_readonly": 0.167,
+   "data_size": 0.803,
+   "dynamic_sql": 0.875,
+   "external_calls": 0.444,
+   "foreign_reads": 0.539,
+   "foreign_writes": 0.351,
+   "inbound_reads": 0.153,
+   "inbound_writes": 0.028
+  },
+  "contributions": {
    "bonus_dead": 0.4,
    "bonus_readonly": 1.7,
    "data_size": -8.0,
@@ -79,545 +608,18 @@
    "inbound_reads": -1.5,
    "inbound_writes": -0.4
   },
-  "skore": 64.7,
-  "slozky": {
-   "bonus_dead": 0.077,
-   "bonus_readonly": 0.167,
-   "data_size": 0.803,
-   "dynamic_sql": 0.875,
-   "external_calls": 0.444,
-   "foreign_reads": 0.539,
-   "foreign_writes": 0.351,
-   "inbound_reads": 0.153,
-   "inbound_writes": 0.028
-  }
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": 9,
+  "score": 64.7
  },
- "procedury": [
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_CarrierService_Cancel",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 123,
-   "zapisuje": [
-    "CarrierService",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Carrier_CeskaPosta",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 4928,
-   "zapisuje": [
-    "Shipment",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Carrier_DPD",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1178,
-   "zapisuje": [
-    "Shipment",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Carrier_GLS_old",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 170,
-   "zapisuje": [
-    "Shipment",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Carrier_GetByCode",
-   "pokryti": "chybi",
-   "stav": "mrtvá",
-   "volani_6_tydnu": 0,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Carrier_PPL",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 539,
-   "zapisuje": [
-    "Shipment",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Carrier_Zasilkovna",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 180,
-   "zapisuje": [
-    "Shipment",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_DeliverySlot_Cleanup",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "DeliverySlot",
-    "ShipmentItem"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_DeliverySlot_Close",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 9152,
-   "zapisuje": [
-    "DeliverySlot"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_DeliverySlot_List",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 22,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_PickupPoint_GetByCode",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1558,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_PickupPoint_GetDetail",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 38373,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_SendToCarrier",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 447,
-   "zapisuje": [
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_ShipmentItem_Cleanup",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "DeliverySlot",
-    "Shipment",
-    "ShipmentItem"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_ShipmentItem_Dispatch",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1236,
-   "zapisuje": [
-    "DeliverySlot",
-    "PickupPoint"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_ShipmentItem_Insert",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 292,
-   "zapisuje": [
-    "ShipmentItem",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_ShipmentTracking_Delete",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 887,
-   "zapisuje": [
-    "Orders",
-    "ShipmentItem",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": [
-    "Orders"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_ShipmentTracking_List",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1067,
-   "zapisuje": [],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_ShipmentTracking_Recalc",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1219,
-   "zapisuje": [
-    "CarrierService",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": []
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Shipment_Insert",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 177,
-   "zapisuje": [
-    "CarrierService",
-    "Shipment"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Shipment_Nightly",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 42,
-   "zapisuje": [
-    "Shipment",
-    "ShipmentTracking"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Shipment_Rebuild",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1494,
-   "zapisuje": [
-    "PickupPoint",
-    "Shipment"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Shipment_Save",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 1060,
-   "zapisuje": [
-    "Shipment"
-   ],
-   "zapisuje_cizi": [
-    "Shipment"
-   ]
-  },
-  {
-   "charakterizace": {
-    "golden_master": null,
-    "tsqlt": null
-   },
-   "nazev": "usp_Ship_Shipment_Update",
-   "pokryti": "chybi",
-   "stav": "živá",
-   "volani_6_tydnu": 48,
-   "zapisuje": [
-    "Orders",
-    "Shipment"
-   ],
-   "zapisuje_cizi": [
-    "Orders",
-    "Shipment"
-   ]
-  }
- ],
- "pruh_core": {
-  "brana": {
-   "kdo_slouci": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
-   "kdo_spusti_agenta": "nikdo; intake odpoví, co chybí",
-   "pr": "nevzniká"
-  },
-  "chybi_k_dalsimu_stavu": [
-   "doména má vlastnický tým (vlastník není určen)"
-  ],
-  "popis": "zavřený",
-  "pravidla": [
-   {
-    "detail": "vlastník není určen",
-    "id": "R1",
-    "pravidlo": "doména má vlastnický tým",
-    "pro": "jen_draft_pr",
-    "splneno": false
-   },
-   {
-    "detail": "ano",
-    "id": "R2",
-    "pravidlo": "doména je kandidát na vyjmutí (ne úklid, ne malý shluk)",
-    "pro": "jen_draft_pr",
-    "splneno": true
-   },
-   {
-    "detail": "0 z 23 (0 %)",
-    "id": "R3",
-    "pravidlo": "ověřené pokrytí živých procedur ≥ 80 %",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "chybí 19: usp_Ship_CarrierService_Cancel, usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_GLS_old, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna …",
-    "id": "R4",
-    "pravidlo": "všechny zapisující procedury mají zelený charakterizační test",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": false
-   },
-   {
-    "detail": "žádné",
-    "id": "R5",
-    "pravidlo": "blokujících slepých míst ≤ 0",
-    "pro": "otevreny_s_vlastnikem",
-    "splneno": true
-   }
-  ],
-  "stav": "zavreny"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
  },
- "schema": "mapa-monolitu/dukazy@1",
- "slepa_mista": [
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_SendToCarrier",
-   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: usp_Ship_Carrier_CeskaPosta, usp_Ship_Carrier_DPD, usp_Ship_Carrier_PPL, usp_Ship_Carrier_Zasilkovna (jen v okně měření)",
-   "typ": "dynamicke_sql_slepe"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_ShipmentTracking_Delete",
-   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: ShipmentItem (jen v okně měření)",
-   "typ": "dynamicke_sql_slepe"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_Shipment_Nightly",
-   "popis": "jméno objektu se skládá za běhu; cíle viděné za běhu: ShipmentTracking (jen v okně měření)",
-   "typ": "dynamicke_sql_slepe"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_Shipment_Save",
-   "popis": "dynamické SQL, cíle jdou vyčíst z literálů",
-   "typ": "dynamicke_sql_z_literalu"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_CarrierService_Cancel",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_Carrier_CeskaPosta",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_Carrier_GLS_old",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_Carrier_PPL",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_DeliverySlot_Cleanup",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_DeliverySlot_Close",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_DeliverySlot_List",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_SendToCarrier",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_ShipmentItem_Cleanup",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_ShipmentItem_Dispatch",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_Shipment_Nightly",
-   "popis": "vstupní bod mimo katalog (agent)",
-   "typ": "vstup_mimo_katalog"
-  },
-  {
-   "blokujici": false,
-   "objekt": "usp_Ship_Shipment_Rebuild",
-   "popis": "vstupní bod mimo katalog (client)",
-   "typ": "vstup_mimo_katalog"
-  }
- ],
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "tabulky": [
+ "tables": [
   "Carrier",
   "CarrierService",
   "DeliverySlot",
@@ -625,6 +627,5 @@
   "Shipment",
   "ShipmentItem",
   "ShipmentTracking"
- ],
- "vlastnik": null
+ ]
 }

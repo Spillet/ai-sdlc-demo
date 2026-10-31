@@ -1,35 +1,35 @@
-# Balíček důkazů: D:PriceList
+# Evidence pack: D:PriceList
 
-Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `3a31a99461f1…`). Strojová verze: `D-PriceList.json` (schéma `mapa-monolitu/dukazy@1`).
+Vygenerováno `analyze.py` ze snímku 2026-10-31 (platí do 2026-11-30, vstupy `fed7344328f4…`). Strojová verze: `D-PriceList.json` (schéma `mapa-monolitu/evidence-pack@2`).
 
-## Pruh core: **zavřený**
+## Core lane: **closed** (autonomy level L0)
 
 - Kdo spustí agenta: nikdo; intake odpoví, co chybí
 - PR: nevzniká
-- Kdo sloučí: jen vlastník ručně mimo AI pipeline (pokud existuje)
-- Vlastník: neurčen
+- Kdo udělá merge: jen vlastník ručně mimo AI pipeline (pokud existuje)
+- Owning team: neurčen
 
 | Pravidlo | Pro stav | Splněno | Detail |
 |---|---|---|---|
-| R1 doména má vlastnický tým | jen draft PR | **ne** | vlastník není určen |
-| R2 doména je kandidát na vyjmutí (ne úklid, ne malý shluk) | jen draft PR | ano | ano |
-| R3 ověřené pokrytí živých procedur ≥ 80 % | otevřený s vlastníkem | **ne** | 0 z 17 (0 %) |
-| R4 všechny zapisující procedury mají zelený charakterizační test | otevřený s vlastníkem | **ne** | chybí 12: usp_Price_PriceHistory_MonthClose, usp_Price_PriceList_Insert, usp_Price_PriceList_MonthClose, usp_Price_PriceList_Recalc, usp_Price_PriceList_SetStatus, usp_Price_Promo_Cancel … |
-| R5 blokujících slepých míst ≤ 0 | otevřený s vlastníkem | **ne** | usp_Price_PriceHistory_MonthClose |
+| R1 doména má owning team | draft-only | **ne** | owning team není určen |
+| R2 doména je mezi domain candidates (ne úklid, ne malý shluk) | draft-only | ano | ano |
+| R3 ověřené pokrytí živých procedur ≥ 80 % | open | **ne** | 0 z 17 (0 %) |
+| R4 všechny zapisující procedury mají zelený characterization test | open | **ne** | chybí 12: usp_Price_PriceHistory_MonthClose, usp_Price_PriceList_Insert, usp_Price_PriceList_MonthClose, usp_Price_PriceList_Recalc, usp_Price_PriceList_SetStatus, usp_Price_Promo_Cancel … |
+| R5 blokujících blind spots ≤ 0 | open | **ne** | usp_Price_PriceHistory_MonthClose |
 
 **Co chybí k dalšímu stavu:**
 
-- doména má vlastnický tým (vlastník není určen)
+- doména má owning team (owning team není určen)
 
-## Připravenost k vyjmutí
+## Extraction readiness score
 
-Skóre 71.9, pořadí 7. Skóre řadí domény k vyjmutí, stav pruhu neurčuje.
+Skóre 71.9, pořadí 7. Extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje.
 
-## Pokrytí charakterizačními testy
+## Pokrytí characterization tests
 
-Živých procedur 17: ověřeno 0, jen návrh 0, chybí 17. Zapisujících 12, z toho bez ověřeného testu 12.
+Živých procedur 17: verified 0, draft 0, missing 17. Zapisujících 12, z toho bez ověřeného testu 12.
 
-Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh pruh neotevře.
+Draft = test existuje, ale nemá doložený zelený běh (`run.json`). Draft core lane neotevře.
 
 | Procedura | Stav | Golden master | tSQLt | Zapisuje | Volání / 6 týdnů |
 |---|---|---|---|---|---:|
@@ -53,19 +53,19 @@ Návrh = test existuje, ale nemá doložený zelený běh (`beh.json`). Návrh p
 | `usp_Price_Voucher_Merge` | živá | – | – | **Voucher** | 95 |
 | `usp_Product_Product_Merge` | živá | – | – | **Product** | 8 524 |
 
-## Slepá místa
+## Blind spots
 
 | Objekt | Typ | Blokuje otevření | Popis |
 |---|---|---|---|
-| `usp_Price_PriceHistory_MonthClose` | jina_databaze | **ano** | zápis do DWH.dbo.PriceHistory_Archive (katalog nemá ID) |
-| `usp_Price_Promo_Get` | volani_bez_schematu | ne | volá usp_SysParam_Get bez schématu (is_caller_dependent) |
-| `usp_Price_Voucher_Confirm` | volani_bez_schematu | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
-| `usp_Price_PriceHistory_MonthClose` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Price_PriceList_MonthClose` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (agent) |
-| `usp_Price_PriceList_SetStatus` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Price_Promo_Cancel` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Price_Promo_Import` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Price_Promo_Save` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
-| `usp_Price_Voucher_Confirm` | vstup_mimo_katalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Price_PriceHistory_MonthClose` | cross_database | **ano** | zápis do DWH.dbo.PriceHistory_Archive (katalog nemá ID) |
+| `usp_Price_Promo_Get` | caller_dependent | ne | volá usp_SysParam_Get bez schématu (is_caller_dependent) |
+| `usp_Price_Voucher_Confirm` | caller_dependent | ne | volá usp_Audit_Write bez schématu (is_caller_dependent) |
+| `usp_Price_PriceHistory_MonthClose` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Price_PriceList_MonthClose` | entry_outside_catalog | ne | vstupní bod mimo katalog (agent) |
+| `usp_Price_PriceList_SetStatus` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Price_Promo_Cancel` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Price_Promo_Import` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Price_Promo_Save` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
+| `usp_Price_Voucher_Confirm` | entry_outside_catalog | ne | vstupní bod mimo katalog (client) |
 
 Tučně v tabulce procedur = zápis do tabulky jiné domény nebo sdílené tabulky.

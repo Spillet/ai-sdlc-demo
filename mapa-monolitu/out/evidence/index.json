@@ -1,100 +1,125 @@
 {
- "domeny": {
+ "default_state": "closed",
+ "domains": {
   "D:Category": {
-   "soubor": "D-Category.json",
-   "stav": "jen_draft_pr",
-   "vlastnik": "kompas/katalog"
+   "autonomy_level": "L1",
+   "file": "D-Category.json",
+   "owner": "kompas/katalog",
+   "state": "draft-only"
   },
   "D:Claim": {
-   "soubor": "D-Claim.json",
-   "stav": "jen_draft_pr",
-   "vlastnik": "kompas/poprodej"
+   "autonomy_level": "L1",
+   "file": "D-Claim.json",
+   "owner": "kompas/poprodej",
+   "state": "draft-only"
   },
   "D:CreditNote": {
-   "soubor": "D-CreditNote.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-CreditNote.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:CustomerAddress": {
-   "soubor": "D-CustomerAddress.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-CustomerAddress.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:GatewayLog": {
-   "soubor": "D-GatewayLog.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-GatewayLog.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:ImportProduct": {
-   "soubor": "D-ImportProduct.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-ImportProduct.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:OldOrders": {
-   "soubor": "D-OldOrders.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-OldOrders.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:OrderNote": {
-   "soubor": "D-OrderNote.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-OrderNote.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:PriceList": {
-   "soubor": "D-PriceList.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-PriceList.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:Product_bak2019": {
-   "soubor": "D-Product_bak2019.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-Product_bak2019.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:RptDailySales": {
-   "soubor": "D-RptDailySales.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-RptDailySales.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:ShipmentTracking": {
-   "soubor": "D-ShipmentTracking.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-ShipmentTracking.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:SysParam": {
-   "soubor": "D-SysParam.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-SysParam.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:TmpRecalc": {
-   "soubor": "D-TmpRecalc.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-TmpRecalc.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:Translation": {
-   "soubor": "D-Translation.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-Translation.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:Users": {
-   "soubor": "D-Users.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-Users.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:Warehouse": {
-   "soubor": "D-Warehouse.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-Warehouse.json",
+   "owner": null,
+   "state": "closed"
   },
   "D:X_Migr_Customer": {
-   "soubor": "D-X_Migr_Customer.json",
-   "stav": "zavreny",
-   "vlastnik": null
+   "autonomy_level": "L0",
+   "file": "D-X_Migr_Customer.json",
+   "owner": null,
+   "state": "closed"
   }
  },
- "objekty": {
+ "gate_rules": [
+  "objekt, který v indexu není, nebo index po snapshot.valid_until -> closed (fail-closed)",
+  "sdílená tabulka nebo procedura (doména 'shared') -> closed, mění se jen přes architektonické review",
+  "PR přes víc domén -> nejpřísnější stav z dotčených domén",
+  "procedura bez zeleného characterization testu -> nejvýš draft-only, i když je doména open"
+ ],
+ "objects": {
   "AccountingExport": "D:CreditNote",
   "AttributeDef": "D:Category",
-  "AuditLog": "sdílené",
+  "AuditLog": "shared",
   "Brand": "D:Category",
   "Carrier": "D:ShipmentTracking",
   "CarrierService": "D:ShipmentTracking",
@@ -107,14 +132,14 @@
   "ClaimReason": "D:Claim",
   "ClaimStatusHistory": "D:Claim",
   "Consent": "D:CustomerAddress",
-  "Counter": "sdílené",
+  "Counter": "shared",
   "CreditNote": "D:CreditNote",
-  "Customer": "sdílené",
+  "Customer": "shared",
   "CustomerAddress": "D:CustomerAddress",
   "CustomerContact": "D:CustomerAddress",
   "CustomerSegment": "D:CustomerAddress",
   "DeliverySlot": "D:ShipmentTracking",
-  "ErrorLog": "sdílené",
+  "ErrorLog": "shared",
   "ExchangeRate": "D:CreditNote",
   "ExportQueue": "D:RptDailySales",
   "GatewayLog": "D:GatewayLog",
@@ -128,25 +153,25 @@
   "InventoryCountItem": "D:Warehouse",
   "Invoice": "D:OrderNote",
   "InvoiceItem": "D:CreditNote",
-  "JobRun": "sdílené",
+  "JobRun": "shared",
   "LedgerEntry": "D:CreditNote",
   "Location": "D:Warehouse",
   "LoyaltyAccount": "D:CustomerAddress",
   "LoyaltyTransaction": "D:CustomerAddress",
   "OldOrders": "D:OldOrders",
   "OrderEvent": "D:OrderNote",
-  "OrderItem": "sdílené",
+  "OrderItem": "shared",
   "OrderNote": "D:OrderNote",
   "OrderStatusHistory": "D:OrderNote",
-  "Orders": "sdílené",
-  "Payment": "sdílené",
+  "Orders": "shared",
+  "Payment": "shared",
   "PaymentMethod": "D:GatewayLog",
   "PaymentTransaction": "D:GatewayLog",
   "PickupPoint": "D:ShipmentTracking",
   "PriceHistory": "D:PriceList",
   "PriceList": "D:PriceList",
   "PriceListItem": "D:Category",
-  "Product": "sdílené",
+  "Product": "shared",
   "ProductAttribute": "D:Category",
   "ProductCategory": "D:Category",
   "ProductImage": "D:Category",
@@ -166,10 +191,10 @@
   "Sales_2025": "D:RptDailySales",
   "Sales_2026": "D:RptDailySales",
   "ServiceCenter": "D:Claim",
-  "Shipment": "sdílené",
+  "Shipment": "shared",
   "ShipmentItem": "D:ShipmentTracking",
   "ShipmentTracking": "D:ShipmentTracking",
-  "StockLevel": "sdílené",
+  "StockLevel": "shared",
   "StockMovement": "D:Warehouse",
   "StockReservation": "D:OrderNote",
   "Supplier": "D:Warehouse",
@@ -188,8 +213,8 @@
   "fn_Claim_Deadline": "D:Claim",
   "fn_CustomerIsVip": "D:CustomerAddress",
   "fn_ExchangeRate": "D:CreditNote",
-  "fn_GetSysParam": "sdílené",
-  "fn_IsWorkingDay": "sdílené",
+  "fn_GetSysParam": "shared",
+  "fn_IsWorkingDay": "shared",
   "fn_LoyaltyPoints": "D:CustomerAddress",
   "fn_OldPriceCalc": "D:Product_bak2019",
   "fn_OrderTotal": "D:OrderNote",
@@ -198,12 +223,12 @@
   "fn_ProductPrice": "D:PriceList",
   "fn_PromoActive": "D:PriceList",
   "fn_ShippingPrice": "D:ShipmentTracking",
-  "fn_SplitString": "sdílené",
+  "fn_SplitString": "shared",
   "fn_StockValue": "D:Warehouse",
-  "fn_Translate": "sdílené",
-  "fn_UserName": "sdílené",
+  "fn_Translate": "shared",
+  "fn_UserName": "shared",
   "fn_VatRateFor": "D:CreditNote",
-  "fn_WorkingDaysBetween": "sdílené",
+  "fn_WorkingDaysBetween": "shared",
   "spSklad_InventoryCount_Cancel": "D:Warehouse",
   "spSklad_InventoryCount_Check": "D:Warehouse",
   "spSklad_InventoryCount_Merge": "D:Warehouse",
@@ -244,7 +269,7 @@
   "tvf_OrderItems": "D:OrderNote",
   "tvf_StockByProduct": "D:Warehouse",
   "usp_AuditLog_Purge": "D:SysParam",
-  "usp_Audit_Write": "sdílené",
+  "usp_Audit_Write": "shared",
   "usp_Claim_ClaimItem_GetByCode": "D:Claim",
   "usp_Claim_ClaimReason_Cleanup": "D:Claim",
   "usp_Claim_ClaimReason_Hourly": "D:Claim",
@@ -264,7 +289,7 @@
   "usp_Claim_Search": "D:Claim",
   "usp_Claim_ServiceCenter_Merge": "D:Claim",
   "usp_Claim_SetStatus": "D:Claim",
-  "usp_Counter_Next": "sdílené",
+  "usp_Counter_Next": "shared",
   "usp_Cust_CustomerAddress_Close": "D:CustomerAddress",
   "usp_Cust_CustomerAddress_Confirm": "D:CustomerAddress",
   "usp_Cust_CustomerAddress_Dispatch": "D:CustomerAddress",
@@ -285,7 +310,7 @@
   "usp_Cust_Customer_Sync": "D:CustomerAddress",
   "usp_Cust_LoyaltyAccount_Merge": "D:CustomerAddress",
   "usp_Cust_LoyaltyTransaction_GetByCode": "D:CustomerAddress",
-  "usp_Error_Log": "sdílené",
+  "usp_Error_Log": "shared",
   "usp_Import_Price": "D:TmpRecalc",
   "usp_Import_Product": "D:Warehouse",
   "usp_Import_Stock": "D:Warehouse",
@@ -310,8 +335,8 @@
   "usp_Inv_LedgerEntry_Rebuild": "D:CreditNote",
   "usp_Inv_VatRate_Dispatch": "D:CreditNote",
   "usp_Inv_YearClose": "D:CreditNote",
-  "usp_JobRun_End": "sdílené",
-  "usp_JobRun_Start": "sdílené",
+  "usp_JobRun_End": "shared",
+  "usp_JobRun_Start": "shared",
   "usp_Migr2019_Customer": "D:Product_bak2019",
   "usp_Migr2019_Orders": "D:ImportProduct",
   "usp_Migr2019_Product": "D:Warehouse",
@@ -445,10 +470,10 @@
   "usp_Rpt_Kpi_RptDailySales": "D:RptDailySales",
   "usp_Rpt_Margin_RptDailySales": "D:RptDailySales",
   "usp_Rpt_Margin_Sales_2024": "D:RptDailySales",
-  "usp_Rpt_RptCustomerKpi_GetByCode": "sdílené",
+  "usp_Rpt_RptCustomerKpi_GetByCode": "shared",
   "usp_Rpt_RptDailySales_Cleanup": "D:RptDailySales",
   "usp_Rpt_RptDailySales_Export": "D:RptDailySales",
-  "usp_Rpt_RptDailySales_GetByCode": "sdílené",
+  "usp_Rpt_RptDailySales_GetByCode": "shared",
   "usp_Rpt_RptDailySales_List": "D:RptDailySales",
   "usp_Rpt_RptDailySales_MonthClose": "D:RptDailySales",
   "usp_Rpt_RptStockSnapshot_Cleanup": "D:RptDailySales",
@@ -483,27 +508,20 @@
   "usp_Ship_Shipment_Rebuild": "D:ShipmentTracking",
   "usp_Ship_Shipment_Save": "D:ShipmentTracking",
   "usp_Ship_Shipment_Update": "D:ShipmentTracking",
-  "usp_SysParam_Get": "sdílené",
+  "usp_SysParam_Get": "shared",
   "usp_SysParam_Set": "D:SysParam",
   "usp_Tmp_FixStock": "D:OldOrders",
   "usp_Tmp_Recalc": "D:Product_bak2019",
   "usp_Translation_Get": "D:Translation",
-  "usp_User_CheckPermission": "sdílené",
+  "usp_User_CheckPermission": "shared",
   "usp_User_Get": "D:Users",
   "usp_User_Save": "D:Users"
  },
- "pravidla_brany": [
-  "objekt, který v indexu není, nebo index starší než snimek.platne_do -> zavreny (fail-closed)",
-  "sdílená tabulka nebo procedura (domena 'sdílené') -> zavreny, mění se jen přes architektonické review",
-  "PR přes víc domén -> nejpřísnější stav z dotčených domén",
-  "procedura bez zeleného charakterizačního testu -> nejvýš jen_draft_pr, i když je doména otevřená"
- ],
- "schema": "mapa-monolitu/dukazy@1",
- "snimek": {
-  "datum": "2026-10-31",
-  "platne_do": "2026-11-30",
-  "verze_politiky": 1,
-  "vstupy_sha256": "3a31a99461f17a5fab7650e63cd08528299fda0402b6bcb088c1d98165d3aa8a"
- },
- "vychozi_stav": "zavreny"
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
+ }
 }
