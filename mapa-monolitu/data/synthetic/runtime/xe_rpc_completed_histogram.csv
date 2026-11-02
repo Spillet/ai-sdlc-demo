@@ -1,0 +1,164 @@
+object_name,client_app_name,event_count,window_from,window_to
+dbo.spSklad_InventoryCount_Cancel,Konzole.exe,19428,2026-09-14,2026-10-25
+dbo.spSklad_InventoryCount_Check,Konzole.exe,27383,2026-09-14,2026-10-25
+dbo.spSklad_InventoryCount_Nightly,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.spSklad_StockLevel_Close,Konzole.exe,8152,2026-09-14,2026-10-25
+dbo.spSklad_StockLevel_Delete,Konzole.exe,899,2026-09-14,2026-10-25
+dbo.spSklad_StockLevel_Overview,Konzole.exe,564,2026-09-14,2026-10-25
+dbo.spSklad_StockLevel_Update,Konzole.exe,29,2026-09-14,2026-10-25
+dbo.spSklad_StockReservation_Export,SQLAgent - TSQL JobStep,4032,2026-09-14,2026-10-25
+dbo.spSklad_Warehouse_Approve,Konzole.exe,8923,2026-09-14,2026-10-25
+dbo.spSklad_Warehouse_Delete,Konzole.exe,3217,2026-09-14,2026-10-25
+dbo.spSklad_Warehouse_Export,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.spSklad_Warehouse_Save,Konzole.exe,6973,2026-09-14,2026-10-25
+dbo.spSklad_Warehouse_SetStatus,Konzole.exe,27941,2026-09-14,2026-10-25
+dbo.usp_AuditLog_Purge,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Claim_ClaimItem_GetByCode,Konzole.exe,28,2026-09-14,2026-10-25
+dbo.usp_Claim_ClaimReason_Cleanup,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Claim_ClaimReason_Hourly,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Claim_ClaimStatusHistory_Cleanup,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Claim_ClaimStatusHistory_Confirm,Konzole.exe,1064,2026-09-14,2026-10-25
+dbo.usp_Claim_Claim_Archive,SQLAgent - TSQL JobStep,4032,2026-09-14,2026-10-25
+dbo.usp_Claim_Create,Kompas.Web.Api,199614,2026-09-14,2026-10-25
+dbo.usp_Claim_Create,Konzole.exe,127,2026-09-14,2026-10-25
+dbo.usp_Claim_GetDetail,Kompas.Web.Api,57225,2026-09-14,2026-10-25
+dbo.usp_Claim_GetDetail,Konzole.exe,27723,2026-09-14,2026-10-25
+dbo.usp_Claim_OverdueCheck,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Claim_Search,Konzole.exe,13848,2026-09-14,2026-10-25
+dbo.usp_Claim_ServiceCenter_Merge,Konzole.exe,641,2026-09-14,2026-10-25
+dbo.usp_Claim_SetStatus,Konzole.exe,21,2026-09-14,2026-10-25
+dbo.usp_Counter_Next,Konzole.exe,38261,2026-09-14,2026-10-25
+dbo.usp_Cust_CustomerAddress_Confirm,Konzole.exe,2112,2026-09-14,2026-10-25
+dbo.usp_Cust_CustomerAddress_Dispatch,Konzole.exe,2974,2026-09-14,2026-10-25
+dbo.usp_Cust_CustomerAddress_List,Konzole.exe,153,2026-09-14,2026-10-25
+dbo.usp_Cust_CustomerContact_MonthClose,SQLAgent - TSQL JobStep,1008,2026-09-14,2026-10-25
+dbo.usp_Cust_CustomerSegment_Close,Konzole.exe,926,2026-09-14,2026-10-25
+dbo.usp_Cust_CustomerSegment_Dispatch,Konzole.exe,233,2026-09-14,2026-10-25
+dbo.usp_Cust_Customer_Approve,Konzole.exe,974,2026-09-14,2026-10-25
+dbo.usp_Cust_Customer_Insert,Konzole.exe,15194,2026-09-14,2026-10-25
+dbo.usp_Cust_Customer_MonthClose,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Cust_Customer_Nightly,SQLAgent - TSQL JobStep,1008,2026-09-14,2026-10-25
+dbo.usp_Cust_Customer_Rebuild,Konzole.exe,33813,2026-09-14,2026-10-25
+dbo.usp_Cust_Customer_Save,Konzole.exe,69,2026-09-14,2026-10-25
+dbo.usp_Cust_LoyaltyAccount_Merge,Konzole.exe,5721,2026-09-14,2026-10-25
+dbo.usp_Error_Log,Konzole.exe,1721,2026-09-14,2026-10-25
+dbo.usp_Import_Stock,SQLAgent - TSQL JobStep,1008,2026-09-14,2026-10-25
+dbo.usp_Inv_AccountingExport_List,Konzole.exe,508,2026-09-14,2026-10-25
+dbo.usp_Inv_AccountingExport_MonthClose,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Inv_ExchangeRate_Approve,Konzole.exe,27,2026-09-14,2026-10-25
+dbo.usp_Inv_ExchangeRate_List,Konzole.exe,2147,2026-09-14,2026-10-25
+dbo.usp_Inv_Invoice_Confirm,Konzole.exe,69,2026-09-14,2026-10-25
+dbo.usp_Inv_Invoice_Hourly,SQLAgent - TSQL JobStep,4032,2026-09-14,2026-10-25
+dbo.usp_Inv_Invoice_Rebuild,Konzole.exe,22,2026-09-14,2026-10-25
+dbo.usp_Inv_Invoice_Sync,Konzole.exe,23085,2026-09-14,2026-10-25
+dbo.usp_Inv_LedgerEntry_Find,Konzole.exe,642,2026-09-14,2026-10-25
+dbo.usp_Inv_LedgerEntry_MonthClose,SQLAgent - TSQL JobStep,1008,2026-09-14,2026-10-25
+dbo.usp_Inv_VatRate_Dispatch,Konzole.exe,312,2026-09-14,2026-10-25
+dbo.usp_JobRun_Start,Konzole.exe,28650,2026-09-14,2026-10-25
+dbo.usp_Order_Cancel,Konzole.exe,151,2026-09-14,2026-10-25
+dbo.usp_Order_CartItem_Archive,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.usp_Order_CartItem_Cleanup,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Order_Cart_List,Konzole.exe,4921,2026-09-14,2026-10-25
+dbo.usp_Order_Create,Kompas.Web.Api,46264,2026-09-14,2026-10-25
+dbo.usp_Order_Create,Konzole.exe,37,2026-09-14,2026-10-25
+dbo.usp_Order_Dispatch,Konzole.exe,198,2026-09-14,2026-10-25
+dbo.usp_Order_Export,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.usp_Order_OrderEvent_Cancel,Konzole.exe,25,2026-09-14,2026-10-25
+dbo.usp_Order_OrderEvent_MonthClose,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Order_OrderEvent_Sync,Konzole.exe,308,2026-09-14,2026-10-25
+dbo.usp_Order_OrderItem_Nightly,SQLAgent - TSQL JobStep,1008,2026-09-14,2026-10-25
+dbo.usp_Order_OrderNote_Check,Konzole.exe,993,2026-09-14,2026-10-25
+dbo.usp_Order_OrderNote_Insert,Konzole.exe,1162,2026-09-14,2026-10-25
+dbo.usp_Order_OrderNote_Nightly,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Order_OrderNote_SetStatus,Konzole.exe,33068,2026-09-14,2026-10-25
+dbo.usp_Order_OrderStatusHistory_Archive,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.usp_Order_Sync,Konzole.exe,143,2026-09-14,2026-10-25
+dbo.usp_Pay_GatewayLog_Merge,Konzole.exe,19414,2026-09-14,2026-10-25
+dbo.usp_Pay_GatewayLog_Recalc,Konzole.exe,33,2026-09-14,2026-10-25
+dbo.usp_Pay_Installment_Delete,Konzole.exe,2842,2026-09-14,2026-10-25
+dbo.usp_Pay_PaymentTransaction_Dispatch,Konzole.exe,1421,2026-09-14,2026-10-25
+dbo.usp_Pay_PaymentTransaction_Sync,Konzole.exe,4130,2026-09-14,2026-10-25
+dbo.usp_Pay_PaymentTransaction_Update,Konzole.exe,3870,2026-09-14,2026-10-25
+dbo.usp_Pay_Payment_Cancel,Konzole.exe,260,2026-09-14,2026-10-25
+dbo.usp_Pay_Payment_Cleanup,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Pay_Payment_Delete,Konzole.exe,9907,2026-09-14,2026-10-25
+dbo.usp_Pay_Payment_Get,Konzole.exe,211,2026-09-14,2026-10-25
+dbo.usp_Pay_Payment_List,Konzole.exe,8307,2026-09-14,2026-10-25
+dbo.usp_Po_GoodsReceipt_Get,Konzole.exe,197,2026-09-14,2026-10-25
+dbo.usp_Po_GoodsReceipt_GetDetail,Konzole.exe,9369,2026-09-14,2026-10-25
+dbo.usp_Po_GoodsReceipt_Sync,Konzole.exe,26501,2026-09-14,2026-10-25
+dbo.usp_Po_PurchaseOrderItem_Delete,Konzole.exe,314,2026-09-14,2026-10-25
+dbo.usp_Po_SupplierProduct_GetDetail,Konzole.exe,218,2026-09-14,2026-10-25
+dbo.usp_Po_Supplier_Cancel,Konzole.exe,317,2026-09-14,2026-10-25
+dbo.usp_Po_Supplier_Close,Konzole.exe,31058,2026-09-14,2026-10-25
+dbo.usp_Po_Supplier_Dispatch,Konzole.exe,2178,2026-09-14,2026-10-25
+dbo.usp_Po_Supplier_Hourly,SQLAgent - TSQL JobStep,4032,2026-09-14,2026-10-25
+dbo.usp_Po_Supplier_SetStatus,Konzole.exe,18212,2026-09-14,2026-10-25
+dbo.usp_Price_PriceHistory_GetDetail,Konzole.exe,10570,2026-09-14,2026-10-25
+dbo.usp_Price_PriceHistory_MonthClose,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Price_PriceList_MonthClose,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Price_PriceList_Overview,Konzole.exe,81,2026-09-14,2026-10-25
+dbo.usp_Price_PriceList_Recalc,Konzole.exe,1091,2026-09-14,2026-10-25
+dbo.usp_Price_PriceList_SetStatus,Konzole.exe,4173,2026-09-14,2026-10-25
+dbo.usp_Price_Promo_Cancel,Konzole.exe,2277,2026-09-14,2026-10-25
+dbo.usp_Price_Promo_GetDetail,Konzole.exe,98,2026-09-14,2026-10-25
+dbo.usp_Price_Promo_Import,Konzole.exe,141,2026-09-14,2026-10-25
+dbo.usp_Price_Promo_Save,Konzole.exe,39589,2026-09-14,2026-10-25
+dbo.usp_Price_Voucher_Confirm,Konzole.exe,933,2026-09-14,2026-10-25
+dbo.usp_Price_Voucher_Merge,Konzole.exe,54,2026-09-14,2026-10-25
+dbo.usp_Product_AttributeDef_Process,Konzole.exe,51,2026-09-14,2026-10-25
+dbo.usp_Product_Brand_Cleanup,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.usp_Product_Brand_Insert,Konzole.exe,16829,2026-09-14,2026-10-25
+dbo.usp_Product_Category_Nightly,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.usp_Product_ProductAttribute_Approve,Konzole.exe,381,2026-09-14,2026-10-25
+dbo.usp_Product_ProductAttribute_Cleanup,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.usp_Product_ProductAttribute_Process,Kompas.Web.Api,371144,2026-09-14,2026-10-25
+dbo.usp_Product_ProductCategory_GetByCode,Konzole.exe,29102,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Cancel,Konzole.exe,3959,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Check,Konzole.exe,2062,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Confirm,Konzole.exe,260,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Dispatch,Kompas.Web.Api,535083,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Find,Kompas.Web.Api,389172,2026-09-14,2026-10-25
+dbo.usp_Product_Product_GetByCode,Konzole.exe,8604,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Import,Konzole.exe,7769,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Merge,Konzole.exe,8523,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Rebuild,Kompas.Web.Api,181616,2026-09-14,2026-10-25
+dbo.usp_Product_Product_Search,Konzole.exe,163,2026-09-14,2026-10-25
+dbo.usp_Rpt_Customers_RptDailySales,Konzole.exe,292,2026-09-14,2026-10-25
+dbo.usp_Rpt_Dispatch,SQLAgent - TSQL JobStep,12096,2026-09-14,2026-10-25
+dbo.usp_Rpt_Export_Heureka,.Net SqlClient Data Provider (Invoke-Sqlcmd),1008,2026-09-14,2026-10-25
+dbo.usp_Rpt_Export_RptDailySales,Konzole.exe,67,2026-09-14,2026-10-25
+dbo.usp_Rpt_Export_Sales_2026,Konzole.exe,293,2026-09-14,2026-10-25
+dbo.usp_Rpt_Kpi_ExportQueue,Konzole.exe,142,2026-09-14,2026-10-25
+dbo.usp_Rpt_Kpi_RptDailySales,Konzole.exe,3685,2026-09-14,2026-10-25
+dbo.usp_Rpt_Margin_RptDailySales,Konzole.exe,37301,2026-09-14,2026-10-25
+dbo.usp_Rpt_Margin_Sales_2024,Konzole.exe,12393,2026-09-14,2026-10-25
+dbo.usp_Rpt_RptDailySales_Cleanup,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.usp_Rpt_RptDailySales_Export,SQLAgent - TSQL JobStep,4032,2026-09-14,2026-10-25
+dbo.usp_Rpt_RptDailySales_MonthClose,SQLAgent - TSQL JobStep,1008,2026-09-14,2026-10-25
+dbo.usp_Rpt_RptStockSnapshot_Cleanup,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Rpt_RptStockSnapshot_MonthClose,SQLAgent - TSQL JobStep,4032,2026-09-14,2026-10-25
+dbo.usp_Rpt_Sales_2024_Cleanup,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Rpt_Sales_2026_MonthClose,SQLAgent - TSQL JobStep,2,2026-09-14,2026-10-25
+dbo.usp_Rpt_Stock_RptDailySales,Konzole.exe,5030,2026-09-14,2026-10-25
+dbo.usp_Rpt_Weekly_RptDailySales,Konzole.exe,6894,2026-09-14,2026-10-25
+dbo.usp_Ship_CarrierService_Cancel,Konzole.exe,123,2026-09-14,2026-10-25
+dbo.usp_Ship_Carrier_CeskaPosta,Konzole.exe,4779,2026-09-14,2026-10-25
+dbo.usp_Ship_Carrier_GLS_old,Konzole.exe,170,2026-09-14,2026-10-25
+dbo.usp_Ship_Carrier_PPL,Konzole.exe,395,2026-09-14,2026-10-25
+dbo.usp_Ship_DeliverySlot_Cleanup,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Ship_DeliverySlot_Close,Konzole.exe,9152,2026-09-14,2026-10-25
+dbo.usp_Ship_DeliverySlot_List,Konzole.exe,22,2026-09-14,2026-10-25
+dbo.usp_Ship_PickupPoint_GetDetail,Konzole.exe,38284,2026-09-14,2026-10-25
+dbo.usp_Ship_SendToCarrier,Konzole.exe,447,2026-09-14,2026-10-25
+dbo.usp_Ship_ShipmentItem_Cleanup,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Ship_ShipmentItem_Dispatch,Konzole.exe,1236,2026-09-14,2026-10-25
+dbo.usp_Ship_Shipment_List,Konzole.exe,103,2026-09-14,2026-10-25
+dbo.usp_Ship_Shipment_Nightly,SQLAgent - TSQL JobStep,42,2026-09-14,2026-10-25
+dbo.usp_Ship_Shipment_Rebuild,Konzole.exe,1494,2026-09-14,2026-10-25
+dbo.usp_Ship_Shipment_Save,Konzole.exe,188,2026-09-14,2026-10-25
+dbo.usp_SysParam_Set,Konzole.exe,6839,2026-09-14,2026-10-25
+dbo.usp_Translation_Get,Konzole.exe,38149,2026-09-14,2026-10-25
+dbo.usp_User_CheckPermission,Konzole.exe,50607,2026-09-14,2026-10-25
+dbo.usp_User_Get,Konzole.exe,45,2026-09-14,2026-10-25
+dbo.usp_User_Save,Konzole.exe,9290,2026-09-14,2026-10-25

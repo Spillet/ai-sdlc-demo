@@ -1,0 +1,126 @@
+{
+ "blind_spots": [],
+ "core_lane": {
+  "autonomy_level": "L0",
+  "gate": {
+   "pr": "nevzniká",
+   "who_merges": "jen vlastník ručně mimo AI pipeline (pokud existuje)",
+   "who_runs_agent": "nikdo; intake odpoví, co chybí"
+  },
+  "label": "closed",
+  "missing_for_next_state": [
+   "doména má owning team (owning team není určen)",
+   "doména je mezi domain candidates (ne úklid, ne malý shluk) (úklid: většina procedur je mrtvá, vypnout místo měnit)"
+  ],
+  "rules": [
+   {
+    "applies_to": "draft-only",
+    "detail": "owning team není určen",
+    "id": "R1",
+    "met": false,
+    "rule": "doména má owning team"
+   },
+   {
+    "applies_to": "draft-only",
+    "detail": "úklid: většina procedur je mrtvá, vypnout místo měnit",
+    "id": "R2",
+    "met": false,
+    "rule": "doména je mezi domain candidates (ne úklid, ne malý shluk)"
+   },
+   {
+    "applies_to": "open",
+    "detail": "0 z 0 (0 %)",
+    "id": "R3",
+    "met": false,
+    "rule": "ověřené pokrytí živých procedur ≥ 80 %"
+   },
+   {
+    "applies_to": "open",
+    "detail": "ano",
+    "id": "R4",
+    "met": true,
+    "rule": "všechny zapisující procedury mají zelený characterization test"
+   },
+   {
+    "applies_to": "open",
+    "detail": "žádné",
+    "id": "R5",
+    "met": true,
+    "rule": "blokujících blind spots ≤ 0"
+   }
+  ],
+  "state": "closed"
+ },
+ "coverage": {
+  "draft": 0,
+  "live_procedures": 0,
+  "missing": 0,
+  "verified": 0,
+  "verified_ratio": 0.0,
+  "writing": 0,
+  "writing_unverified": []
+ },
+ "domain": "D:ImportProduct",
+ "name": null,
+ "objects": [
+  "ImportProduct",
+  "usp_Migr2019_Orders"
+ ],
+ "owner": null,
+ "procedures": [
+  {
+   "calls_6_weeks": 0,
+   "characterization": {
+    "golden_master": null,
+    "tsqlt": null
+   },
+   "coverage": "missing",
+   "name": "usp_Migr2019_Orders",
+   "status": "mrtvá",
+   "writes": [
+    "Customer",
+    "ImportProduct"
+   ],
+   "writes_foreign": [
+    "Customer"
+   ]
+  }
+ ],
+ "readiness": {
+  "components": {
+   "bonus_dead": 1.0,
+   "bonus_readonly": 0.0,
+   "data_size": 0.317,
+   "dynamic_sql": 0.0,
+   "external_calls": 0.0,
+   "foreign_reads": 0.0,
+   "foreign_writes": 0.0,
+   "inbound_reads": 0.0,
+   "inbound_writes": 0.0
+  },
+  "contributions": {
+   "bonus_dead": 5.0,
+   "bonus_readonly": 0.0,
+   "data_size": -3.2,
+   "dynamic_sql": -0.0,
+   "external_calls": -0.0,
+   "foreign_reads": -0.0,
+   "foreign_writes": -0.0,
+   "inbound_reads": -0.0,
+   "inbound_writes": -0.0
+  },
+  "note": "extraction readiness score řadí domény k vyjmutí, stav core lane neurčuje",
+  "rank": null,
+  "score": 100.0
+ },
+ "schema": "mapa-monolitu/evidence-pack@2",
+ "snapshot": {
+  "date": "2026-10-31",
+  "inputs_sha256": "fed7344328f48f954877ff44815ac1ffaeaa0cb90473e10718f89161f6f0847f",
+  "policy_version": 2,
+  "valid_until": "2026-11-30"
+ },
+ "tables": [
+  "ImportProduct"
+ ]
+}
