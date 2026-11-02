@@ -3,6 +3,8 @@
 /src/Claims.Api/Refunds/    @Spillet
 /tests/**/*Refund*          @Spillet
 /db/                        @Spillet
+/mapa-monolitu/             @Spillet
+/mapa-monolitu/policy/      @Spillet
 /.github/                   @Spillet
 /risk-policy.yml            @Spillet
 /change-calendar.yml        @Spillet

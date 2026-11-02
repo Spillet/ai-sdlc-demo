@@ -30,6 +30,18 @@ rules:
     tier: high
     owner: default
     reason: Změna schématu nebo procedury. Ověřuje se characterization tests a parallel run (viz P1 Monolith Map).
+  - paths: ["mapa-monolitu/data/synthetic/db/*"]
+    tier: high
+    owner: default
+    reason: Schéma a procedury legacy DB (syntetické). Stejné pravidlo jako db/*.
+  - paths: ["mapa-monolitu/policy/*"]
+    tier: high
+    owner: default
+    reason: Prahy core lane a vlastníci domén. Pravidla, podle kterých se otevírá autonomie v core.
+  - paths: ["mapa-monolitu/*"]
+    tier: medium
+    owner: default
+    reason: Analyzátor legacy DB z P1 (Monolith Map), jeho vstupy a výstupy. Schvaluje člověk, i dokumentaci.
   - paths: ["tests/*Refund*"]
     tier: high
     owner: refunds

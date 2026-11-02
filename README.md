@@ -1,8 +1,21 @@
-# AI SDLC demo: od požadavku k PR
+# AI SDLC a dekompozice monolitu
+
+Prototypy ke case study „AI SDLC a dekompozice monolitu“. Obě části běží nad stejným fiktivním e-shopem Kompas: nad legacy databází s uloženými procedurami a nad novou službou reklamací, která z ní vychází jako první kandidát na doménu. Žádná data ani schéma skutečné firmy tu nejsou.
+
+| Část | Kde | Co ukazuje |
+|---|---|---|
+| P1 Monolith Map | [`mapa-monolitu/`](mapa-monolitu/README.md) | Mapa závislostí legacy DB, kandidáti na domény a pořadí jejich vytažení, kontext a návrhy testů pro AI |
+| P2 AI SDLC demo | tento README níže, `src/`, `tests/`, `.github/` | Cesta změny od požadavku přes kódovacího agenta k PR, o merge rozhoduje risk gate |
+
+Risk gate z P2 hlídá celý repozitář. Procedury a schéma legacy DB (`mapa-monolitu/data/synthetic/db/`) a prahy core lane (`mapa-monolitu/policy/`) mají risk tier high, merge u nich smí jen owning team. Ostatní změny P1 schvaluje člověk.
+
+---
+
+# P2 AI SDLC demo: od požadavku k PR
 
 Prototyp k case study „AI SDLC a dekompozice monolitu“. Ukazuje jednu část navržené architektury: cestu změny od byznysového požadavku přes spec a kódovacího agenta až k PR, o jehož merge rozhoduje risk gate.
 
-Ukázková služba řeší reklamace fiktivního e-shopu (.NET 10, xUnit). Je malá schválně: jde o tok změny a guardrails, ne o službu. **Vztah k P1 a legacy:** P2 ukazuje tok a guardrails na malé službě. P1 (Monolith Map) ukazuje, jak agent nad legacy databází a procedurami dostane kontext a ověření (mapa závislostí, characterization tests). Bez P1 zůstane core v lane core navždy „jen owning team“. Pravidlo `db/*` → high je v risk policy už teď, i když složka v demu chybí.
+Ukázková služba řeší reklamace fiktivního e-shopu (.NET 10, xUnit). Je malá schválně: jde o tok změny a guardrails, ne o službu. **Vztah k P1 a legacy:** P2 ukazuje tok a guardrails na malé službě. [P1 (Monolith Map)](mapa-monolitu/README.md) ukazuje, jak agent nad legacy databází a procedurami dostane kontext a ověření (mapa závislostí, characterization tests). Bez P1 zůstane core v lane core navždy „jen owning team“. Pravidlo `db/*` → high platí stejně pro syntetické procedury legacy DB v `mapa-monolitu/data/synthetic/db/`.
 
 ## Jak to běží
 

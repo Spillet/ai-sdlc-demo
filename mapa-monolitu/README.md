@@ -95,7 +95,7 @@ Pět shluků je „úklid“ (většina procedur mrtvá: vypnout a smazat) a tř
 
 ## Vazba na P2: lane core otevírá důkaz
 
-P2 ([`ai-sdlc-demo`](https://github.com/Spillet/ai-sdlc-demo)) dnes říká „core = jen vlastník“. Zadání ale chce vývoj „demokratizovaný napříč firmou, zejména v core systémech“. P1 dává cestu mezi tím: **v lane core může záměr zadat kdokoli, agent založí PR, ale o tom, jestli PR jde do merge, rozhoduje důkaz z mapy, ne model ani skóre.** Risk gate v P2 čte z evidence packu stav core lane domény a podle něj určí autonomy level L0–L3. Core lane se otevírá doménu po doméně, jak přibývají ověřené characterization tests.
+P2 ([AI SDLC demo](../README.md)) dnes říká „core = jen vlastník“. Zadání ale chce vývoj „demokratizovaný napříč firmou, zejména v core systémech“. P1 dává cestu mezi tím: **v lane core může záměr zadat kdokoli, agent založí PR, ale o tom, jestli PR jde do merge, rozhoduje důkaz z mapy, ne model ani skóre.** Risk gate v P2 čte z evidence packu stav core lane domény a podle něj určí autonomy level L0–L3. Core lane se otevírá doménu po doméně, jak přibývají ověřené characterization tests.
 
 | Stav core lane | Autonomy level v P2 | Kdy | Kdo spustí agenta | PR | Kdo udělá merge |
 |---|---|---|---|---|---|
