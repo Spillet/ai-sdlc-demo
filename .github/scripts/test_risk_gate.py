@@ -155,6 +155,17 @@ class Policy(unittest.TestCase):
         for path, tier in expected.items():
             self.assertEqual(classify(path, POLICY)["tier"], tier, path)
 
+    def test_monolith_map_is_never_auto_merged(self):
+        expected = {
+            "mapa-monolitu/data/synthetic/db/02_procs_claims.sql": "high",
+            "mapa-monolitu/policy/core-lane.json": "high",
+            "mapa-monolitu/mapa/score.py": "medium",
+            "mapa-monolitu/README.md": "medium",
+            "mapa-monolitu/out/report.md": "medium",
+        }
+        for path, tier in expected.items():
+            self.assertEqual(classify(path, POLICY)["tier"], tier, path)
+
 
 class Signals(unittest.TestCase):
     def test_docs_only_is_low(self):  # scénář PR #6

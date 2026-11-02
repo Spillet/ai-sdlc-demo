@@ -1,0 +1,30 @@
+name: CI Monolith Map
+
+on:
+  push:
+    branches: [main]
+    paths: ["mapa-monolitu/**", ".github/workflows/ci-mapa.yml"]
+  pull_request:
+    paths: ["mapa-monolitu/**", ".github/workflows/ci-mapa.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    # Testy a běh analýzy P1. Jen standardní knihovna Pythonu, bez sítě k modelu, bez secrets.
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mapa-monolitu
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+      - name: Testy parseru, pravidel core lane, risk gate a citlivosti
+        run: python3 -m unittest discover -s tests -v
+      - name: Analýza syntetické DB doběhne
+        run: python3 analyze.py

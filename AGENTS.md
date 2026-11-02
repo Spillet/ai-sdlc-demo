@@ -23,3 +23,9 @@ Služba řeší reklamace fiktivního e-shopu. API v .NET 10 (minimal API), test
 - Lhůta na vyřízení reklamace: 30 dní od přijetí (`Domain/ClaimPolicy.cs`).
 - Záruka pro spotřebitele: 24 měsíců od nákupu.
 - Vracení peněz: `Refunds/RefundCalculator.cs`, sleva nejvýš 50 % ceny.
+
+## Monolith Map (`mapa-monolitu/`)
+
+- Analyzátor syntetické legacy DB v Pythonu, jen standardní knihovna. Ověř se: `cd mapa-monolitu && python3 -m unittest discover -s tests`.
+- `out/` a `site/` jsou generované. Změň kód a spusť `python3 analyze.py`, ručně je neupravuj.
+- `data/synthetic/db/` (schéma a procedury legacy DB) a `policy/` (prahy core lane): změnu můžeš navrhnout, merge smí jen owning team.
