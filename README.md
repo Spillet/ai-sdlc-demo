@@ -35,7 +35,7 @@ Ukázka pokrývá kroky 1–4 smyčky (zadání, agentní vývoj, ověření, br
 | 🟢 auto-merge | FAQ pro zákaznickou podporu ([#5](https://github.com/Spillet/ai-sdlc-demo/issues/5)) | [PR #6](https://github.com/Spillet/ai-sdlc-demo/pull/6), sloučené | Změna dokumentace, brána ji pustila bez člověka. |
 | 🟡 schválí člověk | Kolik dní zbývá do vyřízení reklamace ([#1](https://github.com/Spillet/ai-sdlc-demo/issues/1)) | [PR #2](https://github.com/Spillet/ai-sdlc-demo/pull/2), otevřené | Změna produkčního kódu s testem. AI review souhlasila, ale upozornila, že endpoint nemá test. |
 | 🔴 jen owning team | Strop slevy při reklamaci 60 % ([#3](https://github.com/Spillet/ai-sdlc-demo/issues/3)) | [PR #4](https://github.com/Spillet/ai-sdlc-demo/pull/4), otevřené | Peníze zákazníků. Agent změnu připravil a nesáhl na chráněné instrukce, sloučit ji smí jen owning team. |
-| 🔴 jen owning team | Pomocná třída pro vrácení peněz ([#7](https://github.com/Spillet/ai-sdlc-demo/issues/7)) | [PR #9](https://github.com/Spillet/ai-sdlc-demo/pull/9), otevřené | Soubor `Refunds/Vrácení.cs` s diakritikou v názvu. Brána ho vidí a dává high. Ověření opravy, kterou našla oponentura (dřívější verze brány takový soubor přehlédla). |
+| 🔴 jen owning team | Pomocná třída pro vrácení peněz ([#7](https://github.com/Spillet/ai-sdlc-demo/issues/7)) | [PR #9](https://github.com/Spillet/ai-sdlc-demo/pull/9), otevřené | Soubor `Refunds/Vrácení.cs` s diakritikou v názvu. Brána ho vidí a dává high. Ověření opravy: dřívější verze brány takový soubor přehlédla a změnu peněz by pustila jako low. |
 | 🟡 → 🟢 | Šablona zprávy „kurýr vyzvedne zboží“ ([#11](https://github.com/Spillet/ai-sdlc-demo/issues/11)) | [PR #13](https://github.com/Spillet/ai-sdlc-demo/pull/13), sloučené | Skutečný agent a AI review. V sezóně `peak` změna čekala na člověka, po přepočtu brány s profilem `normal` se sloučila sama. Komentář brány drží historii obou rozhodnutí. |
 | 🟡 → 🟢 | Připravená šablona zprávy, bez modelu | [PR #10](https://github.com/Spillet/ai-sdlc-demo/pull/10), sloučené | Totéž přes workflow `demo-prepare`, opakovatelně a zdarma. |
 | 🟡 čeká | Připravená šablona zprávy, bez modelu | [PR #12](https://github.com/Spillet/ai-sdlc-demo/pull/12), otevřené | Malá změna textu v sezóně `peak`. Připravené pro živou ukázku. |
@@ -104,7 +104,7 @@ Profily jsou deklarativně v `risk-policy.yml` a riziko smějí jen zvýšit. Ka
 | Nejsilnější dny Black Friday | freeze | 26. 11. 2026 | 30. 11. 2026 |
 | Vánoční uzávěrka | peak | 14. 12. 2026 | 23. 12. 2026 |
 
-**V listopadu 2026 proto platí peak a brána podrží pro člověka i malou změnu textu**, jako v PR #12. Od 26. do 30. 11. platí freeze a nic se nesloučí. U změny kódu jde v tomto období sloučení bez člověka ukázat jen ručním přepočtem brány s profilem `normal` (viz [Jak ukázku zopakovat](#jak-ukázku-zopakovat)).
+**V listopadu 2026 proto platí peak a brána podrží pro člověka i malou změnu šablony zprávy**, jako v PR #12. Samotná dokumentace v `docs/` projde i v peak. Od 26. do 30. 11. platí freeze a nic se nesloučí. U změny kódu jde v tomto období sloučení bez člověka ukázat jen ručním přepočtem brány s profilem `normal` (viz [Jak ukázku zopakovat](#jak-ukázku-zopakovat)).
 
 Každé rozhodnutí brány zapíše do komentáře u PR: aktivní profil a proč platí (okno kalendáře, nebo ruční přepsání a kdo ho spustil), kdo agenta spustil, odkaz na přesnou verzi `risk-policy.yml` a `change-calendar.yml` a historii předchozích rozhodnutí. Je tak vidět, pod jakým režimem změna prošla.
 
