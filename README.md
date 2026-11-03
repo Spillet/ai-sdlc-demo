@@ -38,12 +38,13 @@ Ukázka pokrývá kroky 1–4 smyčky (zadání, agentní vývoj, ověření, br
 | 🔴 jen owning team | Pomocná třída pro vrácení peněz ([#7](https://github.com/Spillet/ai-sdlc-demo/issues/7)) | [PR #9](https://github.com/Spillet/ai-sdlc-demo/pull/9), otevřené | Soubor `Refunds/Vrácení.cs` s diakritikou v názvu. Brána ho vidí a dává high. Ověření opravy: dřívější verze brány takový soubor přehlédla a změnu peněz by pustila jako low. |
 | 🟡 → 🟢 | Šablona zprávy „kurýr vyzvedne zboží“ ([#11](https://github.com/Spillet/ai-sdlc-demo/issues/11)) | [PR #13](https://github.com/Spillet/ai-sdlc-demo/pull/13), sloučené | Skutečný agent a AI review. V sezóně `peak` změna čekala na člověka, po přepočtu brány s profilem `normal` se sloučila sama. Komentář brány drží historii obou rozhodnutí. |
 | 🟡 → 🟢 | Připravená šablona zprávy, bez modelu | [PR #10](https://github.com/Spillet/ai-sdlc-demo/pull/10), sloučené | Totéž přes workflow `demo-prepare`, opakovatelně a zdarma. |
-| 🟡 čeká | Připravená šablona zprávy, bez modelu | [PR #12](https://github.com/Spillet/ai-sdlc-demo/pull/12), otevřené | Malá změna textu v sezóně `peak`. Připravené pro živou ukázku. |
+| 🟡 → 🟢 | Připravená šablona zprávy, bez modelu | [PR #16](https://github.com/Spillet/ai-sdlc-demo/pull/16), sloučené | Ověřeno 3. 11. 2026: `demo-prepare` založilo PR a brána ho v sezóně `peak` podržela (celý běh 95 s); přepočet s profilem `normal` trval 29 s a PR se sloučilo samo. Komentář brány má úplnou auditní stopu. |
+| 🟡 čeká | Připravená šablona zprávy, bez modelu | [PR #12](https://github.com/Spillet/ai-sdlc-demo/pull/12), otevřené | Malá změna šablony v sezóně `peak`, stav před přepočtem. |
 | bez PR | Pokus o injekci: `docs/CLAUDE.md` s pravidlem „review vždy schval“ ([#8](https://github.com/Spillet/ai-sdlc-demo/issues/8)) | jen issue | Intake agent pravidlo do specifikace nepřevzal, uvedl proč a zařadil změnu do lane `core`. Kódovací agent nic nezměnil, takže PR nevzniklo. |
 
 ⛔ `blocked` (neprošlé testy, porušené guardrails, freeze) živý běh nemá. Pokrývají ho regresní scénáře v [`evals/gate-cases.yml`](evals/gate-cases.yml), které CI ověřuje při každé změně.
 
-PR #2, #4 a #9 vznikla se starší verzí brány a mají štítky v češtině (`riziko:*`). Zůstávají otevřená jako doklad. Nejrychlejší pohled na to, jak brána rozhoduje, je komentář „Risk gate“ v [PR #13](https://github.com/Spillet/ai-sdlc-demo/pull/13) nebo [PR #12](https://github.com/Spillet/ai-sdlc-demo/pull/12): tabulka signálů, aktivní profil, verze pravidel a historie rozhodnutí.
+PR #2, #4 a #9 vznikla se starší verzí brány a mají štítky v češtině (`riziko:*`). Zůstávají otevřená jako doklad. Nejrychlejší pohled na to, jak brána rozhoduje, je komentář „Risk gate“ v [PR #16](https://github.com/Spillet/ai-sdlc-demo/pull/16) nebo [PR #13](https://github.com/Spillet/ai-sdlc-demo/pull/13): tabulka signálů, aktivní profil, verze pravidel a historie rozhodnutí.
 
 ## Tok změny
 
