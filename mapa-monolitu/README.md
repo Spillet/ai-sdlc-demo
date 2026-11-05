@@ -1,6 +1,6 @@
-# Monolith Map
+# Mapa monolitu (Monolith Map)
 
-Prototyp k case study „AI SDLC a dekompozice monolitu“, část B. Ukazuje první krok dekompozice databázového monolitu: **pozorovanou mapu závislostí**, ze které jde rozhodnout, co vytáhnout první, a nad kterou může AI pracovat po kouscích.
+Prototyp k case study „AI SDLC a dekompozice monolitu“, část B (snímek 17 prezentace). Část A, cesta změny od požadavku k PR s risk gate, je popsaná v [README v kořeni repa](../README.md). Ukazuje první krok dekompozice databázového monolitu: **pozorovanou mapu závislostí**, ze které jde rozhodnout, co vytáhnout první, a nad kterou může AI pracovat po kouscích.
 
 Běží na **syntetické databázi** fiktivního e-shopu „Kompas“ (MS SQL, 277 uložených procedur, 24 funkcí, 6 triggerů, 92 tabulek, 33 pohledů, fiktivních 27 TB). Žádná reálná data ani schéma skutečné firmy. Dotazy pro sběr stejných vstupů ze skutečné DB jsou v [`sql/collect/`](sql/collect).
 
@@ -41,7 +41,7 @@ XE + Query Store (CSV) ─────────── běh: kdo volá, jak č
 | Domain candidates | [`mapa/cluster.py`](mapa/cluster.py) | |
 | Skóre a pořadí | [`mapa/score.py`](mapa/score.py) | váhy v kódu i v HTML posuvnících |
 | Citlivost vah | [`mapa/sensitivity.py`](mapa/sensitivity.py) | ±20 % po jedné váze, náhodné kombinace, bod zvratu |
-| Evidence pack a core lane | [`mapa/evidence.py`](mapa/evidence.py), [`policy/core-lane.json`](policy/core-lane.json) | kontrakt pro risk gate v P2, viz „Vazba na P2“ |
+| Evidence pack a core lane | [`mapa/evidence.py`](mapa/evidence.py), [`policy/core-lane.json`](policy/core-lane.json) | kontrakt pro risk gate z části A, viz „Vazba na risk gate“ |
 | Výstupy | [`mapa/render.py`](mapa/render.py), [`mapa/template.html`](mapa/template.html) | HTML bez knihoven, data vložená do stránky |
 | AI vrstva | [`ai-vrstva/`](ai-vrstva) | dokumentace, testy a kontrakt pro 3 procedury první domény |
 | Sběr ze skutečné DB | [`sql/collect/`](sql/collect) | 9 dotazů + grep Delphi; nic nespuštěno proti reálné DB |
@@ -85,7 +85,7 @@ Stránka má pět pohledů: **Domény a pořadí** (skóre, složky, posuvníky 
 
 1. **Na vahách pořadí 1–2 nevisí, na definici složek ano.** Citlivost zkouší jen váhy. Jak se měří „volání zvenku“ nebo kde je práh sdílené tabulky, netestuje. A data jsou syntetická. Rozdíl 1,6 bodu proto neberu jako důkaz, že Reklamace je lepší, jen že žádná rozumná změna vah to neotočí.
 2. **Místa 3–7 jsou fakticky remíza.** Fakturace, Platby, Reporting, Adresy a Ceníky mají skóre 71,9–73,0 a při ±20 % se mezi sebou přeskupují v rozsahu 3.–7. (Reporting až 8.). Pořadí v tomhle pásmu nic neříká, rozhodnou jiná kritéria.
-3. **Mezi Reklamací a Katalogem nerozhodlo skóre.** Rozhodla věc, kterou skóre nevidí: jádro katalogu `Product` je sdílená tabulka a nejvíc do ní zapisuje sklad, takže Katalog nejde vytáhnout bez rozhodnutí o vlastnictví `Product`. Reklamace takovou překážku nemají a sedí na stejnou doménu jako P2. Skóre slouží jako filtr („tyhle dvě jsou nejlepší kandidáti“), ne jako rozhodčí.
+3. **Mezi Reklamací a Katalogem nerozhodlo skóre.** Rozhodla věc, kterou skóre nevidí: jádro katalogu `Product` je sdílená tabulka a nejvíc do ní zapisuje sklad, takže Katalog nejde vytáhnout bez rozhodnutí o vlastnictví `Product`. Reklamace takovou překážku nemají a jde o stejnou doménu jako ukázková služba reklamací v části A. Skóre slouží jako filtr („tyhle dvě jsou nejlepší kandidáti“), ne jako rozhodčí.
 
 Pět shluků je „úklid“ (většina procedur mrtvá: vypnout a smazat) a tři jsou příliš malé na doménu (infrastruktura). Názvy shluků jsou automatické podle nejcentrálnější tabulky, lidský název doplňuju v závorce.
 
@@ -93,27 +93,25 @@ Pět shluků je „úklid“ (většina procedur mrtvá: vypnout a smazat) a tř
 
 **AI vrstva** na reklamacích: [`ai-vrstva/README.md`](ai-vrstva/README.md). Model z context packu našel souběh při kontrole množství, lhůtu počítanou od objednávky místo od převzetí a přímý odpis skladu s natvrdo daným skladem. Všechno označené k ověření člověkem.
 
-## Vazba na P2: lane core otevírá důkaz
+## Vazba na risk gate: lane core otevírá důkaz
 
-P2 ([AI SDLC demo](../README.md)) dnes říká „core = jen vlastník“. Zadání ale chce vývoj „demokratizovaný napříč firmou, zejména v core systémech“. P1 dává cestu mezi tím: **v lane core může záměr zadat kdokoli, agent založí PR, ale o tom, jestli PR jde do merge, rozhoduje důkaz z mapy, ne model ani skóre.** Risk gate v P2 čte z evidence packu stav core lane domény a podle něj určí autonomy level L0–L3. Core lane se otevírá doménu po doméně, jak přibývají ověřené characterization tests.
+Ukázka AI SDLC ([README v kořeni repa](../README.md)) dnes v lane core vytvoří od někoho mimo owning team jen draft PR a merge smí jen owning team. Zadání ale chce vývoj „demokratizovaný napříč firmou, zejména v core systémech“. Mapa dává cestu dál: **v lane core může záměr zadat kdokoli, agent založí PR, ale o tom, jestli PR jde do merge, rozhoduje důkaz z mapy, ne model ani skóre.** Risk gate má číst z evidence packu stav core lane domény a podle něj určit autonomy level L0–L3 (úrovně ze snímku 6 prezentace; napojení zatím chybí, viz níže). Core lane se otevírá doménu po doméně, jak přibývají ověřené characterization tests.
 
-| Stav core lane | Autonomy level v P2 | Kdy | Kdo spustí agenta | PR | Kdo udělá merge |
+| Stav core lane | Autonomy level | Kdy | Kdo spustí agenta | PR | Kdo udělá merge |
 |---|---|---|---|---|---|
 | **closed** | L0 (čtení) | doména nemá owning team (R1), nebo shluk není mezi domain candidates, protože je úklidový nebo malý (R2) | nikdo; intake odpoví, co chybí | nevzniká | jen vlastník ručně mimo AI pipeline |
 | **draft-only** | L1 | R1 a R2 platí, ale chybí ověření | kdokoli | vždy draft; risk gate jen okomentuje dopad a chybějící důkazy | vlastník po převzetí; první úkol agenta je dopsat characterization tests |
 | **open** | L2 (merge s důkazem) | navíc ověřené pokrytí živých procedur ≥ 80 % (R3), všechny zapisující procedury mají zelený test (R4), žádný blokující blind spot (R5) | kdokoli | jde do review | vlastník, a jen se zelenými characterization tests dotčených procedur |
 
-L3 (úzký auto-merge) z mapy nevzniká. Potřebuje historii change failure rate AI změn v doméně, kterou má P2, ne P1.
+L3 (úzký auto-merge) z mapy nevzniká. Potřebuje historii change failure rate AI změn v doméně, kterou má pipeline z části A, ne mapa.
 
 „Ověřený“ test znamená doložený zelený běh: soubor `ai-vrstva/<procedura>/run.json` s výsledkem `"result": "green"`. Návrh testu od modelu core lane neotevře. Blokující blind spot je dynamické SQL se skládaným jménem, u kterého běh nezachytil žádný cíl, zápis do jiné databáze a procedura, jejíž jméno skládá klient (`'usp_Rpt_' + cbReport.Text` blokuje celý Reporting). Owning teams a prahy určují lidé v [`policy/core-lane.json`](policy/core-lane.json), ne analyzátor.
 
 **Stav na syntetických datech:** Reklamace a Katalog jsou draft-only, tedy L1 (mají owning team, ale 0 ověřených testů: tři testy v `ai-vrstva/` jsou jen draft). Ostatních 16 shluků je closed (L0), protože nemají owning team. Žádná doména není open. To je správně: dokud testy nikdo nespustil, nemá kdo říct, že změna procedury nic nerozbila. Aby se core lane u Reklamací otevřel, potřebuje zelený test aspoň 15 z 18 živých procedur (práh 80 %) a mezi nimi všech 13 zapisujících.
 
-### Kontrakt pro risk gate v P2 (`mapa-monolitu/evidence-pack@2`)
+### Kontrakt pro risk gate (`mapa-monolitu/evidence-pack@2`)
 
-**Změna formátu na `@2` (31. 10. 2026):** názvy polí a hodnot jsou anglicky podle slovníku termínů. Původní `mapa-monolitu/dukazy@1` už analyzátor nevyrábí. Hlavní změny: stavy `zavreny` / `jen_draft_pr` / `otevreny_s_vlastnikem` → `closed` / `draft-only` / `open`, nové pole `autonomy_level`, `pruh_core` → `core_lane`, `slepa_mista` → `blind_spots`, `pokryti` → `coverage` (`overeno` / `navrh` / `chybi` → `verified` / `draft` / `missing`), sdílené objekty `"sdílené"` → `"shared"`, záznam běhu testu `beh.json` (`vysledek: zelene`) → `run.json` (`result: green`), politika `politika/pruh-core.json` → `policy/core-lane.json` (verze 2). Texty pro člověka (`description`, `detail`, pravidla) zůstávají česky.
-
-Risk gate v P2 zatím nic z toho nečte. Implementace patří do P2 později, formát je připravený tak, aby stačilo číst dva soubory:
+Risk gate z části A zatím nic z toho nečte. Napojení přijde později, formát je připravený tak, aby stačilo číst dva soubory:
 
 - `out/evidence/index.json`: `snapshot` (`date`, `valid_until`, `inputs_sha256`, `policy_version`), `domains` (`state`, `autonomy_level`, `file` a `owner` jako GitHub tým pro každou doménu), `objects` (jméno procedury, funkce, triggeru, tabulky nebo pohledu → doména, sdílené objekty → `"shared"`), `default_state: "closed"` a `gate_rules`.
 - `out/evidence/<doména>.json`: `core_lane` (`state`, `autonomy_level`, `rules` s `met` a `detail`, `missing_for_next_state`, `gate`), `owner`, `readiness` (extraction readiness score a složky, jen informativně), `coverage`, `blind_spots` (s příznakem `blocking`), `procedures` (pro každou: `coverage` = `verified` / `draft` / `missing`, testy a jejich běh, zápisy do cizích tabulek), `tables`, `objects`.
@@ -121,11 +119,11 @@ Risk gate v P2 zatím nic z toho nečte. Implementace patří do P2 později, fo
 
 Jak má risk gate rozhodnout (referenční implementace `gate_decision` v [`mapa/evidence.py`](mapa/evidence.py), pokrytá testy):
 
-1. Z diffu PR zjistí změněné objekty (v P2 by to byla složka `db/` s jedním souborem na objekt).
+1. Z diffu PR zjistí změněné objekty (v pipeline z části A by to byla složka `db/` s jedním souborem na objekt).
 2. Objekt, který v indexu není, sdílený objekt, nebo index po `valid_until` → **closed** (fail-closed).
 3. Jinak stav domény z indexu. PR přes víc domén dostane nejpřísnější stav.
 4. Procedura bez zeleného testu sníží výsledek na **draft-only** i v open doméně.
-5. Výsledek se mapuje na P2 takto: closed = preflight zastaví běh s vysvětlením (L0), draft-only = `gh pr create --draft` a risk gate nepustí merge (L1), open = běžná risk gate pro risk tier high (code owners review a povinné testy, L2).
+5. Výsledek se mapuje na pipeline z části A takto: closed = preflight zastaví běh s vysvětlením (L0), draft-only = `gh pr create --draft` a risk gate nepustí merge (L1), open = běžná risk gate pro risk tier high (code owners review a povinné testy, L2).
 
 Výstupy nemají časové razítko běhu, takže stejné vstupy dají bajtově stejné soubory a risk gate může ověřit `inputs_sha256`. Snímek má platnost 30 dní: mapa nad starými daty z Query Store nesmí otevírat core lane.
 
@@ -158,7 +156,7 @@ Váhy jsou můj předpoklad, ne kalibrovaný model. Ve stránce jdou posuvníky 
 - **Core lane stojí na vstupech, které jsem vymyslel.** Owning teams dvou domén v `policy/core-lane.json` jsou fiktivní a prahy (80 %, všechny zapisující procedury, nula blokujících blind spots) jsou návrh k diskusi s architekty a vlastníky, ne ověřená hodnota.
 - **Pokrytí testy se pozná podle souborů, ne podle běhu.** Analyzátor nic nespouští. Věří `run.json`, který by v reálu měla zapsat CI po běhu tSQLt nebo golden masteru proti kopii DB. Ručně zapsaný `run.json` by core lane otevřel; v produkci by ho musela podepsat pipeline, ne člověk ani agent.
 - **Pokrytí počítá procedury, ne cesty v nich.** Jeden zelený test na proceduru se počítá jako `verified`, i když procedura má deset větví. Kvalitu testů musí posoudit vlastník.
-- **Risk gate v P2 kontrakt zatím nečte.** `gate_decision` je referenční implementace v Pythonu s testy, napojení do `risk_gate.py` v P2 není hotové.
+- **Risk gate z části A kontrakt zatím nečte.** `gate_decision` je referenční implementace v Pythonu s testy, napojení do `risk_gate.py` není hotové.
 - **Skóre nezná změnovost ani byznysovou hodnotu.** Chybí historie změn procedur (v syntetické DB žádná není) a plán byznysu. V reálu by vstupovala změnovost z gitu nebo DDL auditu.
 - **Mrtvý kód v okně 6 týdnů** je kandidát, ne důkaz. Ruční zásahy a výjimečné procesy okno nezachytí.
 - **HTML jsem neověřil v prohlížeči.** JavaScript prošel kontrolou syntaxe a během nad stubem DOM (všechny pohledy včetně „Core lane“ se vykreslí bez chyby), vizuální podoba grafu a nového pohledu je neověřená.
