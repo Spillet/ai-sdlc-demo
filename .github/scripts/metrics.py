@@ -1,8 +1,10 @@
 """Souhrn běhů pipeline z PR, které založil agent. Použití: metrics.py [--json SOUBOR]
 
 Bez argumentu čte PR přes `gh pr list`. S `--json` čte uložený výstup téhož příkazu
-(`gh pr list --state all --json number,title,labels,createdAt,mergedAt,closedAt,isDraft,body,headRefName`).
-Počítá: PR podle risk tier, podíl PR sloučených přes auto-merge, dobu do merge a cenu agenta z popisu PR.
+(`gh pr list --state all --json number,title,labels,createdAt,mergedAt,mergedBy,closedAt,isDraft,body,headRefName`).
+Počítá: PR podle risk tier, kolik PR se sloučilo a kdo je sloučil (risk gate sama, nebo člověk),
+dobu od založení PR do merge a cenu agenta z popisu PR.
+Nepočítá dobu od požadavku po produkci (ukázka končí mergem), reverty ani incidenty.
 Cena z popisu PR je jen implementace; intake a review mají cenu v artefaktech běhů.
 """
 import json
@@ -15,6 +17,8 @@ from common import REPO, gh
 # Nové štítky podle slovníku termínů a staré české štítky na PR, které vznikly před přejmenováním.
 TIERS = {"risk:low": "🟢 low", "risk:medium": "🟡 medium", "risk:high": "🔴 high", "blocked": "⛔ blocked",
          "riziko:nizke": "🟢 low", "riziko:stredni": "🟡 medium", "riziko:vysoke": "🔴 high", "blokovano": "⛔ blocked"}
+# Risk gate slučuje pod identitou GitHub Actions. `gh pr list` vrací login bota bez `[bot]`.
+GATE_MERGERS = {"github-actions", "github-actions[bot]", "app/github-actions"}
 COST = re.compile(r"\|\s*(\d+)\s*\|\s*([\d.]+) USD\s*\|\s*([\d.]+) min\s*\|")
 
 
@@ -23,13 +27,21 @@ def load():
         with open(sys.argv[sys.argv.index("--json") + 1], encoding="utf-8") as f:
             return json.load(f)
     raw = gh("pr", "list", "--repo", REPO, "--state", "all", "--limit", "200", "--json",
-             "number,title,labels,createdAt,mergedAt,closedAt,isDraft,body,headRefName")
+             "number,title,labels,createdAt,mergedAt,mergedBy,closedAt,isDraft,body,headRefName")
     return json.loads(raw)
 
 
 def hours(start, end):
     parse = lambda s: datetime.fromisoformat(s.replace("Z", "+00:00"))
     return (parse(end) - parse(start)).total_seconds() / 3600
+
+
+def merged_by_gate(pr):
+    """True, když PR sloučila risk gate sama; False, když člověk; None, když to výstup neříká."""
+    merger = pr.get("mergedBy")
+    if not merger:
+        return None
+    return merger.get("login") in GATE_MERGERS
 
 
 def summarize(prs):
@@ -44,7 +56,11 @@ def summarize(prs):
         if match:
             costs.append(float(match.group(2)))
             minutes.append(float(match.group(3)))
-        state = "sloučeno" if pr.get("mergedAt") else ("zavřeno" if pr.get("closedAt") else "otevřené")
+        if pr.get("mergedAt"):
+            by_gate = merged_by_gate(pr)
+            state = {True: "sloučila brána", False: "sloučil člověk", None: "sloučeno"}[by_gate]
+        else:
+            state = "zavřeno" if pr.get("closedAt") else "otevřené"
         if pr.get("isDraft"):
             state += ", draft"
         rows.append(f"| #{pr['number']} | {pr['title']} | {tier} | {state} | "
@@ -55,9 +71,16 @@ def summarize(prs):
     lines.append(f"- PR od agenta: {len(prs)}; podle risk tier: "
                  + ", ".join(f"{k} {v}" for k, v in sorted(by_tier.items())))
     if prs:
-        lines.append(f"- Sloučeno (auto-merge): {len(merged)} z {len(prs)} ({100 * len(merged) / len(prs):.0f} %)")
+        by_gate = sum(1 for p in merged if merged_by_gate(p) is True)
+        by_human = sum(1 for p in merged if merged_by_gate(p) is False)
+        unknown = len(merged) - by_gate - by_human
+        line = (f"- Sloučeno: {len(merged)} z {len(prs)} ({100 * len(merged) / len(prs):.0f} %); "
+                f"z toho sloučila brána sama {by_gate}, člověk {by_human}")
+        if unknown:
+            line += f", neznámo {unknown} (výstup bez mergedBy)"
+        lines.append(line)
     if merged:
-        lines.append(f"- Doba od PR do merge (medián): "
+        lines.append(f"- Doba od založení PR do merge (medián, ne doba do produkce): "
                      f"{sorted(hours(p['createdAt'], p['mergedAt']) * 60 for p in merged)[len(merged) // 2]:.1f} min")
     if costs:
         lines.append(f"- Cena implementace: celkem {sum(costs):.2f} USD, průměr {sum(costs) / len(costs):.2f} USD na PR, "
