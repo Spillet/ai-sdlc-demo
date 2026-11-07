@@ -159,7 +159,7 @@ Váhy jsou můj předpoklad, ne kalibrovaný model. Ve stránce jdou posuvníky 
 - **Risk gate z části A kontrakt zatím nečte.** `gate_decision` je referenční implementace v Pythonu s testy, napojení do `risk_gate.py` není hotové.
 - **Skóre nezná změnovost ani byznysovou hodnotu.** Chybí historie změn procedur (v syntetické DB žádná není) a plán byznysu. V reálu by vstupovala změnovost z gitu nebo DDL auditu.
 - **Mrtvý kód v okně 6 týdnů** je kandidát, ne důkaz. Ruční zásahy a výjimečné procesy okno nezachytí.
-- **HTML jsem neověřil v prohlížeči.** JavaScript prošel kontrolou syntaxe a během nad stubem DOM (všechny pohledy včetně „Core lane“ se vykreslí bez chyby), vizuální podoba grafu a nového pohledu je neověřená.
+- **HTML je ověřené v prohlížeči jen na GitHub Pages** (7. 11. 2026, <https://spillet.github.io/ai-sdlc-demo/mapa/>): všech pět pohledů se vykreslí bez chyb v konzoli, funguje detail uzlu v grafu i v pohledu Objekty. Jiné prohlížeče a velikosti obrazovky ověřené nejsou.
 - **AI vrstva**: výstupy modelu nejsou spuštěné; tSQLt testy jsou kostry, kontrakt se nekompiloval. Proto mají v evidence pack stav `draft` a žádnou doménu neotevírají.
 
 ## Jak by to škálovalo na 5 000 procedur (back-of-envelope)
