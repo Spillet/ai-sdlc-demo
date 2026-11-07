@@ -3,6 +3,7 @@
   --accent:#0f6e6e; --accent-soft:#e3f1f0;
   --low:#1f7a3d; --low-soft:#e5f4ea; --med:#8a5a00; --med-soft:#fbf0d9;
   --high:#a3302a; --high-soft:#f9e3e1; --sim:#5a4a9c; --sim-soft:#ece8f8;
+  --a:#0f6e6e; --a-soft:#e3f1f0; --b:#5b6b1f; --b-soft:#eef1df;
   --code:#f1efe9;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
@@ -10,6 +11,7 @@
   --accent:#5cc3bf; --accent-soft:#1d3433;
   --low:#6fd08f; --low-soft:#1c3324; --med:#e6b85c; --med-soft:#3a2f17;
   --high:#f08a82; --high-soft:#3d2120; --sim:#b3a6f0; --sim-soft:#2a2540;
+  --a:#5cc3bf; --a-soft:#1d3433; --b:#b9c96a; --b-soft:#2b3119;
   --code:#262a2f;
 }}
 :root[data-theme="dark"]{
@@ -17,6 +19,7 @@
   --accent:#5cc3bf; --accent-soft:#1d3433;
   --low:#6fd08f; --low-soft:#1c3324; --med:#e6b85c; --med-soft:#3a2f17;
   --high:#f08a82; --high-soft:#3d2120; --sim:#b3a6f0; --sim-soft:#2a2540;
+  --a:#5cc3bf; --a-soft:#1d3433; --b:#b9c96a; --b-soft:#2b3119;
   --code:#262a2f;
 }
 *{box-sizing:border-box}
@@ -29,12 +32,16 @@ header.top{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom
 h1{font-size:30px;line-height:1.2;margin:0 0 12px}
 h2{font-size:21px;margin:40px 0 12px}
 h3{font-size:17px;margin:0 0 6px}
+section > h3{margin:26px 0 8px}
 p{margin:0 0 12px}
 .lead{font-size:18px;color:var(--muted);max-width:760px}
 a{color:var(--accent)}
 code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.92em}
 pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.45}
 .note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:16px 0}
+.note p:last-child{margin-bottom:0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
 .links{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}
 .links a{display:inline-block;padding:9px 14px;border:1px solid var(--line);border-radius:8px;
   background:var(--surface);text-decoration:none;font-weight:600}
@@ -59,3 +66,108 @@ tr:last-child td{border-bottom:0}
 .t-med{background:var(--med-soft);color:var(--med)}
 .t-high{background:var(--high-soft);color:var(--high)}
 footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+
+/* Rozcestník: odkaz s popisem */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0 0}
+.card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+  text-decoration:none;color:var(--text)}
+.card.primary{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.card .k{font-weight:700;color:var(--accent);font-size:16px}
+.card p{font-size:14.5px;margin:6px 0 0;color:var(--text)}
+.card .meta{font-size:13px;color:var(--muted)}
+a.card:hover{border-color:var(--accent)}
+@media (max-width:760px){.cards{grid-template-columns:1fr}}
+
+/* Obsah stránky */
+.toc{font-size:14.5px;color:var(--muted);margin:16px 0 0}
+.toc a{white-space:nowrap}
+
+/* Manažerské shrnutí */
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.summary .box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.summary .box h3{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.summary .box p{margin:0 0 8px;font-size:15px}
+.summary .box p:last-child{margin:0}
+@media (max-width:640px){.summary{grid-template-columns:1fr}}
+ol.theses{margin:8px 0 12px;padding-left:22px}
+ol.theses li{margin:0 0 6px}
+
+/* Diagram: dvě části a společná smyčka */
+.d-two{display:grid;grid-template-columns:1fr 28px 1.1fr 28px 1fr;align-items:center;gap:8px;margin:16px 0}
+.d-col{display:grid;gap:10px}
+.d-box{border-radius:10px;padding:12px 14px;font-size:14.5px}
+.d-box b{display:block;font-size:15px;margin-bottom:2px}
+.d-a{background:var(--a-soft);border:1px solid var(--a)}
+.d-a b{color:var(--a)}
+.d-b{background:var(--b-soft);border:1px solid var(--b)}
+.d-b b{color:var(--b)}
+.d-loop{background:var(--surface);border:2px solid var(--text);border-radius:12px;padding:10px 14px;text-align:center}
+.d-loop b{display:block;margin-bottom:4px}
+.d-loop div{padding:6px 0;border-top:1px solid var(--line);font-size:14.5px}
+.d-out{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14.5px}
+.d-out b{display:block}
+.d-out span{color:var(--muted)}
+.arr{text-align:center;color:var(--muted);font-size:20px;line-height:1}
+.arr::before{content:"→"}
+@media (max-width:760px){
+  .d-two{grid-template-columns:1fr}
+  .arr::before{content:"↓"}
+}
+
+/* Diagram: smyčka šesti kroků */
+.loop{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:16px 0 8px;counter-reset:s}
+.loop .s{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;position:relative}
+.loop .s h3{font-size:15px;margin:0 0 4px}
+.loop .s p{margin:0 0 6px}
+.loop .s.in{border-color:var(--low)}
+.loop .s.out{border-style:dashed}
+.loop-legend{font-size:13.5px;color:var(--muted);margin:0 0 12px}
+.loop-back{font-size:14px;color:var(--muted);border-top:2px dashed var(--line);padding-top:8px;margin:0 0 12px}
+@media (max-width:860px){.loop{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:520px){.loop{grid-template-columns:1fr}}
+
+/* Diagram: tři pásma a úrovně autonomie */
+.bands{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.band{border-radius:10px;padding:12px 14px;font-size:14.5px;background:var(--surface);border:1px solid var(--line)}
+.band h3{font-size:15px;margin:0 0 6px}
+.band ul{margin:0;padding-left:18px}
+.band li{margin:0 0 4px}
+.band.go{border-top:4px solid var(--low)}
+.band.cond{border-top:4px solid var(--med)}
+.band.no{border-top:4px solid var(--muted)}
+@media (max-width:760px){.bands{grid-template-columns:1fr}}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 6px}
+.lvl{border-radius:10px;padding:10px 12px;font-size:14px;border:1px solid var(--a);background:var(--a-soft)}
+.lvl b{display:block;color:var(--a)}
+.lvl-arrows{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;margin:0 0 12px}
+.lvl-arrows .up{color:var(--low)}
+.lvl-arrows .down{color:var(--high);text-align:right}
+@media (max-width:760px){.levels{grid-template-columns:1fr 1fr}.lvl-arrows{flex-direction:column}.lvl-arrows .down{text-align:left}}
+
+/* Diagram: jedna doména od mapy po vypnutí */
+.domain{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:16px 0 8px}
+.domain .s{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
+.domain .s h3{font-size:15px;margin:0 0 2px;color:var(--b)}
+.domain .s .how{color:var(--muted);font-size:13px;margin:0 0 6px}
+.domain .s p{margin:0 0 4px}
+.domain .s.in{border-color:var(--low)}
+@media (max-width:860px){.domain{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:520px){.domain{grid-template-columns:1fr}}
+
+/* Diagram: roadmapa */
+.road{display:grid;grid-template-columns:110px repeat(4,1fr);gap:8px;margin:16px 0 8px;font-size:14px}
+.road .h{font-weight:700;border-bottom:2px solid var(--line);padding-bottom:4px}
+.road .lab{font-weight:700;align-self:center}
+.road .lab.a{color:var(--a)}
+.road .lab.b{color:var(--b)}
+.road .c{border-radius:10px;padding:10px 12px}
+.road .c.a{background:var(--a-soft);border:1px solid var(--a)}
+.road .c.b{background:var(--b-soft);border:1px solid var(--b)}
+.road .c p{margin:0 0 4px}
+.road .c .cond{color:var(--muted);font-size:13px;margin:0}
+.road .m{display:none}
+@media (max-width:760px){
+  .road{grid-template-columns:1fr}
+  .road .h,.road .lab{display:none}
+  .road .m{display:block;font-weight:700;font-size:13px;color:var(--muted);margin:0 0 2px}
+}

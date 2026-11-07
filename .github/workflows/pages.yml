@@ -5,6 +5,7 @@ name: Pages
 # (pages/check_public.py) a nasazuje se jen z main, a to jen když je zapnutá proměnná repa
 # PAGES_ENABLED=true (Settings › Secrets and variables › Actions › Variables).
 # Mapu workflow generuje znovu ze stejného commitu (analyze.py), ne z uloženého HTML.
+# Kopie mapy na webu dostane český titulek a lištu s odkazem zpět na přehled (pages/map_banner.py).
 
 on:
   push:
@@ -40,6 +41,7 @@ jobs:
           mkdir -p _site/mapa
           cp pages/index.html pages/zaznam-dema.html pages/style.css _site/
           cp mapa-monolitu/site/index.html _site/mapa/index.html
+          python3 pages/map_banner.py _site/mapa/index.html
           sed -i "s/__COMMIT__/${GITHUB_SHA::7}/g" _site/index.html _site/zaznam-dema.html
           touch _site/.nojekyll
           ls -la _site _site/mapa
