@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI SDLC: ukázka</title>
+<meta name="description" content="Praktická ukázka k case study AI SDLC a dekompozice monolitu: brána podle rizika a kalendáře a mapa databázového monolitu. Fiktivní data.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<header class="top">
+  <p class="eyebrow">Case study · AI SDLC a dekompozice monolitu</p>
+  <h1>Ukázka: o sloučení změny rozhoduje riziko, ne autor</h1>
+  <p class="lead">Dvě části na fiktivním e-shopu Kompas. Brána podle rizika určí, kdo smí změnu sloučit, a ve špičce sezóny je přísnější. Mapa databázového monolitu ukáže, co katalog databáze nevidí a kterou doménu vytáhnout první. Žádná data, kód ani schéma skutečné firmy tu nejsou.</p>
+  <div class="links">
+    <a class="primary" href="mapa/">Otevřít mapu monolitu</a>
+    <a href="zaznam-dema.html">Záznam ukázky brány</a>
+    <a href="https://github.com/Spillet/ai-sdlc-demo">Repozitář na GitHubu</a>
+  </div>
+</header>
+
+<section>
+  <h2>Jedna změna od souboru po mapu</h2>
+  <p>Skutečný průběh z 3. 11. 2026 (<a href="zaznam-dema.html">záznam</a>): nová šablona zákaznické zprávy „v sezóně to potrvá déle“ a její test.</p>
+  <div class="path">
+    <div class="step"><div class="n">1 · Změna</div><h3>2 soubory, 32 řádků</h3><p>Šablona zprávy v <code>Content/</code> a test. Připravil ji skript bez modelu, aby šla ukázka opakovat zdarma.</p></div>
+    <div class="step"><div class="n">2 · Brána</div><h3><span class="tag t-med">🟡 medium</span></h3><p>Testy prošly v čistém běhu bez secrets. Přesto brána změnu podržela pro člověka.</p></div>
+    <div class="step"><div class="n">3 · Důvod</div><h3>Profil <code>peak</code></h3><p>Kalendář změn má okno Black Friday (30. 10.–30. 11.). V běžném týdnu by stejná změna byla <span class="tag t-low">🟢 low</span> a brána by ji sloučila sama.</p></div>
+    <div class="step"><div class="n">4 · Mapa</div><h3>Reklamace: <code>draft-only</code></h3><p>Kdyby změna sahala na uložené procedury reklamací, mapa říká: jen návrh PR, chybí ověřené testy chování. Brána tento stav zatím nečte.</p></div>
+  </div>
+  <p>Pak člověk ručně spustil přepočet s profilem <code>normal</code>. Brána změnu sloučila a do komentáře zapsala, kdo profil přepsal a co by platilo podle kalendáře. Je to <strong>simulovaná výjimka</strong>: v produkci by přepnutí profilu schvaloval druhý člověk.</p>
+</section>
+
+<section>
+  <h2>Co je skutečné a co simulované</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Část</th><th>Stav</th><th>Poznámka</th></tr></thead>
+    <tbody>
+      <tr><td>Agentní implementace a AI review</td><td><span class="tag real">skutečné</span></td><td>Historické běhy, hlavně PR #13. Při živé ukázce se agent nespouští.</td></tr>
+      <tr><td>Opakovatelná ukázka</td><td><span class="tag real">skutečné</span></td><td>Skutečný workflow; změnu připraví skript bez modelu a AI review je připravený záznam.</td></tr>
+      <tr><td>Výpočet brány, testy a přepočet</td><td><span class="tag real">skutečné</span></td><td>CI při každé změně ověřuje 24 regresních scénářů (18 změn, 6 hranic kalendáře).</td></tr>
+      <tr><td>Merge u výsledku <code>low</code></td><td><span class="tag real">skutečné</span></td><td>PR sloučí skript brány pod identitou GitHub Actions.</td></tr>
+      <tr><td>Povinné lidské schválení u <code>medium</code> a <code>high</code></td><td><span class="tag not">nevynucené</span></td><td>Brána nastaví kontrolu na neúspěch a požádá o review. Sloučení technicky nebrání.</td></tr>
+      <tr><td>Ruční přepnutí <code>peak → normal</code></td><td><span class="tag sim">simulované</span></td><td>Zaznamenaná výjimka bez druhého schválení.</td></tr>
+      <tr><td>Nasazení do produkce a návrat</td><td><span class="tag plan">návrh</span></td><td>Ukázka končí sloučením do hlavní větve.</td></tr>
+      <tr><td>Mapa monolitu</td><td><span class="tag real">skutečný kód</span> <span class="tag sim">syntetická data</span></td><td>Analyzátor nad syntetickou databází (277 procedur, 92 tabulek), klientem, plánovačem a simulovaným záznamem běhu.</td></tr>
+      <tr><td>Mapa řídí bránu</td><td><span class="tag plan">návrh</span></td><td>Kontrakt a referenční rozhodnutí jsou připravené a testované samostatně. Brána je zatím nečte.</td></tr>
+      <tr><td>Snížení autonomie podle incidentů</td><td><span class="tag plan">návrh</span></td><td>Autonomie se v ukázce mění jen podle kalendáře.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Pravidla podle období</h2>
+  <p>Pravidla i kalendář jsou kód v repozitáři. Mění se přes PR a samy patří do nejvyššího rizika.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>normal</th><th>peak (30. 10.–30. 11.)</th><th>freeze (26.–30. 11.)</th></tr></thead>
+    <tbody>
+      <tr><td>Brána sloučí sama</td><td>dokumentace, testy, šablony zpráv</td><td>jen dokumentace</td><td>nic</td></tr>
+      <tr><td>Kód</td><td>šablony low, ostatní medium, vrácení peněz high</td><td>každá změna kódu aspoň medium</td><td>vše blokované, hotfix high</td></tr>
+      <tr><td>Limit velikosti pro low</td><td>150 řádků</td><td>50 řádků</td><td>–</td></tr>
+      <tr><td>Schválení pro high</td><td>1</td><td>2</td><td>2</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Kde má ukázka hranice</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Oblast</th><th>V ukázce</th><th>V produkci by bylo potřeba</th></tr></thead>
+    <tbody>
+      <tr><td>Merge</td><td>Brána sama slučuje jen low. Člověk s právem zápisu může sloučit cokoli.</td><td>Ruleset na hlavní větvi s povinnou kontrolou brány a bez obcházení.</td></tr>
+      <tr><td>Schválení</td><td>Počet schválení brána zapíše, ale nevynutí. Owning team je jeden člověk.</td><td>Schválení vlastníky kódu, počet podle profilu.</td></tr>
+      <tr><td>Výjimka z kalendáře</td><td>Spustí ji kdokoli s právem zápisu; komentář v PR ji zaznamená.</td><td>Chráněné prostředí se schvalovateli a auditní log mimo PR.</td></tr>
+      <tr><td>Izolace agenta</td><td>Agent nemá token se zápisem a testy běží znovu bez secrets. Běží ale na runneru se sítí.</td><td>Sandbox bez odchozí sítě a krátkodobá pověření.</td></tr>
+      <tr><td>Data mapy</td><td>Syntetická databáze a simulovaný běh; parser T-SQL na regulárních výrazech.</td><td>4–6 týdnů záznamu běhu nad kopií databáze a oficiální parser T-SQL.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Mapa monolitu</h2>
+  <p>Mapa skládá závislosti ze čtyř zdrojů: kód procedur, desktopový klient, plánovač úloh a záznam běhu. Na syntetických datech ukazuje:</p>
+  <ul>
+    <li><strong>119 z 252 živých procedur (47 %)</strong> nemá v katalogu databáze žádného volajícího. Volá je klient, plánovač, web nebo dynamické SQL. Jde o výsledek syntetické databáze, ne měření skutečné firmy.</li>
+    <li><strong>25 procedur</strong> za 6 týdnů nikdo nezavolal: kandidáti k prověření, ne důkaz nepotřebnosti.</li>
+    <li><strong>Reklamace</strong> vycházejí jako první doména. Skóre slouží jako filtr kandidátů, rozhoduje vlastník.</li>
+  </ul>
+  <p>Stránka mapy má pět pohledů: <strong>Domény a pořadí</strong>, <strong>Core lane</strong>, <strong>Graf</strong>, <strong>Blind spots</strong> a <strong>Objekty</strong>. Funguje i offline: stačí ji uložit a otevřít z disku.</p>
+  <div class="links"><a class="primary" href="mapa/">Otevřít mapu monolitu</a></div>
+</section>
+
+<section>
+  <h2>Jak ukázku ověřit bez GitHubu</h2>
+  <p>Pravidla brány jdou spustit lokálně na 24 scénářích, bez sítě a bez modelu:</p>
+<pre>pip install pyyaml==6.0.2
+python3 .github/scripts/run_gate_evals.py
+cd mapa-monolitu &amp;&amp; python3 analyze.py &amp;&amp; python3 -m unittest discover -s tests</pre>
+</section>
+
+<footer>
+  Stránka vzniká automaticky z repozitáře <code>Spillet/ai-sdlc-demo</code>, commit <code>__COMMIT__</code>. Mapa je vygenerovaná ze stejného commitu. Všechna data jsou fiktivní.
+</footer>
+</main>
+</body>
+</html>

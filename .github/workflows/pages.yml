@@ -1,0 +1,67 @@
+name: Pages
+
+# Veřejná stránka ukázky na GitHub Pages: přehled pro hodnotitele, záznam ukázky brány a mapa monolitu.
+# Web na Pages je veřejný i u soukromého repa. Proto se na PR web jen sestaví a zkontroluje
+# (pages/check_public.py) a nasazuje se jen z main, a to jen když je zapnutá proměnná repa
+# PAGES_ENABLED=true (Settings › Secrets and variables › Actions › Variables).
+# Mapu workflow generuje znovu ze stejného commitu (analyze.py), ne z uloženého HTML.
+
+on:
+  push:
+    branches: [main]
+    paths: ["pages/**", "mapa-monolitu/**", ".github/workflows/pages.yml"]
+  pull_request:
+    paths: ["pages/**", "mapa-monolitu/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.12'
+      - name: Mapa monolitu ze stejného commitu
+        working-directory: mapa-monolitu
+        run: python3 analyze.py
+      - name: Sestavit web
+        run: |
+          mkdir -p _site/mapa
+          cp pages/index.html pages/zaznam-dema.html pages/style.css _site/
+          cp mapa-monolitu/site/index.html _site/mapa/index.html
+          sed -i "s/__COMMIT__/${GITHUB_SHA::7}/g" _site/index.html _site/zaznam-dema.html
+          touch _site/.nojekyll
+          ls -la _site _site/mapa
+      - name: Kontrola, že na veřejném webu nic citlivého není
+        run: python3 pages/check_public.py _site
+      - name: Artefakt pro Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.PAGES_ENABLED == 'true'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.PAGES_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

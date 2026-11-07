@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Záznam ukázky brány</title>
+<meta name="description" content="Záznam průběhu PR #16 z 3. 11. 2026: stejná změna v profilu peak a po ručním přepočtu s profilem normal.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<header class="top">
+  <p class="eyebrow"><a href="./">← Ukázka</a> · Záznam, ne živý běh</p>
+  <h1>Záznam ukázky brány: PR #16, 3. 11. 2026</h1>
+  <p class="lead">Záloha pro případ, že GitHub Actions nebo síť nejsou k dispozici. Obsah je převzatý z komentáře brány u <a href="https://github.com/Spillet/ai-sdlc-demo/pull/16">PR #16</a>. Celý běh přípravy trval 95 s, přepočet 29 s.</p>
+</header>
+
+<section>
+  <h2>1. Změna</h2>
+  <p>Workflow <code>demo-prepare</code> připravil změnu skriptem bez modelu: novou šablonu zákaznické zprávy a její test. AI review v tomto workflow neběží; brána dostala připravený záznam a v komentáři to uvádí.</p>
+<pre>src/Claims.Api/Content/Templates/ClaimPeakDelayTemplate.cs   +9
++public sealed class ClaimPeakDelayTemplate : IMessageTemplate
++{
++    public string Key => "claim-peak-delay";
++    public string Subject => "Reklamace {claimNumber}: v sezóně to potrvá déle";
++    public string Body =>
++        "Dobrý den, reklamaci {claimNumber} k objednávce {orderNumber} jsme přijali.
++         V sezóně Black Friday máme víc práce, vyřídíme ji ale v zákonné lhůtě,
++         nejpozději do {resolveBy}.";
++}
+
+tests/Claims.Tests/Content/ClaimPeakDelayTemplateTests.cs    +23
++    [Fact]
++    public void Template_is_registered_and_fills_placeholders() { … }</pre>
+</section>
+
+<section>
+  <h2>2. Rozhodnutí brány podle kalendáře</h2>
+  <p>Kalendář změn měl aktivní okno „Black Friday sezóna“ (30. 10.–30. 11. 2026, Europe/Prague), tedy profil <code>peak</code>. V něm je každá změna kódu aspoň medium.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Kdy</th><th>Spustil</th><th>Profil</th><th>Rozhodnutí</th></tr></thead>
+    <tbody>
+      <tr><td>3. 11. 22:10</td><td>demo-prepare</td><td><code>peak</code> (kalendář)</td><td><span class="tag t-med">🟡 medium</span> čeká na schválení člověkem (1×)</td></tr>
+      <tr><td>3. 11. 22:14</td><td>gate-reevaluate, ručně</td><td><code>normal</code> (ruční přepsání)</td><td><span class="tag t-low">🟢 low</span> brána PR sloučila</td></tr>
+    </tbody>
+  </table></div>
+  <p>Obě rozhodnutí počítala se stejnou verzí pravidel (<code>risk-policy.yml@456d36b</code>, <code>change-calendar.yml@4eb238a</code>).</p>
+</section>
+
+<section>
+  <h2>3. Signály po přepočtu s profilem <code>normal</code></h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Signál</th><th>Hodnota</th><th>Risk tier</th><th>Proč</th></tr></thead>
+    <tbody>
+      <tr><td>cesta</td><td><code>…/Content/Templates/ClaimPeakDelayTemplate.cs</code></td><td><span class="tag t-low">low</span></td><td>Texty a šablony zákaznických zpráv. Nemění peníze ani zákonná pravidla.</td></tr>
+      <tr><td>cesta</td><td><code>…/Content/ClaimPeakDelayTemplateTests.cs</code></td><td><span class="tag t-low">low</span></td><td>Testy a dokumentace.</td></tr>
+      <tr><td>velikost</td><td>32 řádků</td><td><span class="tag t-low">low</span></td><td>V limitu profilu normal (150 řádků). V peak je limit 50.</td></tr>
+      <tr><td>AI review</td><td>souhlasí (připravené, bez modelu)</td><td><span class="tag t-low">low</span></td><td>Připravená změna z <code>demo/messages.yml</code>.</td></tr>
+      <tr><td>testy</td><td>prošly</td><td><span class="tag t-low">low</span></td><td>Ověření v čistém jobu bez secrets: guardrails a <code>dotnet test</code>.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Výsledný risk tier je nejvyšší ze všech signálů. Komentář brány navíc uvádí, kdo profil přepsal a že bez přepsání by platil <code>peak</code>.</p>
+</section>
+
+<section>
+  <h2>Jak to číst</h2>
+  <div class="note">
+    <p><strong>Ruční přepsání profilu je simulovaná výjimka.</strong> Ukazuje, že výjimka zanechá stopu: kdo, kdy, jaký profil a co by platilo podle kalendáře. Nechrání ji druhé schválení a komentář v PR není neměnný auditní záznam. V produkci by přepnutí profilu spouštělo chráněné prostředí se schvalovateli.</p>
+    <p><strong>Ukázka končí sloučením do hlavní větve.</strong> Nasazení do produkce je v návrhu úkolem existujícího CD.</p>
+  </div>
+  <p>Stejný průběh se skutečným agentem a AI review je v <a href="https://github.com/Spillet/ai-sdlc-demo/pull/13">PR #13</a>.</p>
+</section>
+
+<footer>
+  Záznam z repozitáře <code>Spillet/ai-sdlc-demo</code>, stránka sestavená z commitu <code>__COMMIT__</code>. Všechna data jsou fiktivní.
+</footer>
+</main>
+</body>
+</html>
