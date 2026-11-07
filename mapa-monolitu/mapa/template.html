@@ -3,106 +3,244 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Monolith Map</title>
+<title>Mapa monolitu · ukázka</title>
 <style>
 :root{
-  --bg:#f7f7f5;--panel:#ffffff;--ink:#1d1d1b;--muted:#6b6b66;--line:#e2e1dc;--accent:#2b5fd9;
+  --bg:#f7f7f5;--panel:#ffffff;--ink:#1d1d1b;--muted:#6b6b66;--line:#e2e1dc;--accent:#2b5fd9;--accent-soft:#e8eefc;
   --good:#2f8a4c;--warn:#b7791f;--bad:#c0392b;--chip:#efeee9;--code:#f3f2ee;
   --l-static:#6b7280;--l-dynamic:#d97706;--l-runtime:#7c3aed;--l-client:#0891b2;--l-agent:#db2777;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#7aa2ff;
+  --bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#7aa2ff;--accent-soft:#1f2a44;
   --good:#5cc27f;--warn:#e0a93f;--bad:#ef6b5b;--chip:#2a2a27;--code:#232320;
   --l-static:#9ca3af;--l-dynamic:#f59e0b;--l-runtime:#a78bfa;--l-client:#22d3ee;--l-agent:#f472b6;}}
 :root[data-theme="dark"]{
-  --bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#7aa2ff;
+  --bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#7aa2ff;--accent-soft:#1f2a44;
   --good:#5cc27f;--warn:#e0a93f;--bad:#ef6b5b;--chip:#2a2a27;--code:#232320;
   --l-static:#9ca3af;--l-dynamic:#f59e0b;--l-runtime:#a78bfa;--l-client:#22d3ee;--l-agent:#f472b6;}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
-header{padding:18px 16px 8px;max-width:1400px;margin:0 auto}
-h1{font-size:20px;margin:0 0 4px}
-.sub{color:var(--muted);margin:0}
-.kpis{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:120px}
-.kpi b{display:block;font-size:20px}
-.kpi span{color:var(--muted);font-size:12px}
-nav{max-width:1400px;margin:0 auto;padding:0 16px;display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
-nav button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 12px;color:var(--muted);font:inherit;cursor:pointer;white-space:nowrap}
-nav button.on{color:var(--ink);border-color:var(--accent)}
-main{max-width:1400px;margin:0 auto;padding:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{padding:20px 16px 8px;max-width:1400px;margin:0 auto}
+h1{font-size:24px;margin:0 0 6px}
+.eyebrow{margin:0 0 4px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--ink);margin:0;max-width:820px;font-size:15px}
+h2{font-size:18px;margin:22px 0 8px}h3{font-size:15px;margin:16px 0 6px}
+.lead{max-width:860px;margin:0 0 10px;font-size:15px}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+ul{padding-left:18px;margin:6px 0}
+code{font-size:12px;background:var(--code);padding:0 4px;border-radius:4px}
+/* karty */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:10px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.card li,.panel li,.panel h2,.chip{overflow-wrap:anywhere}
+.card h3{margin:0 0 6px;font-size:14px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card p{margin:0 0 6px}
+.card .go{background:none;border:0;padding:0;color:var(--accent);font:inherit;font-weight:600;cursor:pointer}
+.count{font-size:12px;font-weight:700;background:var(--chip);border-radius:10px;padding:1px 8px;white-space:nowrap}
+.why{margin:12px 0 6px}
+.why .card{border-top:3px solid var(--accent)}
+.limits{border-left:3px solid var(--warn);background:var(--panel);padding:8px 12px;margin:10px 0;max-width:1100px;border-radius:0 8px 8px 0}
+/* čísla */
+.kpis{display:grid;gap:8px;margin:12px 0 4px}
+.kpis.main{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.kpis.rest{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.kpis.main .kpi b{font-size:26px}
+.kpi span{color:var(--muted);font-size:12px;display:block}
+.kpis.main .kpi span{color:var(--ink);font-size:13px}
+.kpi small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+details.gloss{margin:10px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.gloss summary{cursor:pointer;font-weight:600}
+details.gloss dl{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:6px 14px;margin:10px 0 4px}
+details.gloss dt{font-weight:600}details.gloss dd{margin:0}
+@media (max-width:600px){details.gloss dl{grid-template-columns:1fr}details.gloss dd{margin:0 0 8px}}
+/* výběr pohledu */
+.views-wrap{max-width:1400px;margin:0 auto;padding:6px 16px 0}
+.views-wrap h2{margin:16px 0 2px}
+.views{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:10px 0 0;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.view{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);font:inherit;cursor:pointer;min-height:76px}
+.view:hover{border-color:var(--accent)}
+.view .vn{font-size:12px;font-weight:700;color:var(--accent)}
+.view b{font-size:15px}
+.view small{color:var(--muted);font-size:12px;line-height:1.35}
+.view.on{border:2px solid var(--accent);background:var(--accent-soft);padding:9px 11px}
+.view.on small{color:var(--ink)}
+@media (max-width:900px){.views{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:600px){.views{grid-template-columns:repeat(2,minmax(0,1fr))}.view{min-height:0}}
+main{max-width:1400px;margin:0 auto;padding:4px 16px 24px}
 .tab{display:none}.tab.on{display:block}
+.howto{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:8px 14px;margin:8px 0 14px;max-width:1100px}
+.howto b.t{display:block;margin-bottom:2px}
+.howto ul{margin:4px 0}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:14px;color:var(--muted);background:var(--panel)}
+/* tabulky */
 table{border-collapse:collapse;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
 th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
 th{font-size:12px;color:var(--muted);font-weight:600;background:var(--chip)}
-td.n{text-align:right;font-variant-numeric:tabular-nums}
-tr.click{cursor:pointer}tr.click:hover{background:var(--chip)}
-.wrap{overflow-x:auto}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.click{cursor:pointer}tr.click:hover,tr.click:focus{background:var(--chip)}
+tr.sel{background:var(--accent-soft)!important}
+.wrap{overflow-x:auto;max-width:100%}
+#domtab{min-width:860px}#lanetab{min-width:880px}
 .bar{height:8px;border-radius:4px;background:var(--chip);position:relative;min-width:80px}
 .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--good)}
 .chip{display:inline-block;background:var(--chip);border-radius:10px;padding:1px 8px;margin:1px 2px;font-size:12px}
 .lay{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px}
-@media (max-width:900px){.grid{grid-template-columns:1fr}}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px}
-canvas{width:100%;height:640px;display:block;background:var(--panel);border:1px solid var(--line);border-radius:8px;touch-action:none}
-@media (max-width:600px){canvas{height:420px}}
+@media (max-width:900px){.grid{grid-template-columns:1fr}#otabwrap{max-height:55vh;overflow:auto;border-radius:8px}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}
+.panel h2{margin-top:0;word-break:break-word}
 .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+input[type=search]{min-width:min(260px,100%)}
 select,input[type=search]{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);max-width:100%}
+button.btn{font:inherit;padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);cursor:pointer}
+button.btn:hover{border-color:var(--accent)}
 label{font-size:13px;color:var(--muted)}
 pre{background:var(--code);padding:10px;border-radius:6px;overflow:auto;font-size:12px;max-height:420px}
-.muted{color:var(--muted)}
-h2{font-size:16px;margin:18px 0 8px}h3{font-size:14px;margin:14px 0 6px}
-.weights{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 16px;margin:8px 0 12px}
-.weights label{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.weights input{width:110px}
-.note{border-left:3px solid var(--warn);padding:6px 10px;background:var(--panel);margin:8px 0}
-ul{padding-left:18px}
+.note{border-left:3px solid var(--warn);padding:8px 12px;background:var(--panel);margin:10px 0;border-radius:0 8px 8px 0;max-width:1100px}
+.note.info{border-left-color:var(--accent)}
+/* váhy */
+.wgroups{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 12px}
+@media (max-width:900px){.wgroups{grid-template-columns:1fr}}
+.wgroup h3{margin:0 0 6px}
+.w{padding:6px 0;border-top:1px solid var(--line)}
+.w label{display:flex;justify-content:space-between;gap:8px;color:var(--ink);font-size:13px;font-weight:600}
+.w input{width:100%}
+.w small{display:block;color:var(--muted);font-size:12px}
+.w.changed label b{color:var(--accent)}
+.wbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
+#domsum{font-size:15px}
+.up{color:var(--good);font-weight:700}.down{color:var(--bad);font-weight:700}
+/* core lane */
 .st{display:inline-block;border-radius:10px;padding:1px 9px;font-size:12px;font-weight:600;white-space:nowrap;border:1px solid currentColor}
 .st-closed{color:var(--bad)}.st-draft-only{color:var(--warn)}.st-open{color:var(--good)}
+.card.s-closed{border-top:3px solid var(--bad)}.card.s-draft-only{border-top:3px solid var(--warn)}.card.s-open{border-top:3px solid var(--good)}
 .ok{color:var(--good)}.ko{color:var(--bad)}
+/* graf */
+canvas{width:100%;height:600px;display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;touch-action:none;cursor:grab}
+@media (max-width:600px){canvas{height:380px}}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin:8px 0;font-size:12px}
+.legend .sw{display:inline-block;width:10px;height:10px;margin-right:4px;vertical-align:middle}
+.dchips{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 0}
+.dchip{font:inherit;font-size:12px;background:var(--chip);border:1px solid transparent;border-radius:10px;padding:1px 8px;color:var(--ink);cursor:pointer}
+.dchip.on{border-color:var(--accent);background:var(--accent-soft)}
+#gmsg{font-size:12px}
+/* blind spots */
+.scrollbox{max-height:220px;overflow:auto;margin:4px 0 0}
+.card ul{margin:4px 0 0}
+footer{max-width:1400px;margin:0 auto;padding:12px 16px 28px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
 <header>
-  <h1>Monolith Map</h1>
-  <p class="sub">Syntetická DB fiktivního e-shopu „Kompas“. Závislosti ze 4 vrstev, domain candidates a extraction readiness score. Žádná reálná data.</p>
-  <div class="kpis" id="kpis"></div>
+  <p class="eyebrow">Prototyp · syntetická data</p>
+  <h1>Mapa monolitu</h1>
+  <p class="sub">Prototyp ke case study „AI SDLC a dekompozice monolitu“, část B. Ukazuje, co v databázi fiktivního e-shopu Kompas opravdu běží, kdo to volá a kterou doménu jde oddělit jako první.</p>
+  <p style="margin:8px 0 0"><a href="#views-h">Rovnou k pěti pohledům ↓</a></p>
+  <h2>K čemu prototyp je</h2>
+  <div class="cards why" id="why"></div>
+  <p class="limits"><b>Hranice prototypu:</b> syntetická databáze a 6 týdnů simulovaného běhu, ne data skutečné firmy. Závislosti v kódu hledá parser na regulárních výrazech, ne úplný parser T-SQL. Mapa bránu z ukázky neřídí: kontrakt pro bránu je připravený a otestovaný samostatně, brána ho zatím nečte.</p>
+  <h2>Co mapa našla</h2>
+  <div class="kpis main" id="kpis"></div>
+  <div class="kpis rest" id="kpis2"></div>
+  <details class="gloss" id="gloss">
+    <summary>Slovník pojmů</summary>
+    <dl>
+      <dt>Kandidát domény</dt><dd>Skupina procedur a tabulek, které spolu pracují, nalezená algoritmem. Je to návrh pro workshop, ne hotová doména. Hranici potvrdí architekt a vlastník.</dd>
+      <dt>Názvy <code>D:…</code></dt><dd>Vznikají automaticky podle nejcentrálnější tabulky skupiny: <code>D:OrderNote</code> je skupina kolem tabulky <code>OrderNote</code>. Lidský název (Reklamace, Katalog) mají jen domény, kterým je přidělený vlastník.</dd>
+      <dt>Katalog závislostí</dt><dd>Co o vazbách mezi objekty ví databáze sama (obdoba <code>sys.sql_expression_dependencies</code> v MS SQL). Zná jen odkazy zapsané přímo v kódu.</dd>
+      <dt>Vrstva</dt><dd>Zdroj, ze kterého mapa vazbu zjistila: katalog (statická vrstva), rozbor dynamického SQL, zdrojáky klienta v Delphi, plánovač úloh a záznam běhu. U každé vazby si mapa pamatuje, která vrstva ji viděla.</dd>
+      <dt>Blind spot</dt><dd>Slepé místo: vazba, kterou katalog nevidí nebo kterou mapa nezná jistě, například jméno tabulky skládané až za běhu.</dd>
+      <dt>Živá a mrtvá procedura</dt><dd>Živá se za 6 týdnů simulovaného běhu aspoň jednou zavolala. Mrtvá se nezavolala a nevolá ji ani plánovač, ani klient: kandidát na vypnutí, ne na přepis. „Mimo okno měření“ = je v plánovači, ale běží řidčeji (třeba roční uzávěrka). „V klientovi, nepoužitá“ = klient ji umí zavolat, ale za 6 týdnů to nikdo neudělal.</dd>
+      <dt>Sdílená tabulka</dt><dd>Tabulka, kterou používá mnoho procedur z různých domén (například <code>Orders</code>, <code>Product</code>). Ze shlukování je vyřazená, jinak by slepila všechno do jedné domény.</dd>
+      <dt>Skóre připravenosti</dt><dd>Extraction readiness score, 0–100. Čím vyšší, tím méně vazeb drží doménu v monolitu a tím snáz jde oddělit.</dd>
+      <dt>Core lane</dt><dd>Cesta, kterou agent mění jádro monolitu, tedy procedury a tabulky domény. Stav <code>closed</code>, <code>draft-only</code> nebo <code>open</code> říká, co agent v doméně smí.</dd>
+      <dt>Characterization test</dt><dd>Test, který zachytí současné chování procedury, i s jejími chybami. Nová verze se s ním porovná. „Ověřený“ = má doložený zelený běh.</dd>
+      <dt>Vlastník (owning team)</dt><dd>Tým, který za doménu odpovídá a rozhoduje o změnách v ní. V ukázce fiktivní.</dd>
+      <dt>Evidence pack</dt><dd>Soubor, kam mapa pro každou doménu zapíše důkazy: vlastníka, testy, blind spots a stav core lane. Je připravený jako vstup pro bránu.</dd>
+    </dl>
+  </details>
 </header>
-<nav id="nav">
-  <button data-t="domeny" class="on">Domény a pořadí</button>
-  <button data-t="lane">Core lane</button>
-  <button data-t="graf">Graf</button>
-  <button data-t="blind">Blind spots</button>
-  <button data-t="objekty">Objekty</button>
-</nav>
+<div class="views-wrap">
+  <h2 id="views-h">Pět pohledů na stejná data</h2>
+  <p class="muted" style="margin:0">Doporučené pořadí je zleva doprava. Každý pohled začíná krátkým návodem, jak ho číst.</p>
+  <div class="views" id="views" role="tablist" aria-labelledby="views-h">
+    <button class="view on" role="tab" id="t-domeny" data-t="domeny" aria-controls="domeny" aria-selected="true"><span class="vn">1</span><b>Domény a pořadí</b><small>Kterou doménu oddělit první a proč</small></button>
+    <button class="view" role="tab" id="t-lane" data-t="lane" aria-controls="lane" aria-selected="false" tabindex="-1"><span class="vn">2</span><b>Core lane</b><small>Kde smí agent měnit jádro a co mu chybí</small></button>
+    <button class="view" role="tab" id="t-graf" data-t="graf" aria-controls="graf" aria-selected="false" tabindex="-1"><span class="vn">3</span><b>Graf</b><small>Vazby mezi procedurami a tabulkami</small></button>
+    <button class="view" role="tab" id="t-blind" data-t="blind" aria-controls="blind" aria-selected="false" tabindex="-1"><span class="vn">4</span><b>Blind spots</b><small>Co katalog databáze nevidí</small></button>
+    <button class="view" role="tab" id="t-objekty" data-t="objekty" aria-controls="objekty" aria-selected="false" tabindex="-1"><span class="vn">5</span><b>Objekty</b><small>Detail a kód každého objektu</small></button>
+  </div>
+</div>
 <main>
-  <section class="tab on" id="domeny">
-    <p class="muted">Skóre 0–100: čím víc, tím snáz jde doména vyjmout jako první. Váhy jsou předpoklad k diskusi; posunem posuvníků se pořadí přepočítá. Kliknutím na řádek se otevře detail.</p>
-    <div class="weights" id="weights"></div>
+  <section class="tab on" id="domeny" role="tabpanel" aria-labelledby="t-domeny">
+    <h2>Kterou doménu oddělit jako první</h2>
+    <p class="lead">Mapa seskupila procedury a tabulky do kandidátů domén a každému spočítala skóre připravenosti 0–100. Čím vyšší skóre, tím méně vazeb drží doménu v monolitu. Pořadí je podklad pro workshop s architekty, ne rozhodnutí.</p>
+    <div class="howto"><b class="t">Jak číst tento pohled</b><ul>
+      <li>Řádek = kandidát domény. Pruh u skóre: zelená ≥ 75, oranžová 60–75, červená pod 60.</li>
+      <li>„úklid“ = většina procedur je mrtvá, skupina patří k vypnutí, ne k přepisu. „malý“ = méně než 5 živých procedur, spíš část sousední domény. Do pořadí se nepočítají.</li>
+      <li>Táhla pod tabulkou mění váhy kritérií. Pořadí se hned přepočítá a sloupec Posun ukáže změnu proti výchozím vahám.</li>
+      <li>Klikni na řádek: pod tabulkou se ukáže, z čeho se skóre skládá a s kým doména sdílí data.</li>
+    </ul></div>
+    <p id="domsum" aria-live="polite"></p>
     <div class="wrap"><table id="domtab"></table></div>
-    <div id="domdetail"></div>
+    <h3>Váhy kritérií: posuň a sleduj pořadí</h3>
+    <p class="lead">Skóre = 100 − srážky + bonusy. U každého kritéria mapa změří podíl 0–100 %, jak moc se doménu týká. Podíl krát váha dá body. Vyšší váha srážky posune dolů domény, kterých se kritérium týká víc. Vyšší váha bonusu je posune nahoru. Výchozí váhy jsou předpoklad k diskusi, ne výsledek měření.</p>
+    <div class="wbar"><button class="btn" id="wreset" type="button">Vrátit výchozí váhy</button><span class="small" id="wstate" aria-live="polite"></span></div>
+    <div class="wgroups" id="weights"></div>
+    <div id="domdetail"><div class="empty">Klikni na řádek tabulky. Ukáže se, z čeho se skóre domény skládá, do čích tabulek zapisuje, kdo zapisuje do jejích a které procedury k ní patří.</div></div>
+    <div id="sens"></div>
   </section>
-  <section class="tab" id="graf">
+  <section class="tab" id="lane" role="tabpanel" aria-labelledby="t-lane"></section>
+  <section class="tab" id="graf" role="tabpanel" aria-labelledby="t-graf">
+    <h2>Graf závislostí</h2>
+    <p class="lead">Každý bod je objekt databáze, každá čára vazba mezi dvěma objekty. Body stejné barvy patří do stejného kandidáta domény. Graf ukazuje, které skupiny drží pohromadě a které tabulky je spojují.</p>
+    <div class="howto"><b class="t">Jak číst tento pohled</b><ul>
+      <li>Najeď nebo klikni na bod: zvýrazní se jeho přímí sousedé a vpravo (na mobilu pod grafem) se ukáže detail. Klik do prázdna výběr zruší.</li>
+      <li>Kolečkem myši nebo tlačítky + a − přibližuješ, tažením posouváš. „Celý graf“ vrátí výchozí pohled.</li>
+      <li>Filtr Doména ukáže jednu doménu a tabulky, které sdílí s ostatními. Stejně funguje klik na barevný štítek domény pod grafem.</li>
+    </ul></div>
     <div class="controls">
       <label>Doména <select id="fdom"><option value="">všechny</option></select></label>
-      <label><input type="checkbox" id="fshared" checked> sdílené uzly</label>
-      <label><input type="checkbox" id="fdead"> mrtvé</label>
-      <input type="search" id="fsearch" placeholder="hledat objekt…">
-      <span id="legend"></span>
+      <label><input type="checkbox" id="fshared" checked> sdílené objekty</label>
+      <label><input type="checkbox" id="fdead"> mrtvé procedury</label>
+      <input type="search" id="fsearch" list="gnodes" placeholder="najít objekt, např. Product" aria-label="Najít objekt v grafu"><datalist id="gnodes"></datalist>
+      <button class="btn" id="zin" type="button" aria-label="Přiblížit">+</button><button class="btn" id="zout" type="button" aria-label="Oddálit">−</button><button class="btn" id="zfit" type="button">Celý graf</button>
+      <span id="gmsg" class="muted" aria-live="polite"></span>
     </div>
     <div class="grid">
-      <canvas id="cv"></canvas>
-      <div class="panel" id="detail"><p class="muted">Klikni na uzel. Kolečka = procedury a funkce, čtverce = tabulky (velikost podle dat). Barva hrany = vrstva, která ji viděla.</p></div>
+      <div>
+        <canvas id="cv" aria-label="Graf závislostí. Stejné informace jsou přístupné v pohledu Objekty."></canvas>
+        <div class="legend" id="legend"></div>
+        <div class="dchips" id="dchips"></div>
+      </div>
+      <div class="panel" id="detail"></div>
     </div>
   </section>
-  <section class="tab" id="lane"></section>
-  <section class="tab" id="blind"></section>
-  <section class="tab" id="objekty">
-    <div class="controls"><input type="search" id="osearch" placeholder="filtr…"><select id="otype"><option value="">všechny typy</option><option>P</option><option>FN</option><option>TR</option><option>U</option><option>V</option></select></div>
-    <div class="grid"><div class="wrap"><table id="otab"></table></div><div class="panel" id="odetail"><p class="muted">Vyber objekt.</p></div></div>
+  <section class="tab" id="blind" role="tabpanel" aria-labelledby="t-blind"></section>
+  <section class="tab" id="objekty" role="tabpanel" aria-labelledby="t-objekty">
+    <h2>Objekty databáze</h2>
+    <p class="lead" id="olead"></p>
+    <div class="howto"><b class="t">Jak číst tento pohled</b><ul>
+      <li>Hledej podle jména, domény nebo stavu (například <code>Product</code>, <code>Claim</code>, <code>mrtvá</code>). Typ objektu zúžíš výběrem vedle.</li>
+      <li>Klikni na řádek: vpravo (na mobilu pod tabulkou) se ukáže, kdo objekt volá, co čte a zapisuje a jeho kód. Poslední sloupec je u procedur počet volání za 6 týdnů, u tabulek velikost v GB.</li>
+      <li>Barevná tečka u vazby = vrstva, která ji viděla. Vazba jen s jinou tečkou než šedou (katalog) je pro katalog databáze neviditelná.</li>
+      <li>Stav: <b>živá</b> se za 6 týdnů zavolala, <b>mrtvá</b> ne a nikdo ji nevolá, <b>mimo okno měření</b> je v plánovači, ale běží řidčeji, <b>v klientovi, nepoužitá</b> ji klient umí zavolat, ale nikdo to neudělal.</li>
+    </ul></div>
+    <div class="controls">
+      <input type="search" id="osearch" placeholder="hledat jméno, doménu, stav…" aria-label="Hledat objekt">
+      <select id="otype" aria-label="Typ objektu"><option value="">všechny typy</option><option value="P">procedury (P)</option><option value="FN">funkce (FN)</option><option value="TR">triggery (TR)</option><option value="U">tabulky (U)</option><option value="V">pohledy (V)</option></select>
+      <span id="ocount" class="muted small" aria-live="polite"></span>
+    </div>
+    <p id="opicks" class="small"></p>
+    <div class="grid"><div class="wrap" id="otabwrap"><table id="otab"></table></div><div class="panel" id="odetail"></div></div>
   </section>
 </main>
+<footer>Prototyp nad syntetickou databází fiktivního e-shopu Kompas. Čísla dokládají metodu, ne stav skutečného systému. Stránku generuje <code>analyze.py</code> ve složce <code>mapa-monolitu/</code> repozitáře ukázky a funguje i otevřená z disku, bez internetu.</footer>
 <script>
 const DATA = /*__DATA__*/null;
 const S = DATA.summary;
@@ -113,119 +251,233 @@ for (const e of DATA.edges) {
   if (!IN.has(e.dst)) IN.set(e.dst, []); IN.get(e.dst).push(e);
 }
 const LAYERS = ["static","dynamic","runtime","client","agent"];
-const LNAME = {static:"statická",dynamic:"dynamické SQL",runtime:"běh (XE)",client:"Delphi klient",agent:"plánovač"};
+const LNAME = {static:"statická (katalog)",dynamic:"dynamické SQL",runtime:"běh (XE)",client:"Delphi klient",agent:"plánovač"};
+const LSRC = {static:"katalog závislostí databáze, tedy odkazy zapsané v kódu", dynamic:"rozbor textu dynamického SQL (EXEC, sp_executesql)", runtime:"záznam běhu za 6 týdnů (Extended Events, simulovaný)", client:"hledání volání ve zdrojácích klienta v Delphi", agent:"kroky naplánovaných úloh (SQL Agent)"};
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt = n => n == null ? "–" : Number(n).toLocaleString("cs-CZ");
+const dec = (n, d) => Number(n).toFixed(d).replace(".", ",");
 const TYPE = {P:"procedura",FN:"funkce",TR:"trigger",U:"tabulka",V:"pohled"};
+const NAME = Object.fromEntries((DATA.lanes || []).filter(r => r.name).map(r => [r.domain, r.name]));
+const dname = d => NAME[d] ? `${d} · ${NAME[d]}` : d;
+const narrow = () => window.matchMedia("(max-width:900px)").matches;
 
-// ---------- KPI
+// ---------- přepínání pohledů
+const TABS = ["domeny","lane","graf","blind","objekty"];
+function openTab(t, focus){
+  if (!TABS.includes(t)) t = "domeny";
+  document.querySelectorAll("#views [role=tab]").forEach(b => {
+    const on = b.dataset.t === t; b.classList.toggle("on", on); b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus();
+  });
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x.id === t));
+  try { localStorage.setItem("mapa-tab", t); } catch(e) {}
+  try { history.replaceState(null, "", "#pohled-" + t); } catch(e) {}
+  if (t === "graf") startGraph();
+}
+function goTab(t){ openTab(t); document.getElementById("views").scrollIntoView({behavior:"smooth", block:"start"}); }
+document.getElementById("views").addEventListener("click", ev => { const b = ev.target.closest("[role=tab]"); if (b) openTab(b.dataset.t); });
+document.getElementById("views").addEventListener("keydown", ev => {
+  const i = TABS.indexOf((document.activeElement.dataset || {}).t); if (i < 0) return;
+  let j = null;
+  if (ev.key === "ArrowRight" || ev.key === "ArrowDown") j = (i + 1) % TABS.length;
+  if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") j = (i - 1 + TABS.length) % TABS.length;
+  if (ev.key === "Home") j = 0; if (ev.key === "End") j = TABS.length - 1;
+  if (j != null) { ev.preventDefault(); openTab(TABS[j], true); }
+});
+document.addEventListener("click", ev => { const g = ev.target.closest("[data-go]"); if (g) { ev.preventDefault(); goTab(g.dataset.go); } });
+// klávesnice: Enter nebo mezerník na klikacím řádku tabulky
+document.addEventListener("keydown", ev => {
+  const tr = ev.target.closest && ev.target.closest("tr.click");
+  if (tr && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); tr.click(); }
+});
+
+// ---------- úvod a čísla
 (function(){
-  const sb = S.static_dead_but_alive.length;
-  const k = [
-    [S.procedures, "procedur"], [S.functions + S.triggers, "funkcí a triggerů"], [S.tables, "tabulek"], [S.views, "pohledů"],
-    [(S.total_size_gb/1000).toFixed(1).replace(".",",") + " TB", "dat (fiktivně)"],
-    [sb + " / " + S.live_procs, "živých procedur bez volajícího v katalogu"],
-    [S.layers.not_in_catalog_pct.toString().replace(".",",") + " %", "hran mezi objekty mimo katalog"],
-    [(S.status["mrtvá"]||0), "mrtvých procedur"],
+  const sb = S.static_dead_but_alive.length, pct = Math.round(sb / S.live_procs * 100);
+  const nShared = Object.keys(S.shared_tables).length, dead = S.status["mrtvá"] || 0;
+  const why = [
+    ["Proč mapa před dekompozicí", "Než tým oddělí první doménu, potřebuje vědět, co v databázi opravdu běží a kdo to volá. Bez toho přepisuje mrtvý kód nebo přetrhne vazbu, o které nikdo neví.", "objekty", "Objekty"],
+    ["Co katalog databáze nevidí", `Katalog zná jen odkazy zapsané v kódu procedur. Nevidí volání z klienta, plánovače a webu ani dynamické SQL. Mapa proto kombinuje čtyři zdroje: kód procedur, zdrojáky klienta, plánovač úloh a záznam běhu.`, "blind", "Blind spots"],
+    ["Jak vybrat první doménu", "Mapa seskupí procedury a tabulky do kandidátů domén a seřadí je podle toho, kolik vazeb je drží v monolitu. Pořadí je podklad pro workshop, hranici domény potvrdí vlastník.", "domeny", "Domény a pořadí"],
+    ["Kde chybí důkaz pro změny od AI", "U každé domény mapa ukáže, jestli má vlastníka a ověřené testy chování. Bez nich smí agent v jádru domény jen navrhovat. Na syntetických datech zatím důkaz nemá žádná doména.", "lane", "Core lane"],
   ];
-  document.getElementById("kpis").innerHTML = k.map(([b,s]) => `<div class="kpi"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join("");
+  document.getElementById("why").innerHTML = why.map(([t, p, go, gl]) => `<div class="card"><h3>${esc(t)}</h3><p>${esc(p)}</p><button class="go" type="button" data-go="${go}">→ ${esc(gl)}</button></div>`).join("");
+  const k = [
+    [`${sb} / ${S.live_procs}`, `používaných procedur nemá volajícího v katalogu (${pct} %)`, "Volá je klient, plánovač, web nebo dynamické SQL. Podle katalogu by vypadaly jako mrtvé.", "blind"],
+    [dead, "procedur se za 6 týdnů simulovaného běhu nezavolalo", "Kandidáti na vypnutí, ne na přepis.", "objekty"],
+    [nShared, "sdílených tabulek slepuje domény dohromady", "Ze shlukování jsou vyřazené. U každé mapa ukáže, kdo do ní nejvíc zapisuje.", "blind"],
+  ];
+  document.getElementById("kpis").innerHTML = k.map(([b, s, sm, go]) => `<div class="kpi"><b>${esc(b)}</b><span>${esc(s)}</span><small>${esc(sm)} <button class="go" type="button" data-go="${go}" style="background:none;border:0;padding:0;color:var(--accent);font:inherit;cursor:pointer">Ukázat →</button></small></div>`).join("");
+  const k2 = [
+    [S.procedures, "procedur"], [S.functions + S.triggers, "funkcí a triggerů"], [S.tables, "tabulek"], [S.views, "pohledů"],
+    [dec(S.total_size_gb/1000, 1) + " TB", "dat (fiktivně)"],
+    [dec(S.layers.not_in_catalog_pct, 1) + " %", "vazeb mezi objekty chybí v katalogu"],
+  ];
+  document.getElementById("kpis2").innerHTML = k2.map(([b,s]) => `<div class="kpi"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join("");
 })();
 
-// ---------- taby
-document.getElementById("nav").addEventListener("click", ev => {
-  const b = ev.target.closest("button"); if (!b) return;
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("on", x === b));
-  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x.id === b.dataset.t));
-  try { localStorage.setItem("mapa-tab", b.dataset.t); } catch(e) {}
-  if (b.dataset.t === "graf") startGraph();
-});
-// obnovení záložky až po načtení celého skriptu (graf potřebuje své proměnné)
-setTimeout(() => { try { const t = localStorage.getItem("mapa-tab"); if (t) { const b = document.querySelector(`nav button[data-t="${t}"]`); if (b) b.click(); } } catch(e) {} }, 0);
-
 // ---------- domény a váhy
+const W0 = Object.assign({}, S.weights);
 const W = Object.assign({}, S.weights);
+const WDESC = {
+  foreign_writes: "Procedury domény zapisují do tabulek jiné domény nebo do sdílených. Po oddělení by to znamenalo transakci přes dva systémy, proto má nejvyšší váhu.",
+  inbound_writes: "Do tabulek domény zapisuje někdo cizí. Nový systém by musel převzít nebo zablokovat i cizí zápisy.",
+  inbound_reads: "Tabulky domény čtou jiné domény. Po oddělení budou potřebovat API nebo kopii dat.",
+  foreign_reads: "Doména čte cizí nebo sdílené tabulky. Bude potřebovat cizí API nebo kopii dat.",
+  dynamic_sql: "Procedury s dynamickým SQL. Když se jméno objektu skládá až za běhu, počítá se dvakrát: cíle nezná jistě ani mapa.",
+  external_calls: "Vstupy zvenku: klient, web, plánovač a volání z jiných domén. Každý vstup je potřeba při oddělení přesměrovat.",
+  data_size: "Objem dat domény (logaritmická škála do 10 TB). Víc dat znamená delší přenos a delší souběžný běh.",
+  bonus_readonly: "Podíl procedur, které jen čtou. Čtení jde levně ověřit souběžným během se starou cestou.",
+  bonus_dead: "Podíl mrtvého kódu. Ten se vypne, nepřepisuje, takže práci ubírá.",
+};
+const isBonus = k => k.startsWith("bonus");
+function scoreOf(d, w){
+  w = w || W; let s = 100;
+  for (const k in w) { const v = d.components[k] || 0; s += (isBonus(k) ? 1 : -1) * w[k] * v; }
+  return Math.max(0, Math.min(100, s));
+}
+function ranking(w){
+  return DATA.domains.filter(d => !d.cleanup_only && !d.too_small).map(d => ({d, s: scoreOf(d, w)})).sort((a,b) => b.s - a.s);
+}
+const BASE = Object.fromEntries(ranking(W0).map((x,i) => [x.d.domain, i+1]));
 function wbox(){
-  document.getElementById("weights").innerHTML = Object.keys(W).map(k =>
-    `<label>${esc(S.weight_labels[k])} ${k.startsWith("bonus")?"(+)":"(−)"} <input type="range" min="0" max="40" value="${W[k]}" data-k="${k}"><b id="wv-${k}">${W[k]}</b></label>`).join("");
+  const slider = k => `<div class="w" id="wb-${k}"><label for="w-${k}"><span>${esc(S.weight_labels[k])} (${isBonus(k) ? "+" : "−"})</span><b id="wv-${k}">${W[k]}</b></label>
+    <input type="range" min="0" max="40" value="${W[k]}" id="w-${k}" data-k="${k}" aria-describedby="wd-${k}">
+    <small id="wd-${k}">${esc(WDESC[k] || "")} Výchozí váha ${W0[k]}.</small></div>`;
+  const keys = Object.keys(W);
+  document.getElementById("weights").innerHTML =
+    `<div class="wgroup"><h3>Srážky: co doménu drží v monolitu</h3>${keys.filter(k => !isBonus(k)).map(slider).join("")}</div>
+     <div class="wgroup"><h3>Bonusy: co oddělení usnadní</h3>${keys.filter(isBonus).map(slider).join("")}</div>`;
   document.getElementById("weights").addEventListener("input", ev => {
     const k = ev.target.dataset.k; if (!k) return;
     W[k] = +ev.target.value; document.getElementById("wv-"+k).textContent = W[k]; domTable();
   });
 }
-function scoreOf(d){
-  let s = 100;
-  for (const k in W) { const v = d.components[k] || 0; s += (k.startsWith("bonus") ? 1 : -1) * W[k] * v; }
-  return Math.max(0, Math.min(100, s));
-}
+document.getElementById("wreset").addEventListener("click", () => {
+  for (const k in W0) { W[k] = W0[k]; const i = document.getElementById("w-"+k); if (i) i.value = W0[k]; document.getElementById("wv-"+k).textContent = W0[k]; }
+  domTable();
+});
+let selDom = null;
 function domTable(){
-  const ranked = DATA.domains.filter(d => !d.cleanup_only && !d.too_small).map(d => ({d, s: scoreOf(d)}))
-    .sort((a,b) => b.s - a.s);
+  const ranked = ranking(W);
   const rest = DATA.domains.filter(d => d.cleanup_only || d.too_small).map(d => ({d, s: scoreOf(d)}));
   const rows = ranked.map((x,i) => [i+1, x]).concat(rest.map(x => [x.d.cleanup_only ? "úklid" : "malý", x]));
+  const changed = Object.keys(W).filter(k => W[k] !== W0[k]);
+  Object.keys(W).forEach(k => { const b = document.getElementById("wb-"+k); if (b) b.classList.toggle("changed", W[k] !== W0[k]); });
+  document.getElementById("wstate").innerHTML = (changed.length ? `Upravené váhy: ${changed.length}.` : "Platí výchozí váhy.") +
+    ` Pořadí teď: ${ranked.slice(0,3).map((x,i) => `${i+1}. <b>${esc(dname(x.d.domain))}</b> ${dec(x.s, 1)}`).join(" · ")}`;
+  const top = ranked[0];
+  document.getElementById("domsum").innerHTML = top ? `Na prvním místě: <b>${esc(dname(top.d.domain))}</b>, skóre ${dec(top.s, 1)}. ${changed.length ? "<span class='muted'>(upravené váhy)</span>" : "<span class='muted'>(výchozí váhy)</span>"}` : "";
   const t = document.getElementById("domtab");
-  t.innerHTML = `<tr><th>#</th><th>Domain candidate</th><th>Skóre</th><th></th><th class="n">Procedury<br>živé / mrtvé</th><th class="n">Tabulky</th><th class="n">Data</th><th class="n">CPU (QS)</th><th>Hlavní důvody</th></tr>` +
+  t.innerHTML = `<tr><th>#</th><th>Posun</th><th>Kandidát domény</th><th class="n">Skóre</th><th></th><th class="n">Procedury<br>živé / mrtvé</th><th class="n">Tabulky</th><th class="n">Data</th><th class="n">CPU (QS)</th><th>Hlavní důvody<br><span style="font-weight:400">(při výchozích vahách)</span></th></tr>` +
     rows.map(([o,x]) => { const d = x.d; const col = x.s >= 75 ? "var(--good)" : x.s >= 60 ? "var(--warn)" : "var(--bad)";
-      return `<tr class="click" data-d="${esc(d.domain)}"><td>${o}</td><td><b>${esc(d.domain)}</b><br><span class="muted">${esc(d.tables.slice(0,4).join(", "))}${d.tables.length>4?" …":""}</span></td>
-      <td class="n"><b>${x.s.toFixed(1).replace(".",",")}</b></td><td><div class="bar"><i style="width:${x.s}%;background:${col}"></i></div></td>
-      <td class="n">${d.n_live} / ${d.n_dead}</td><td class="n">${d.n_tables}</td><td class="n">${(d.size_gb/1000).toFixed(2).replace(".",",")} TB</td>
+      let mv = "<span class='muted'>–</span>";
+      if (typeof o === "number") { const dlt = BASE[d.domain] - o; if (dlt > 0) mv = `<span class="up" title="o ${dlt} místa výš">▲ ${dlt}</span>`; else if (dlt < 0) mv = `<span class="down" title="o ${-dlt} místa níž">▼ ${-dlt}</span>`; }
+      return `<tr class="click${selDom === d.domain ? " sel" : ""}" tabindex="0" data-d="${esc(d.domain)}"><td>${o}</td><td>${mv}</td><td><b>${esc(d.domain)}</b>${NAME[d.domain] ? ` · ${esc(NAME[d.domain])}` : ""}<br><span class="muted">${esc(d.tables.slice(0,4).join(", "))}${d.tables.length>4?" …":""}</span></td>
+      <td class="n"><b>${dec(x.s, 1)}</b></td><td><div class="bar"><i style="width:${x.s}%;background:${col}"></i></div></td>
+      <td class="n">${d.n_live} / ${d.n_dead}</td><td class="n">${d.n_tables}</td><td class="n">${dec(d.size_gb/1000, 2)} TB</td>
       <td class="n">${fmt(Math.round(d.cpu_ms/1000))} s</td><td>${d.why.map(esc).join("<br>")}</td></tr>`; }).join("");
+  if (selDom) domDetail(selDom, false);
 }
-document.getElementById("domtab").addEventListener("click", ev => {
-  const tr = ev.target.closest("tr[data-d]"); if (!tr) return;
-  const d = DATA.domains.find(x => x.domain === tr.dataset.d);
+function domDetail(name, scroll){
+  const d = DATA.domains.find(x => x.domain === name); if (!d) return;
+  selDom = name;
+  document.querySelectorAll("#domtab tr[data-d]").forEach(r => r.classList.toggle("sel", r.dataset.d === name));
   const procs = DATA.nodes.filter(n => n.domain === d.domain && n.type !== "U").sort((a,b) => a.id.localeCompare(b.id));
-  const comp = Object.keys(W).map(k => `<tr><td>${esc(S.weight_labels[k])}</td><td class="n">${(d.components[k]*100).toFixed(0)} %</td><td class="n">${k.startsWith("bonus")?"+":"−"}${(W[k]*d.components[k]).toFixed(1).replace(".",",")}</td></tr>`).join("");
-  document.getElementById("domdetail").innerHTML = `<h2>${esc(d.domain)}</h2>
+  const comp = Object.keys(W).map(k => `<tr><td>${esc(S.weight_labels[k])}</td><td class="n">${(d.components[k]*100).toFixed(0)} %</td><td class="n">${W[k]}</td><td class="n">${isBonus(k)?"+":"−"}${dec(W[k]*d.components[k], 1)}</td></tr>`).join("");
+  const chips = (o, none) => Object.entries(o).map(([k,v]) => `<span class="chip">${esc(k)} ×${v}</span>`).join("") || `<span class='muted'>${none}</span>`;
+  document.getElementById("domdetail").innerHTML = `<h2>${esc(dname(d.domain))}: skóre ${dec(scoreOf(d), 1)}</h2>
    <div class="grid"><div>
-    <h3>Složky skóre</h3><table><tr><th>Složka</th><th class="n">Podíl</th><th class="n">Body</th></tr>${comp}</table>
-    <h3>Zapisuje do cizích tabulek</h3><p>${Object.entries(d.foreign_write_targets).map(([k,v]) => `<span class="chip">${esc(k)} ×${v}</span>`).join("") || "<span class='muted'>nic</span>"}</p>
-    <h3>Čte cizí a sdílené tabulky</h3><p>${Object.entries(d.foreign_read_targets).map(([k,v]) => `<span class="chip">${esc(k)} ×${v}</span>`).join("") || "<span class='muted'>nic</span>"}</p>
-    <h3>Do jejích tabulek zapisuje</h3><p>${Object.entries(d.inbound_writers).map(([k,v]) => `<span class="chip">${esc(k)} ×${v}</span>`).join("") || "<span class='muted'>jen ona</span>"}</p>
-    <h3>Vstupy zvenku</h3><p>${Object.entries(d.external).map(([k,v]) => `<span class="chip">${esc(k)} ${v}</span>`).join("")}</p>
-   </div><div class="panel"><h3>Procedury a funkce (${procs.length})</h3>${procs.map(n => `<div><a href="#" data-o="${esc(n.id)}">${esc(n.id)}</a> <span class="muted">${esc(n.status||"")}</span></div>`).join("")}</div></div>`;
-  document.getElementById("domdetail").scrollIntoView({behavior:"smooth"});
-});
-document.addEventListener("click", ev => {
-  const a = ev.target.closest("a[data-o]"); if (!a) return; ev.preventDefault();
-  document.querySelector('nav button[data-t="objekty"]').click(); showObject(a.dataset.o, "odetail");
-});
+    <h3>Složky skóre</h3><p class="muted small">Podíl × váha = body. Skóre = 100 − srážky + bonusy, oříznuté na 0–100.</p>
+    <table><tr><th>Kritérium</th><th class="n">Podíl</th><th class="n">Váha</th><th class="n">Body</th></tr>${comp}</table>
+    <h3>Zapisuje do cizích tabulek</h3><p>${chips(d.foreign_write_targets, "nic")}</p>
+    <h3>Čte cizí a sdílené tabulky</h3><p>${chips(d.foreign_read_targets, "nic")}</p>
+    <h3>Do jejích tabulek zapisuje</h3><p>${chips(d.inbound_writers, "jen ona")}</p>
+    <h3>Vstupy zvenku</h3><p>${Object.entries(d.external).map(([k,v]) => `<span class="chip">${esc(k)} ${v}</span>`).join("") || "<span class='muted'>žádné</span>"}</p>
+   </div><div class="panel"><h3>Procedury a funkce (${procs.length})</h3><p class="muted small">Kliknutím otevřeš detail v pohledu Objekty.</p>${procs.map(n => `<div><a href="#" data-o="${esc(n.id)}">${esc(n.id)}</a> <span class="muted">${esc(n.status||"")}</span></div>`).join("")}</div></div>`;
+  if (scroll) document.getElementById("domdetail").scrollIntoView({behavior:"smooth"});
+}
+document.getElementById("domtab").addEventListener("click", ev => { const tr = ev.target.closest("tr[data-d]"); if (tr) domDetail(tr.dataset.d, true); });
 wbox(); domTable();
+
+// citlivost pořadí (patří k pořadí domén)
+(function(){
+  const sens = DATA.sensitivity; if (!sens) return;
+  const mc = sens.nahodne, bz = sens.bod_zvratu;
+  const be = Object.entries(bz.relativni_zmena_vahy).filter(([k,v]) => v != null && v > -1).sort((a,b) => Math.abs(a[1]) - Math.abs(b[1])).slice(0,3);
+  document.getElementById("sens").innerHTML = `<h2>Jak pevné je pořadí</h2>
+  <p class="lead">Váhy jsou odhad, proto mapa zkouší, jestli na nich pořadí visí. Náhodně je mění v pásmu ±${Math.round(sens.delta*100)} % a sleduje, kdo vyjde první.</p>
+  <p>${esc(dname(bz.prvni))} je před ${esc(dname(bz.druhy))} v <b>${(mc.p_prvni_pred_druhym*100).toFixed(0)} %</b> z ${fmt(mc.n)} náhodných kombinací vah. Rozdíl ve skóre je ${dec(bz.rozdil, 2)} bodu. Pořadí by se prohodilo až při změně jediné váhy o: ${be.map(([k,v]) => `${esc(S.weight_labels[k])} ${v > 0 ? "+" : ""}${Math.round(v*100)} %`).join(", ")}.</p>
+  <div class="wrap"><table><tr><th>Kandidát domény</th><th class="n">Kolikrát na 1. místě</th><th>Rozsah pořadí</th></tr>${sens.zakladni_poradi.map(d => `<tr><td>${esc(dname(d))}</td><td class="n">${((mc.prvni[d]||0)*100).toFixed(0)} %</td><td>${mc.rozsah_poradi[d][0]}.–${mc.rozsah_poradi[d][1]}.</td></tr>`).join("")}</table></div>
+  <p class="muted small">Citlivost zkouší jen váhy, ne definice kritérií. Domény se skóre blízko u sebe se mezi sebou přeskupují; tam rozhodnou kritéria, která skóre nevidí, například kdo vlastní sdílenou tabulku.</p>`;
+})();
 
 // ---------- detail objektu
 function edgeList(list, dir){
   if (!list.length) return "<p class='muted'>nic</p>";
   return "<ul>" + list.sort((a,b) => (a.type+a[dir]).localeCompare(b.type+b[dir])).map(e => {
     const other = e[dir]; const n = N.get(other);
-    return `<li>${esc(e.type)} <a href="#" data-o="${esc(other)}">${esc(other)}</a> ${e.layers.map(l => `<span class="lay" title="${LNAME[l]}" style="background:var(--l-${l})"></span>`).join("")}
+    const ref = N.has(other) ? `<a href="#" data-o="${esc(other)}">${esc(other)}</a>` : `<b>${esc(other)}</b>`;
+    return `<li>${esc(e.type)} ${ref} ${e.layers.map(l => `<span class="lay" title="${esc(LNAME[l])}" style="background:var(--l-${l})"></span>`).join("")}
       <span class="muted">${esc(e.layers.map(l => LNAME[l]).join(", "))}${e.flags.length ? " · " + esc(e.flags.join(", ")) : ""}${e.count ? " · " + fmt(e.count) + "×" : ""}${n && n.domain ? " · " + esc(n.domain) : ""}</span></li>`;
   }).join("") + "</ul>";
 }
 function showObject(id, target){
   const n = N.get(id); if (!n) return;
   const out = OUT.get(id) || [], inn = IN.get(id) || [];
-  let h = `<h2>${esc(id)}</h2><p><span class="chip">${TYPE[n.type]||n.type}</span> <span class="chip">${esc(n.domain || "bez domény")}</span>${n.shared ? " <span class='chip'>sdílený</span>" : ""}${n.status ? ` <span class="chip">${esc(n.status)}</span>` : ""}</p>`;
+  let h = `<h2>${esc(id)}</h2><p><span class="chip">${TYPE[n.type]||n.type}</span> <span class="chip">${esc(n.domain ? dname(n.domain) : "bez domény")}</span>${n.shared && n.domain !== "sdílené" ? " <span class='chip'>sdílený</span>" : ""}${n.status ? ` <span class="chip">${esc(n.status)}</span>` : ""}</p>`;
   if (n.size_gb != null) h += `<p>Velikost: <b>${fmt(n.size_gb)} GB</b></p>`;
   if (n.runtime_calls != null || Object.keys(n.apps||{}).length) {
-    h += `<p>Volání za 6 týdnů (XE module_end): <b>${fmt(n.runtime_calls)}</b></p>`;
+    h += `<p>Volání za 6 týdnů simulovaného běhu (XE module_end): <b>${fmt(n.runtime_calls)}</b></p>`;
     const apps = Object.entries(n.apps||{}); if (apps.length) h += `<p>Přímo z aplikací (rpc_completed): ${apps.map(([a,c]) => `<span class="chip">${esc(a)} ${fmt(c)}</span>`).join("")}</p>`;
   }
-  if (n.declared_entries && n.declared_entries.length) h += `<p>Deklarovaný vstup: ${n.declared_entries.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</p>`;
+  if (n.declared_entries && n.declared_entries.length) h += `<p>Vstup zvenku podle zdrojů: ${n.declared_entries.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</p>`;
   if (n.schedule) h += `<p>Plánovač: ${esc(n.schedule.job)} · ${esc(n.schedule.schedule)}${n.schedule.enabled ? "" : " · VYPNUTO"}</p>`;
   if (n.qs) h += `<p>Query Store: CPU ${fmt(Math.round(n.qs.cpu_ms/1000))} s, zápisy ${fmt(n.qs.logical_writes)}</p>`;
-  if (n.dynamic) h += `<div class="note">Dynamické SQL. Z literálů: ${esc(n.dynamic.tables.map(t => t[0]).join(", ") || "nic")}. ${n.dynamic.blind ? "<b>Blind spot:</b> jméno objektu se skládá za běhu, cíle zná jen běhová vrstva." : ""}</div>`;
+  if (n.dynamic) h += `<div class="note">Dynamické SQL. Z literálů: ${esc(n.dynamic.tables.map(t => t[0]).join(", ") || "nic")}. ${n.dynamic.blind ? "<b>Blind spot:</b> jméno objektu se skládá za běhu, cíle zná jen záznam běhu." : ""}</div>`;
   if (n.on_table) h += `<p>Trigger na tabulce <a href="#" data-o="${esc(n.on_table)}">${esc(n.on_table)}</a></p>`;
-  h += `<h3>Odchozí (${out.length})</h3>${edgeList(out.slice(), "dst")}<h3>Příchozí (${inn.length})</h3>${edgeList(inn.slice(), "src")}`;
+  h += `<p class="muted small">Tečka u vazby = vrstva, která ji viděla: ${LAYERS.map(l => `<span class="lay" style="background:var(--l-${l})"></span>${esc(LNAME[l])}`).join(" · ")}</p>`;
+  h += `<h3>Odchozí: co objekt volá, čte a zapisuje (${out.length})</h3>${edgeList(out.slice(), "dst")}<h3>Příchozí: kdo objekt používá (${inn.length})</h3>${edgeList(inn.slice(), "src")}`;
   if (n.text) h += `<h3>Kód</h3><pre>${esc(n.text)}</pre>`;
-  document.getElementById(target).innerHTML = h;
+  const el = document.getElementById(target);
+  el.innerHTML = h;
+  if (target === "odetail") {
+    document.querySelectorAll("#otab tr[data-o]").forEach(r => r.classList.toggle("sel", r.dataset.o === id));
+    if (narrow()) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }
 }
+document.addEventListener("click", ev => {
+  const a = ev.target.closest("a[data-o]"); if (!a) return; ev.preventDefault();
+  // v detailu grafu zůstaň v grafu, jinak otevři objekt v pohledu Objekty
+  if (a.closest("#detail") && selectInGraph(a.dataset.o)) return;
+  openTab("objekty"); showObject(a.dataset.o, "odetail");
+  if (!narrow()) document.getElementById("objekty").scrollIntoView({behavior:"smooth", block:"start"});
+});
 
 // ---------- objekty
+const OEMPTY = `<div class="empty">Vyber objekt v tabulce nebo zkus některý z příkladů nad ní. Detail ukáže typ, doménu, stav, provoz, všechny vazby s vrstvou, která je viděla, a kód.</div>`;
+document.getElementById("odetail").innerHTML = OEMPTY;
+(function(){
+  const c = {}; DATA.nodes.forEach(n => c[n.type] = (c[n.type]||0) + 1);
+  document.getElementById("olead").textContent = `Seznam všech ${DATA.nodes.length} objektů databáze: ${c.P||0} procedur, ${c.FN||0} funkcí, ${c.TR||0} triggerů, ${c.U||0} tabulek a ${c.V||0} pohledů. U každého mapa ukáže doménu, stav a všechny vazby i s vrstvou, která je našla.`;
+  const picks = [];
+  const top = Object.entries(S.shared_tables).sort((a,b) => b[1]-a[1]);
+  const prod = N.has("Product") ? "Product" : (top[0] || [])[0];
+  if (prod) picks.push([prod, "sdílená tabulka"]);
+  const dyn = (S.blind.dynamic_blind || [])[0]; if (dyn) picks.push([dyn.obj, "dynamické SQL, blind spot"]);
+  const rt = S.static_dead_but_alive.find(x => x.seen_by[0] === "jen běh"); if (rt) picks.push([rt.proc, "ví o ní jen běh"]);
+  const dead = DATA.nodes.find(n => n.type === "P" && n.status === "mrtvá"); if (dead) picks.push([dead.id, "mrtvá procedura"]);
+  document.getElementById("opicks").innerHTML = picks.length ? "Zkus: " + picks.map(([id, why]) => `<a href="#" data-o="${esc(id)}">${esc(id)}</a> <span class="muted">(${esc(why)})</span>`).join(" · ") : "";
+})();
+const OLIMIT = 400;
 function objTable(){
-  const q = document.getElementById("osearch").value.toLowerCase(), ty = document.getElementById("otype").value;
-  const rows = DATA.nodes.filter(n => (!ty || n.type === ty) && (!q || n.id.toLowerCase().includes(q) || String(n.domain||"").toLowerCase().includes(q))).slice(0, 400);
-  document.getElementById("otab").innerHTML = `<tr><th>Objekt</th><th>Typ</th><th>Doména</th><th>Stav</th><th class="n">Volání / GB</th></tr>` +
-    rows.map(n => `<tr class="click" data-o="${esc(n.id)}"><td>${esc(n.id)}</td><td>${n.type}</td><td>${esc(n.domain||"")}</td><td>${esc(n.status||"")}</td><td class="n">${n.type==="U" ? fmt(n.size_gb) : fmt(n.runtime_calls)}</td></tr>`).join("");
+  const q = document.getElementById("osearch").value.toLowerCase().trim(), ty = document.getElementById("otype").value;
+  const all = DATA.nodes.filter(n => (!ty || n.type === ty) && (!q || n.id.toLowerCase().includes(q) || String(n.domain||"").toLowerCase().includes(q) || String(NAME[n.domain]||"").toLowerCase().includes(q) || String(n.status||"").toLowerCase().includes(q)));
+  const rows = all.slice(0, OLIMIT);
+  document.getElementById("ocount").textContent = all.length > OLIMIT ? `Zobrazeno ${OLIMIT} z ${all.length}, upřesni hledání.` : `Zobrazeno ${all.length} z ${DATA.nodes.length}.`;
+  document.getElementById("otab").innerHTML = `<tr><th>Objekt</th><th>Typ</th><th>Doména</th><th>Stav</th><th class="n" title="U procedur a funkcí počet volání za 6 týdnů simulovaného běhu, u tabulek velikost v GB">Volání · GB</th></tr>` +
+    (rows.length ? rows.map(n => `<tr class="click" tabindex="0" data-o="${esc(n.id)}"><td>${esc(n.id)}</td><td title="${esc(TYPE[n.type]||"")}">${n.type}</td><td>${esc(n.domain||"")}</td><td>${esc(n.status||"")}</td><td class="n">${n.type==="U" ? fmt(n.size_gb) : fmt(n.runtime_calls)}</td></tr>`).join("")
+      : `<tr><td colspan="5" class="muted">Hledání nic nenašlo. Zkus kratší text nebo všechny typy.</td></tr>`);
 }
 document.getElementById("osearch").addEventListener("input", objTable);
 document.getElementById("otype").addEventListener("change", objTable);
@@ -234,66 +486,91 @@ objTable();
 
 // ---------- core lane
 (function(){
-  const L = DATA.lanes || []; if (!L.length) return;
-  const sens = DATA.sensitivity;
+  const L = DATA.lanes || []; if (!L.length) { document.getElementById("lane").innerHTML = "<div class='empty'>Mapa nemá data o core lane.</div>"; return; }
   const cnt = s => L.filter(r => r.state === s).length;
-  let h = `<h2>Kdo smí měnit core v které doméně</h2>
-  <p>V lane core může záměr zadat kdokoli. Jestli agent založí jen draft PR, nebo PR, který jde do merge, rozhoduje důkaz: owning team domény, <b>ověřené</b> characterization tests (golden master pro čtení, tSQLt pro zápis, s doloženým zeleným během) a blind spots mapy. Extraction readiness score stav neurčuje.</p>
-  <p><span class="st st-closed">closed</span> ${cnt("closed")} &nbsp; <span class="st st-draft-only">draft-only</span> ${cnt("draft-only")} &nbsp; <span class="st st-open">open</span> ${cnt("open")}</p>
-  <div class="note">Testy v <code>ai-vrstva/</code> zatím nikdo nespustil, takže žádná doména nemá ověřené pokrytí a žádná není otevřená. To je správný výsledek, ne chyba: core lane se otevře, až testy doběhnou zeleně.</div>
-  <div class="wrap"><table id="lanetab"><tr><th>#</th><th>Doména</th><th>Core lane</th><th>Owning team</th><th>Pokrytí (verified / draft / živé)</th><th class="n">Zapisující bez ověření</th><th class="n">Blokující blind spots</th><th>Co chybí k dalšímu stavu</th></tr>` +
+  const r3 = ((L[0].rules || []).find(p => p.id === "R3") || {}).rule || "";
+  const cov = (r3.match(/(\d+)\s*%/) || [])[1] || "80";
+  const states = [
+    ["closed", "L0", "Agent v jádru domény nic nemění", `Jen čte a odpoví, co chybí. Platí pro domény bez vlastníka a pro úklidové nebo malé skupiny.`],
+    ["draft-only", "L1", "Agent smí jen navrhnout změnu", `Založí návrh změny (draft PR). Sloučit ho může jen vlastník domény. Platí, když doména má vlastníka, ale chybí ověřené testy.`],
+    ["open", "L2", "Změna může jít do běžného review", `Podmínky: ověřené testy u aspoň ${cov} % živých procedur, zelený test u každé zapisující procedury a žádný blokující blind spot. Sloučení dál schvaluje vlastník.`],
+  ];
+  const draft = L.filter(r => r.state === "draft-only");
+  const whyDraft = draft.map(r => {
+    const rank = r.rank ? `je ${r.rank}. v pořadí domén a ` : "";
+    return `<li><b>${esc(r.name || r.domain)}</b> (${esc(r.domain)}) ${rank}má vlastníka, tým ${esc(r.owner || "–")}. Ověřené testy má ${r.verified} z ${r.live} živých procedur a ${r.writing_unverified} z ${r.writing} zapisujících procedur nemá zelený test. Proto agent smí změnu jen navrhnout.</li>`;
+  }).join("");
+  let h = `<h2>Kde smí agent měnit jádro monolitu</h2>
+  <p class="lead">Core lane je cesta, kterou agent mění jádro monolitu, tedy procedury a tabulky domény. Záměr může zadat kdokoli. Co pak agent smí, neurčuje skóre z pohledu Domény, ale důkaz: má doména vlastníka a ověřené testy chování?</p>
+  <div class="howto"><b class="t">Jak číst tento pohled</b><ul>
+    <li>Tři karty níže vysvětlují stavy <code>closed</code>, <code>draft-only</code> a <code>open</code>. Číslo na kartě = počet domén v tom stavu.</li>
+    <li>Tabulka ukazuje stav každé domény a co jí chybí k dalšímu stavu. Klikni na řádek: pod tabulkou se ukáže, která pravidla R1–R5 doména splnila.</li>
+    <li>Pruh pokrytí: plná barva = ověřené testy, světlá = navržené, ale nespuštěné testy.</li>
+  </ul></div>
+  <div class="cards">${states.map(([s, lvl, t, p]) => `<div class="card s-${s}"><h3><span><span class="st st-${s}">${s}</span> ${esc(t)}</span><span class="count">${cnt(s)} ${cnt(s) === 1 ? "doména" : cnt(s) >= 2 && cnt(s) <= 4 ? "domény" : "domén"}</span></h3><p>${esc(p)}</p><p class="muted small">Úroveň autonomie ${lvl}</p></div>`).join("")}</div>
+  ${draft.length ? `<h3>Proč jsou ${esc(draft.map(r => r.name || r.domain).join(" a "))} jen draft-only</h3><ul>${whyDraft}</ul>
+  <p>Pořadí domén říká, co jde oddělit nejsnáz. Core lane říká, jestli máme důkaz, že změna od AI nic nerozbije. Doména může být první v pořadí, a přesto zůstat draft-only.</p>` : ""}
+  <div class="note info"><b>Vztah k bráně.</b> Stav každé domény mapa zapisuje do evidence packu (<code>out/evidence/&lt;doména&gt;.json</code>). To je připravený kontrakt pro bránu z části A: <code>closed</code> odpovídá úrovni autonomie L0, <code>draft-only</code> L1 a <code>open</code> L2. Brána ho v ukázce zatím nečte, rozhoduje podle změněných souborů a kalendáře změn. Napojení je další krok, ne hotová věc.</div>
+  <div class="note">Characterization testy v <code>ai-vrstva/</code> zatím nikdo nespustil. Proto žádná doména nemá ověřené pokrytí a žádná není <code>open</code>. To je správný výsledek: bez důkazu se jádro neotevře.</div>
+  <div class="wrap"><table id="lanetab"><tr><th>#</th><th>Doména</th><th>Core lane</th><th>Vlastník (tým)</th><th>Testy: ověřené / navržené / živé procedury</th><th class="n">Zapisující bez ověření</th><th class="n">Blokující blind spots</th><th>Co chybí k dalšímu stavu</th></tr>` +
   L.map(r => { const pct = r.live ? r.verified / r.live * 100 : 0, pn = r.live ? r.draft / r.live * 100 : 0;
-    return `<tr class="click" data-l="${esc(r.domain)}"><td>${r.rank || "–"}</td><td><b>${esc(r.domain)}</b>${r.name ? `<br><span class="muted">${esc(r.name)}</span>` : ""}<br><span class="muted">skóre ${r.score.toFixed(1).replace(".",",")}</span></td>
-    <td><span class="st st-${r.state}">${esc(r.label)}</span><br><span class="muted">autonomy level ${esc(r.autonomy_level)}</span></td><td>${esc(r.owner || "–")}</td>
-    <td><div class="bar" title="verified ${r.verified}, draft ${r.draft}"><i style="width:${pct + pn}%;background:var(--warn);opacity:.35"></i><i style="width:${pct}%"></i></div><span class="muted">${r.verified} / ${r.draft} / ${r.live}</span></td>
+    return `<tr class="click" tabindex="0" data-l="${esc(r.domain)}"><td>${r.rank || "–"}</td><td><b>${esc(r.domain)}</b>${r.name ? `<br><span class="muted">${esc(r.name)}</span>` : ""}<br><span class="muted">skóre ${dec(r.score, 1)}</span></td>
+    <td><span class="st st-${r.state}">${esc(r.label)}</span><br><span class="muted">úroveň ${esc(r.autonomy_level)}</span></td><td>${esc(r.owner || "–")}</td>
+    <td><div class="bar" title="ověřené ${r.verified}, navržené ${r.draft}"><i style="width:${pct + pn}%;background:var(--warn);opacity:.35"></i><i style="width:${pct}%"></i></div><span class="muted">${r.verified} / ${r.draft} / ${r.live}</span></td>
     <td class="n">${r.writing_unverified} z ${r.writing}</td><td class="n">${r.blocking.length}</td>
     <td>${r.missing.length ? r.missing.map(x => esc(x.length > 140 ? x.slice(0,140) + "…" : x)).join("<br>") : "<span class='muted'>nic, nejvyšší stav</span>"}</td></tr>`; }).join("") + `</table></div>
-  <div id="lanedetail"></div>
+  <div id="lanedetail" style="margin-top:12px"><div class="empty">Klikni na řádek tabulky. Ukáže se, která pravidla R1–R5 doména splnila a kde je celý evidence pack.</div></div>
   <h3>Pravidla</h3><ul>
-   <li><b>closed</b>: chybí owning team (R1), nebo shluk není mezi domain candidates, protože je úklidový nebo malý (R2). Agent pro core neběží, intake odpoví, co chybí.</li>
-   <li><b>draft-only</b>: R1 a R2 platí. Kdokoli zadá záměr, agent založí draft PR, risk gate ho jen okomentuje. Vlastník ho může převzít a udělat merge.</li>
-   <li><b>open</b>: navíc ověřené pokrytí živých procedur ≥ 80 % (R3), všechny zapisující procedury mají zelený test (R4) a žádný blokující blind spot (R5). PR jde do review, merge drží zelené testy dotčených procedur a schválení vlastníka.</li>
-   <li>V P2 odpovídá closed autonomy level L0 (jen čtení), draft-only L1 a open L2 (merge s důkazem). L3 (úzký auto-merge) z mapy nevzniká, potřebuje historii change failure rate.</li>
-   <li>Procedura bez zeleného testu sníží PR na draft-only i v open doméně. Neznámý nebo sdílený objekt a prošlý snímek mapy = closed (fail-closed).</li></ul>
-  <p class="muted">Evidence pack pro risk gate v P2 (formát <code>@2</code>): <code>out/evidence/index.json</code> a <code>out/evidence/&lt;doména&gt;.json</code>, čitelná <code>out/evidence/&lt;doména&gt;.md</code>.</p>`;
-  if (sens) {
-    const mc = sens.nahodne, bz = sens.bod_zvratu;
-    const be = Object.entries(bz.relativni_zmena_vahy).filter(([k,v]) => v != null && v > -1).sort((a,b) => Math.abs(a[1]) - Math.abs(b[1])).slice(0,3);
-    h += `<h2>Citlivost pořadí na váhy (±${Math.round(sens.delta*100)} %)</h2>
-    <p>${esc(bz.prvni)} je před ${esc(bz.druhy)} v <b>${(mc.p_prvni_pred_druhym*100).toFixed(0)} %</b> z ${mc.n} náhodných kombinací vah. Rozdíl je ${bz.rozdil.toFixed(2).replace(".",",")} b. Pořadí by se prohodilo až při změně jediné váhy o: ${be.map(([k,v]) => `${esc(S.weight_labels[k])} ${v > 0 ? "+" : ""}${Math.round(v*100)} %`).join(", ")}.</p>
-    <table><tr><th>Doména</th><th class="n">Na 1. místě</th><th>Rozsah pořadí</th></tr>${sens.zakladni_poradi.map(d => `<tr><td>${esc(d)}</td><td class="n">${((mc.prvni[d]||0)*100).toFixed(0)} %</td><td>${mc.rozsah_poradi[d][0]}.–${mc.rozsah_poradi[d][1]}.</td></tr>`).join("")}</table>`;
-  }
+   <li><b>R1</b> doména má vlastnický tým. <b>R2</b> doména je kandidát, ne úklid ani malá skupina. Splněné R1 a R2 = <code>draft-only</code>, jinak <code>closed</code>.</li>
+   <li><b>R3</b> ověřené testy pokrývají aspoň ${cov} % živých procedur. <b>R4</b> každá zapisující procedura má zelený test. <b>R5</b> doména nemá blokující blind spot. Navíc splněné R3 až R5 = <code>open</code>.</li>
+   <li>Pojistky: procedura bez zeleného testu sníží změnu na <code>draft-only</code> i v otevřené doméně. Neznámý nebo sdílený objekt a prošlý snímek mapy znamenají <code>closed</code>.</li>
+   <li>Úroveň L3 (úzké automatické sloučení) z mapy nevzniká. Potřebuje historii chybovosti AI změn z provozu.</li></ul>`;
   document.getElementById("lane").innerHTML = h;
   document.getElementById("lanetab").addEventListener("click", ev => {
     const tr = ev.target.closest("tr[data-l]"); if (!tr) return;
     const r = L.find(x => x.domain === tr.dataset.l);
-    document.getElementById("lanedetail").innerHTML = `<h3>${esc(r.domain)}: <span class="st st-${r.state}">${esc(r.label)}</span></h3>
-     <table><tr><th>Pravidlo</th><th>Pro stav</th><th>Splněno</th><th>Detail</th></tr>${r.rules.map(p => `<tr><td>${esc(p.id)} ${esc(p.rule)}</td><td>${esc(p.applies_to)}</td><td class="${p.met ? "ok" : "ko"}">${p.met ? "ano" : "ne"}</td><td>${esc(p.detail)}</td></tr>`).join("")}</table>
+    document.querySelectorAll("#lanetab tr[data-l]").forEach(x => x.classList.toggle("sel", x === tr));
+    const sl = s => s === "draft-only" ? "draft-only" : s === "open" ? "open" : s;
+    document.getElementById("lanedetail").innerHTML = `<h3>${esc(r.name ? `${r.name} (${r.domain})` : r.domain)}: <span class="st st-${r.state}">${esc(r.label)}</span></h3>
+     <div class="wrap"><table><tr><th>Pravidlo</th><th>Potřeba pro stav</th><th>Splněno</th><th>Detail</th></tr>${r.rules.map(p => `<tr><td>${esc(p.id)} ${esc(p.rule)}</td><td>${esc(sl(p.applies_to))}</td><td class="${p.met ? "ok" : "ko"}">${p.met ? "ano" : "ne"}</td><td>${esc(p.detail)}</td></tr>`).join("")}</table></div>
      <p class="muted">Celý evidence pack: <code>${esc(r.file)}</code></p>`;
+    if (narrow()) document.getElementById("lanedetail").scrollIntoView({behavior:"smooth", block:"start"});
   });
 })();
 
 // ---------- blind spots
 (function(){
   const b = S.blind, ev = S.evaluation;
-  const li = (arr, f) => arr && arr.length ? "<ul>" + arr.map(x => "<li>" + f(x) + "</li>").join("") + "</ul>" : "<p class='muted'>nic</p>";
+  const sb = S.static_dead_but_alive.length, pct = Math.round(sb / S.live_procs * 100);
+  const li = (arr, f) => arr && arr.length ? `<div class="scrollbox"><ul>` + arr.map(x => "<li>" + f(x) + "</li>").join("") + "</ul></div>" : "<p class='muted'>nic</p>";
   const onlyRt = S.static_dead_but_alive.filter(x => x.seen_by[0] === "jen běh");
-  let h = `<h2>Co statický katalog nevidí</h2>
-  <p>Ze <b>${S.live_procs}</b> živých procedur nemá <b>${S.static_dead_but_alive.length}</b> žádného volajícího v katalogu. Volá je klient, plánovač, web nebo dynamické SQL. Bez dalších vrstev by vypadaly jako mrtvé.</p>
-  <table><tr><th>Vrstva</th><th class="n">Hran</th><th class="n">Jen tato vrstva</th></tr>${LAYERS.map(l => `<tr><td><span class="lay" style="background:var(--l-${l})"></span>${LNAME[l]}</td><td class="n">${S.layers.by_layer[l]||0}</td><td class="n">${S.layers.only[l]||0}</td></tr>`).join("")}</table>
-  <h3>Ví o nich jen běh (ne klient, ne plánovač, ne kód)</h3>${li(onlyRt, x => `<a href="#" data-o="${esc(x.proc)}">${esc(x.proc)}</a> <span class="muted">${esc(x.apps.join(", ") || "vnořené přes dynamické SQL")} · ${fmt(x.runtime)}×</span>`)}
-  <h3>Dynamické SQL se skládaným jménem objektu (${(b.dynamic_blind||[]).length})</h3>${li(b.dynamic_blind, x => `<a href="#" data-o="${esc(x.obj)}">${esc(x.obj)}</a>`)}
-  <h3>Odkazy do jiných databází (${(b.cross_db||[]).length})</h3>${li(b.cross_db, x => `<a href="#" data-o="${esc(x.obj)}">${esc(x.obj)}</a> → ${esc(x.ref)}`)}
-  <h3>Volání bez schématu, is_caller_dependent (${(b.caller_dependent||[]).length})</h3>${li(b.caller_dependent, x => `${esc(x.obj)} → ${esc(x.ref)}`)}
-  <h3>Klient: volání, která grep nerozluští</h3>${li(b.client_unresolved, x => `${esc(x.file)}:${esc(x.line)} <code>${esc(x.expression)}</code>`)}
-  <h3>Plánovač mimo T-SQL krok</h3>${li(b.agent_non_tsql, x => `${esc(x.job)} (${esc(x.subsystem)}) → ${esc(x.proc)}`)}
-  <h3>Sdílené tabulky vyřazené ze shlukování</h3><p>${Object.entries(S.shared_tables).sort((a,b) => b[1]-a[1]).map(([t,c]) => `<span class="chip">${esc(t)} · ${c} proc. · zapisuje hlavně ${esc(S.shared_owner[t]||"?")}</span>`).join("")}</p>`;
-  if (ev) h += `<h2>Jak se analyzátor trefil (proti záměru generátoru)</h2><ul>
-   <li>Čistota shluků ${Math.round(ev.purity*100)} %, ${ev.clusters} shluků proti ${ev.true_domains} zamýšleným doménám.</li>
-   <li>Mrtvé procedury: ${ev.dead_tp} z ${ev.dead_true}, falešně ${ev.dead_fp.length}.</li>
-   <li>Dynamické SQL: ${ev.dyn_found - ev.dyn_false.length} z ${ev.dyn_true}.</li>
-   <li>Roční job mimo okno měření rozpoznán: ${ev.yearly_detected ? "ano" : "ne"}.</li></ul>
-   <p class="muted">U skutečné databáze žádný záměr generátoru není. Tam shluky kontroluje architekt.</p>`;
+  const card = (title, n, why, body) => `<div class="card"><h3><span>${esc(title)}</span>${n != null ? `<span class="count">${n}</span>` : ""}</h3><p class="muted">${esc(why)}</p>${body}</div>`;
+  let h = `<h2>Co katalog databáze nevidí</h2>
+  <p class="lead">Katalog závislostí zná jen odkazy zapsané přímo v kódu procedur. Ze ${S.live_procs} používaných procedur nemá ${sb} (${pct} %) v katalogu žádného volajícího: volá je klient, plánovač, web nebo dynamické SQL. Kdo by se řídil jen katalogem, považoval by je za mrtvé a mohl by je vypnout.</p>
+  <div class="howto"><b class="t">Jak číst tento pohled</b><ul>
+    <li>Tabulka vrstev ukazuje, kolik vazeb která vrstva našla a kolik jich zná jen ona. Čím víc vazeb „jen tato vrstva“, tím víc by bez ní chybělo.</li>
+    <li>Karty pod ní jsou místa, kde vazbu katalog nevidí nebo ji mapa nezná jistě. Číslo v rohu = počet případů.</li>
+    <li>Kliknutím na jméno otevřeš detail objektu v pohledu Objekty.</li>
+  </ul></div>
+  <div class="wrap"><table><tr><th>Vrstva</th><th>Odkud vazby bere</th><th class="n">Vazeb</th><th class="n">Jen tato vrstva</th></tr>${LAYERS.map(l => `<tr><td><span class="lay" style="background:var(--l-${l})"></span>${esc(LNAME[l])}</td><td class="muted">${esc(LSRC[l])}</td><td class="n">${fmt(S.layers.by_layer[l]||0)}</td><td class="n">${fmt(S.layers.only[l]||0)}</td></tr>`).join("")}</table></div>
+  <h3>Kde katalog nestačí</h3>
+  <div class="cards">
+  ${card("Ví o nich jen záznam běhu", onlyRt.length, "Nezná je klient, plánovač ani kód. Bez záznamu běhu by vypadaly jako mrtvé.", li(onlyRt, x => `<a href="#" data-o="${esc(x.proc)}">${esc(x.proc)}</a> <span class="muted">${esc(x.apps.join(", ") || "vnořené přes dynamické SQL")} · ${fmt(x.runtime)}×</span>`))}
+  ${card("Dynamické SQL se skládaným jménem", (b.dynamic_blind||[]).length, "Jméno tabulky vzniká až za běhu. Cíle zná jen záznam běhu, rozbor kódu ne.", li(b.dynamic_blind, x => `<a href="#" data-o="${esc(x.obj)}">${esc(x.obj)}</a>`))}
+  ${card("Odkazy do jiných databází", (b.cross_db||[]).length, "Katalog u nich nezná cílový objekt. Při oddělení domény se snadno přehlédnou.", li(b.cross_db, x => `<a href="#" data-o="${esc(x.obj)}">${esc(x.obj)}</a> → ${esc(x.ref)}`))}
+  ${card("Volání bez schématu", (b.caller_dependent||[]).length, "Cíl závisí na tom, kdo proceduru volá (is_caller_dependent). Katalog ho neurčí.", li(b.caller_dependent, x => `${esc(x.obj)} → ${esc(x.ref)}`))}
+  ${card("Klient skládá jméno procedury", (b.client_unresolved||[]).length, "Jméno vzniká v kódu klienta, hledání ve zdrojácích ho nerozluští.", li(b.client_unresolved, x => `${esc(x.file)}:${esc(x.line)} <code>${esc(x.expression)}</code>`))}
+  ${card("Plánovač mimo T-SQL", (b.agent_non_tsql||[]).length, "Krok úlohy běží mimo T-SQL (PowerShell). Katalog ani rozbor kódu ho nevidí.", li(b.agent_non_tsql, x => `${esc(x.job)} (${esc(x.subsystem)}) → <a href="#" data-o="${esc(x.proc)}">${esc(x.proc)}</a>`))}
+  </div>
+  <h3>Sdílené tabulky</h3>
+  <div class="cards">${card("Sdílené tabulky vyřazené ze shlukování", Object.keys(S.shared_tables).length, "Používá je mnoho domén. Kdyby zůstaly ve shlukování, slepily by všechno do jedné domény. U každé je počet procedur a doména, která do ní nejvíc zapisuje.",
+    `<p>${Object.entries(S.shared_tables).sort((a,b) => b[1]-a[1]).map(([t,c]) => `<span class="chip"><a href="#" data-o="${esc(t)}">${esc(t)}</a> · ${c} proc. · zapisuje hlavně ${esc(S.shared_owner[t] ? dname(S.shared_owner[t]) : "?")}</span>`).join("")}</p>`)}</div>`;
+  if (ev) h += `<h3>Jak se analyzátor trefil</h3><div class="cards">${card("Kontrola proti záměru generátoru", null, "Generátor syntetické databáze ví, kam který objekt patří. Proti tomu jde změřit, jak dobře mapa hádá. Data i analyzátor psal stejný autor, takže to dokládá jen to, že logika vrstev funguje, jak je popsaná.",
+    `<ul><li>Čistota shluků ${Math.round(ev.purity*100)} %, ${ev.clusters} shluků proti ${ev.true_domains} zamýšleným doménám.</li>
+     <li>Mrtvé procedury: nalezeno ${ev.dead_tp} z ${ev.dead_true}, falešně ${ev.dead_fp.length}.</li>
+     <li>Dynamické SQL: nalezeno ${ev.dyn_found - ev.dyn_false.length} z ${ev.dyn_true}.</li>
+     <li>Roční úloha mimo okno měření rozpoznána: ${ev.yearly_detected ? "ano" : "ne"}.</li></ul>
+     <p class="muted small">U skutečné databáze žádný záměr generátoru není. Tam shluky kontroluje architekt.</p>`)}</div>`;
   document.getElementById("blind").innerHTML = h;
 })();
 
@@ -304,8 +581,18 @@ let G = {nodes:[], edges:[], byId:new Map()}, view = {x:0,y:0,k:1}, sel = null, 
 const PALETTE = ["#2b5fd9","#d9822b","#2f8a4c","#c0392b","#7c3aed","#0891b2","#b7791f","#db2777","#4d7c0f","#9333ea","#0d9488","#e11d48","#64748b","#a16207","#1d4ed8","#be185d","#15803d","#7c2d12","#334155","#6d28d9"];
 const DOMS = [...new Set(DATA.nodes.map(n => n.domain).filter(Boolean))].sort();
 const DCOL = Object.fromEntries(DOMS.map((d,i) => [d, d === "sdílené" ? "#888" : PALETTE[i % PALETTE.length]]));
-const fdom = document.getElementById("fdom"); DOMS.forEach(d => fdom.insertAdjacentHTML("beforeend", `<option>${esc(d)}</option>`));
-document.getElementById("legend").innerHTML = LAYERS.map(l => `<span class="chip"><span class="lay" style="background:var(--l-${l})"></span>${LNAME[l]}</span>`).join("");
+const fdom = document.getElementById("fdom"); DOMS.forEach(d => fdom.insertAdjacentHTML("beforeend", `<option value="${esc(d)}">${esc(dname(d))}</option>`));
+const GEMPTY = `<div class="empty"><b>Klikni na bod v grafu</b> nebo ho najdi hledáním. Ukáže se typ, doména, provoz a všechny vazby. Odkazy v detailu přeskočí na sousední bod.</div>`;
+document.getElementById("detail").innerHTML = GEMPTY;
+document.getElementById("legend").innerHTML =
+  `<span><svg width="10" height="10" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg> procedura nebo funkce</span>` +
+  `<span><svg width="10" height="10" aria-hidden="true"><rect x="1" y="1" width="8" height="8" fill="currentColor"/></svg> tabulka (větší = víc dat)</span>` +
+  `<span><span class="sw" style="background:var(--muted);border-radius:50%"></span>mrtvá procedura</span>` +
+  `<span><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4" fill="none" stroke="var(--l-dynamic)" stroke-width="2"/></svg> dynamické SQL se skládaným jménem</span>` +
+  `<span class="muted">Barva čáry = vrstva:</span>` + LAYERS.map(l => `<span><span class="lay" style="background:var(--l-${l})"></span>${esc(LNAME[l])}</span>`).join("");
+document.getElementById("dchips").innerHTML = `<span class="muted small" style="align-self:center">Barva bodu = doména:</span>` +
+  DOMS.map(d => `<button type="button" class="dchip" data-d="${esc(d)}"><span class="sw" style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;background:${DCOL[d]}"></span>${esc(dname(d))}</button>`).join("");
+document.getElementById("gnodes").innerHTML = DATA.nodes.filter(n => n.type !== "V").map(n => `<option value="${esc(n.id)}">`).join("");
 function visible(n){
   if (!document.getElementById("fshared").checked && n.shared) return false;
   if (!document.getElementById("fdead").checked && n.status === "mrtvá") return false;
@@ -315,6 +602,31 @@ function visible(n){
     return nb && n.type === "U";
   }
   return n.type !== "V";
+}
+function fit(){
+  const cv = document.getElementById("cv"); if (!cv.clientWidth) return;
+  const vs = G.nodes.filter(p => visible(p.n)); if (!vs.length) { draw(); return; }
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const p of vs) { x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); }
+  const bw = Math.max(60, x1 - x0), bh = Math.max(60, y1 - y0);
+  view.k = Math.max(.2, Math.min(3, Math.min((cv.clientWidth - 40) / bw, (cv.clientHeight - 40) / bh)));
+  view.x = -(x0 + x1) / 2 * view.k; view.y = -(y0 + y1) / 2 * view.k; draw();
+}
+function zoomBy(f){ view.x *= f; view.y *= f; view.k *= f; draw(); }
+function syncChips(){ document.querySelectorAll("#dchips .dchip").forEach(b => b.classList.toggle("on", b.dataset.d === fdom.value)); }
+function selectInGraph(id){
+  if (!started) return false;
+  const p = G.byId.get(id); if (!p) return false;
+  if (!visible(p.n)) {
+    if (fdom.value && p.n.domain !== fdom.value) { fdom.value = ""; syncChips(); }
+    if (p.n.status === "mrtvá") document.getElementById("fdead").checked = true;
+    if (p.n.shared) document.getElementById("fshared").checked = true;
+  }
+  sel = p.id; if (view.k < 1.2) { view.x = view.x / view.k * 1.2; view.y = view.y / view.k * 1.2; view.k = 1.2; }
+  view.x = -p.x * view.k; view.y = -p.y * view.k;
+  showObject(p.id, "detail"); draw();
+  if (narrow()) document.getElementById("detail").scrollIntoView({behavior:"smooth", block:"start"});
+  return true;
 }
 function initGraph(){
   const cv = document.getElementById("cv");
@@ -352,17 +664,34 @@ function initGraph(){
   cv.addEventListener("pointerdown", ev => { drag = {x: ev.clientX, y: ev.clientY, vx: view.x, vy: view.y, moved:false}; cv.setPointerCapture(ev.pointerId); });
   cv.addEventListener("pointermove", ev => {
     if (drag) { const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y; if (Math.abs(dx)+Math.abs(dy) > 3) drag.moved = true; view.x = drag.vx + dx; view.y = drag.vy + dy; draw(); }
-    else { const h = pick(ev); if (h !== hover) { hover = h; draw(); } }
+    else { const h = pick(ev); if (h !== hover) { hover = h; cv.style.cursor = h ? "pointer" : "grab"; draw(); } }
   });
-  cv.addEventListener("pointerup", ev => { if (drag && !drag.moved) { const p = pick(ev); sel = p ? p.id : null; if (p) showObject(p.id, "detail"); draw(); } drag = null; });
+  cv.addEventListener("pointerup", ev => {
+    if (drag && !drag.moved) { const p = pick(ev); sel = p ? p.id : null;
+      if (p) showObject(p.id, "detail"); else document.getElementById("detail").innerHTML = GEMPTY; draw(); }
+    drag = null; });
+  cv.addEventListener("pointerleave", () => { if (hover) { hover = null; draw(); } });
   cv.addEventListener("wheel", ev => { ev.preventDefault(); const f = ev.deltaY < 0 ? 1.15 : 1/1.15; const r = cv.getBoundingClientRect();
     const mx = ev.clientX - r.left - r.width/2, my = ev.clientY - r.top - r.height/2;
     view.x = mx - (mx - view.x) * f; view.y = my - (my - view.y) * f; view.k *= f; draw(); }, {passive:false});
-  ["fdom","fshared","fdead"].forEach(id => document.getElementById(id).addEventListener("change", draw));
-  document.getElementById("fsearch").addEventListener("change", ev => { const q = ev.target.value.toLowerCase(); const p = G.nodes.find(x => x.id.toLowerCase().includes(q)); if (p) { sel = p.id; view.x = -p.x*view.k; view.y = -p.y*view.k; showObject(p.id, "detail"); draw(); } });
+  ["fshared","fdead"].forEach(id => document.getElementById(id).addEventListener("change", draw));
+  fdom.addEventListener("change", () => { syncChips(); fit(); });
+  document.getElementById("dchips").addEventListener("click", ev => { const b = ev.target.closest(".dchip"); if (!b) return; fdom.value = fdom.value === b.dataset.d ? "" : b.dataset.d; syncChips(); fit(); });
+  document.getElementById("zin").addEventListener("click", () => zoomBy(1.3));
+  document.getElementById("zout").addEventListener("click", () => zoomBy(1/1.3));
+  document.getElementById("zfit").addEventListener("click", () => { sel = null; document.getElementById("detail").innerHTML = GEMPTY; fit(); });
+  const search = () => {
+    const q = document.getElementById("fsearch").value.toLowerCase().trim(), msg = document.getElementById("gmsg");
+    if (!q) { msg.textContent = ""; return; }
+    const p = G.nodes.find(x => x.id.toLowerCase() === q) || G.nodes.find(x => x.id.toLowerCase().includes(q));
+    if (p) { msg.textContent = ""; selectInGraph(p.id); }
+    else msg.textContent = DATA.nodes.some(n => n.type === "V" && n.id.toLowerCase().includes(q)) ? "Pohledy v grafu nejsou, najdeš je v pohledu Objekty." : "Nic nenalezeno.";
+  };
+  document.getElementById("fsearch").addEventListener("change", search);
+  document.getElementById("fsearch").addEventListener("keydown", ev => { if (ev.key === "Enter") { ev.preventDefault(); search(); } });
   window.addEventListener("resize", draw);
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
-  view.k = Math.min(1, cv.clientWidth / 900); draw();
+  fit();
 }
 function toScreen(p, cv){ return [cv.clientWidth/2 + view.x + p.x*view.k, cv.clientHeight/2 + view.y + p.y*view.k]; }
 function pick(ev){
@@ -387,6 +716,7 @@ function draw(){
     const [x1,y1] = toScreen(a, cv), [x2,y2] = toScreen(b, cv); c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke();
   }
   c.globalAlpha = 1;
+  const labels = [];
   for (const p of G.nodes) {
     if (!visible(p.n)) continue;
     const [x,y] = toScreen(p, cv); const r = p.r * Math.max(.6, Math.min(2, view.k));
@@ -394,12 +724,23 @@ function draw(){
     c.fillStyle = p.n.status === "mrtvá" ? css("--muted") : (DCOL[p.n.domain] || "#999");
     c.beginPath(); if (p.n.type === "U") c.rect(x-r, y-r, 2*r, 2*r); else c.arc(x, y, r, 0, Math.PI*2); c.fill();
     if (p.n.dynamic && p.n.dynamic.blind) { c.strokeStyle = css("--l-dynamic"); c.lineWidth = 2; c.stroke(); }
-    if (p.id === focus || (view.k > 1.6 && nbr.has(p.id)) || (p.n.type === "U" && (p.n.size_gb||0) > 1000)) {
-      c.fillStyle = css("--ink"); c.font = "11px system-ui"; c.fillText(p.id, x + r + 3, y + 3);
-    }
+    if (p.id === focus || (focus && nbr.has(p.id) && view.k > 1.1) || (!focus && p.n.type === "U" && (p.n.size_gb||0) > 1000)) labels.push([p, x, y, r]);
   }
-  c.globalAlpha = 1;
+  // popisky nakonec, aby je nepřekryly body
+  c.globalAlpha = 1; c.font = "11px system-ui";
+  for (const [p, x, y, r] of labels) {
+    c.lineWidth = 3; c.strokeStyle = css("--panel"); c.strokeText(p.id, x + r + 3, y + 3);
+    c.fillStyle = css("--ink"); c.fillText(p.id, x + r + 3, y + 3);
+  }
 }
+
+// obnovení pohledu až po načtení celého skriptu (graf potřebuje své proměnné): adresa #pohled-…, pak poslední otevřený
+setTimeout(() => {
+  const h = (location.hash || "").replace("#pohled-", "");
+  let t = TABS.includes(h) ? h : null;
+  if (!t) { try { t = localStorage.getItem("mapa-tab"); } catch(e) {} }
+  if (t && t !== "domeny") openTab(t);
+}, 0);
 </script>
 </body>
 </html>

@@ -54,11 +54,19 @@ Python 3.9+, jen standardní knihovna, nic se neinstaluje.
 python3 analyze.py                 # analýza data/synthetic, ~0,2 s
 python3 analyze.py --regenerate    # nejdřív znovu vygenerovat syntetickou DB
 python3 analyze.py --data cesta    # vlastní vstupy ve stejném formátu (viz sql/collect/)
-python3 -m unittest discover -s tests # testy parseru, pravidel core lane, risk gate a citlivosti (40 testů)
+python3 -m unittest discover -s tests # testy parseru, pravidel core lane, risk gate, citlivosti a HTML šablony (50 testů)
 open site/index.html               # mapa funguje otevřením z disku
 ```
 
-Stránka má pět pohledů: **Domény a pořadí** (skóre, složky, posuvníky vah), **Core lane** (stav lane, autonomy level, pokrytí testy, co chybí, citlivost pořadí), **Graf** (procedury a tabulky obarvené podle domény, hrany podle vrstvy; klik = detail), **Blind spots** a **Objekty** (kód každé procedury, závislosti podle vrstev, provoz).
+Stránka začíná vysvětlením, k čemu prototyp je (proč mapa před dekompozicí, co katalog nevidí, jak vybrat první doménu, kde chybí důkaz pro změny od AI), hranicemi prototypu, hlavními čísly a slovníkem pojmů. Pak má pět pohledů, každý s krátkým návodem „Jak číst tento pohled“:
+
+- **Domény a pořadí:** skóre a pořadí kandidátů, táhla vah s popisem každého kritéria, sloupec Posun proti výchozím vahám, složky skóre po kliknutí a citlivost pořadí na váhy.
+- **Core lane:** co znamenají stavy `closed`, `draft-only` a `open`, proč jsou Reklamace a Katalog `draft-only`, vztah k bráně (kontrakt je připravený, brána ho zatím nečte), tabulka domén a pravidla R1–R5.
+- **Graf:** procedury a tabulky obarvené podle domény, čáry podle vrstvy. Klik zvýrazní sousedy a otevře detail, hledání, tlačítka +, − a „Celý graf“, filtr domény i přes barevné štítky, legenda.
+- **Blind spots:** vrstvy se zdrojem každé z nich a karty míst, kde katalog nestačí, sdílené tabulky a kontrola proti záměru generátoru.
+- **Objekty:** všech 432 objektů s hledáním podle jména, domény i stavu, příklady k vyzkoušení, detail se závislostmi podle vrstev, provozem a kódem.
+
+Na konkrétní pohled vede adresa s kotvou, například `site/index.html#pohled-lane`. Šablona stránky je [`mapa/template.html`](mapa/template.html); po její změně spusť `python3 analyze.py`, aby se přegeneroval i `site/index.html` (hlídá to test).
 
 ## Výsledky na syntetických datech
 
@@ -143,7 +151,7 @@ Skóre = 100 − penalizace + bonusy. Každá složka je podíl 0–1 krát váh
 | čtecí cesty | +10 | podíl procedur bez zápisu: levný parallel run |
 | mrtvý kód | +5 | vypnout je levnější než přepsat |
 
-Váhy jsou můj předpoklad, ne kalibrovaný model. Ve stránce jdou posuvníky změnit a pořadí se přepočítá. Diskuse o vahách s architekty je cennější než číslo samotné. Jak moc na vahách pořadí visí, ukazuje sekce citlivosti v `out/report.md` a v pohledu „Core lane“ (shrnutí výše u výsledků).
+Váhy jsou můj předpoklad, ne kalibrovaný model. Ve stránce jdou posuvníky změnit a pořadí se přepočítá. Diskuse o vahách s architekty je cennější než číslo samotné. Jak moc na vahách pořadí visí, ukazuje sekce citlivosti v `out/report.md` a v pohledu „Domény a pořadí“ (shrnutí výše u výsledků).
 
 ## Co nefunguje nebo je zjednodušené
 
@@ -159,7 +167,7 @@ Váhy jsou můj předpoklad, ne kalibrovaný model. Ve stránce jdou posuvníky 
 - **Risk gate z části A kontrakt zatím nečte.** `gate_decision` je referenční implementace v Pythonu s testy, napojení do `risk_gate.py` není hotové.
 - **Skóre nezná změnovost ani byznysovou hodnotu.** Chybí historie změn procedur (v syntetické DB žádná není) a plán byznysu. V reálu by vstupovala změnovost z gitu nebo DDL auditu.
 - **Mrtvý kód v okně 6 týdnů** je kandidát, ne důkaz. Ruční zásahy a výjimečné procesy okno nezachytí.
-- **HTML je ověřené v prohlížeči jen na GitHub Pages** (7. 11. 2026, <https://spillet.github.io/ai-sdlc-demo/mapa/>): všech pět pohledů se vykreslí bez chyb v konzoli, funguje detail uzlu v grafu i v pohledu Objekty. Jiné prohlížeče a velikosti obrazovky ověřené nejsou.
+- **HTML je ověřené v prohlížeči jen na GitHub Pages** (7. 11. 2026, po úpravě popisů a ovládání znovu, <https://spillet.github.io/ai-sdlc-demo/mapa/>): všech pět pohledů se vykreslí bez chyb v konzoli, funguje detail uzlu v grafu i v pohledu Objekty a přepínání vah, na šířce 375 px i na desktopu bez vodorovného posunu stránky. Ověřené jen v Chromiu; jiné prohlížeče ne.
 - **AI vrstva**: výstupy modelu nejsou spuštěné; tSQLt testy jsou kostry, kontrakt se nekompiloval. Proto mají v evidence pack stav `draft` a žádnou doménu neotevírají.
 
 ## Jak by to škálovalo na 5 000 procedur (back-of-envelope)
