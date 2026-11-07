@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI SDLC: ukázka</title>
-<meta name="description" content="Praktická ukázka k case study AI SDLC a dekompozice monolitu: brána podle rizika a kalendáře a mapa databázového monolitu. Fiktivní data.">
+<meta name="description" content="Case study AI SDLC a dekompozice monolitu: shrnutí návrhu, roadmapa a praktická ukázka na fiktivním e-shopu Kompas (brána podle rizika a kalendáře, mapa databázového monolitu).">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,15 +12,192 @@
 <header class="top">
   <p class="eyebrow">Case study · AI SDLC a dekompozice monolitu</p>
   <h1>Ukázka: o sloučení změny rozhoduje riziko, ne autor</h1>
-  <p class="lead">Dvě části na fiktivním e-shopu Kompas. Brána podle rizika určí, kdo smí změnu sloučit, a ve špičce sezóny je přísnější. Mapa databázového monolitu ukáže, co katalog databáze nevidí a kterou doménu vytáhnout první. Žádná data, kód ani schéma skutečné firmy tu nejsou.</p>
-  <div class="links">
-    <a class="primary" href="mapa/">Otevřít mapu monolitu</a>
-    <a href="zaznam-dema.html">Záznam ukázky brány</a>
-    <a href="https://github.com/Spillet/ai-sdlc-demo">Repozitář na GitHubu</a>
+  <p class="lead">Stránka doplňuje prezentaci case study. Shrnuje návrh a ukazuje jeho dvě části v provozu na fiktivním e-shopu Kompas: bránu, která podle rizika a kalendáře určí, kdo smí změnu sloučit, a mapu databázového monolitu. Žádná data, kód ani schéma skutečné firmy tu nejsou.</p>
+  <div class="cards">
+    <a class="card primary" href="mapa/">
+      <span class="k">Mapa monolitu →</span>
+      <p>Interaktivní mapa závislostí syntetické databáze: co katalog databáze nevidí, která doména jde vytáhnout první a kde zatím chybí důkaz pro změny od AI.</p>
+      <span class="meta">Doklad k části B · asi 5 minut · návod níže na stránce</span>
+    </a>
+    <a class="card" href="zaznam-dema.html">
+      <span class="k">Záznam ukázky brány →</span>
+      <p>Jedna malá změna krok za krokem: v sezóně ji brána podržela pro člověka, po ručním přepočtu s běžným profilem ji sloučila sama.</p>
+      <span class="meta">Doklad k části A · asi 3 minuty · běh z 3. 11. 2026</span>
+    </a>
+    <a class="card" href="https://github.com/Spillet/ai-sdlc-demo">
+      <span class="k">Repozitář na GitHubu →</span>
+      <p>Kód brány, pravidla, workflow a analyzátor mapy. Repozitář je soukromý: bez pozvánky GitHub ukáže chybu 404.</p>
+      <span class="meta">Pro hodnotitele s přístupem · obsah shrnuje tato stránka</span>
+    </a>
   </div>
+  <p class="toc">Na stránce: <a href="#shrnuti">Shrnutí</a> · <a href="#ai-sdlc">A · AI SDLC</a> · <a href="#dekompozice">B · Dekompozice</a> · <a href="#roadmapa">Roadmapa</a> · <a href="#vazba">Vazba na prezentaci</a> · <a href="#zmena">Průběh změny</a> · <a href="#skutecne">Skutečné a simulované</a> · <a href="#mapa">Jak číst mapu</a></p>
 </header>
 
-<section>
+<section id="shrnuti">
+  <h2>Manažerské shrnutí</h2>
+  <div class="summary">
+    <div class="box">
+      <h3>Problém</h3>
+      <p>AI zrychlila psaní kódu. Úzké hrdlo se přesunulo na zadání, review a provoz: AI přidává kód ke kontrole a bez byznysového kontextu hádá.</p>
+      <p>E-shop zároveň potřebuje rozdělit roky rostlý databázový monolit s logikou v uložených procedurách, a to za provozu 24/7.</p>
+    </div>
+    <div class="box">
+      <h3>Návrh</h3>
+      <p>Celý vývoj jako jedna smyčka šesti kroků. Změnu může zadat kdokoli, agent ji připraví a o cestě do produkce rozhoduje riziko změny.</p>
+      <p>Migrace monolitu jde stejnou smyčkou, doména po doméně. Začíná mapou toho, co v databázi opravdu běží.</p>
+    </div>
+    <div class="box">
+      <h3>Cíl do 18 měsíců</h3>
+      <p>Kratší Lead Time (doba od zadání změny po nasazení) bez vyšší chybovosti a vypnutá stará cesta první domény.</p>
+      <p>Podmínka: souběžný běh projde špičkou a přepnutí proběhne do 12. měsíce. Jinak vypnutí asi za 24 měsíců. Data zatím zůstávají v monolitu.</p>
+    </div>
+    <div class="box">
+      <h3>Proč ukázka</h3>
+      <p>Návrh stojí na dvou mechanismech, které jdou postavit hned: bráně podle rizika a mapě monolitu. Ukázka obojí spouští nad fiktivními daty.</p>
+      <p>Dokládá, že pravidla pro AI jdou zapsat jako kód a že mapa najde vazby, které databáze sama neukáže. Kde ukázka končí, popisuje <a href="#skutecne">tabulka níže</a>.</p>
+    </div>
+  </div>
+
+  <h3>Tři teze prezentace</h3>
+  <ol class="theses">
+    <li><strong>Změnu může zadat kdokoli.</strong> Agent ji s kontextem domény převede na specifikaci a vlastník domény ji potvrdí.</li>
+    <li><strong>O cestě do produkce rozhoduje riziko změny, ne její autor.</strong> Málo rizikové změny projdou samy, ostatní kontroluje člověk. Autonomie AI roste jen s daty z provozu.</li>
+    <li><strong>Migraci zrychlí hlavně rozhodnutí, co nepřepisovat, a domény podle procesů.</strong> AI zkrátí analýzu. Testy a souběžný běh ověří shodu se starým systémem, zbývající riziko přijme vlastník.</li>
+  </ol>
+
+  <p>Obě části návrhu sdílejí jednu smyčku a potkávají se v první doméně:</p>
+  <div class="d-two" role="img" aria-label="Část A Vývoj s AI a část B Dekompozice monolitu vedou do společné smyčky: validace výstupů AI, rozhodování podle rizika a měření dopadů. Výsledkem je kratší Lead Time bez vyšší chybovosti a vypnuté legacy doména po doméně.">
+    <div class="d-col">
+      <div class="d-box d-a"><b>A · Vývoj s AI</b>celý vývoj jako jedna smyčka: změnu zadá kdokoli, agent ji připraví</div>
+      <div class="d-box d-b"><b>B · Dekompozice monolitu</b>roky rostlý systém rozdělit na domény po krocích, za provozu a s pomocí AI</div>
+    </div>
+    <div class="arr" aria-hidden="true"></div>
+    <div class="d-loop">
+      <b>Společná smyčka</b>
+      <div>validace výstupů AI</div>
+      <div>rozhodování podle rizika</div>
+      <div>měření dopadů, ne objemu práce</div>
+    </div>
+    <div class="arr" aria-hidden="true"></div>
+    <div class="d-col">
+      <div class="d-out"><b>Kratší Lead Time</b><span>bez vyšší chybovosti</span></div>
+      <div class="d-out"><b>Vypnuté legacy</b><span>doména po doméně</span></div>
+    </div>
+  </div>
+  <p class="muted small">Ukázka pokrývá z této smyčky rozhodování podle rizika a první krok migrace (mapu). Měření dopadů je v návrhu.</p>
+</section>
+
+<section id="ai-sdlc">
+  <h2>A · AI SDLC: smyčka šesti kroků</h2>
+  <p>Každý krok má vlastníka, oprávnění a nezávislou kontrolu. AI review je signál, ne schvalovatel. Agent nesmí měnit pravidla, podle kterých se kontroluje.</p>
+  <div class="loop">
+    <div class="s in"><h3>1 · Zadání</h3><p>Zadá kdokoli. Agent připraví specifikaci s akceptačními kritérii, vlastník ji potvrdí.</p><span class="tag real">v ukázce</span></div>
+    <div class="s in"><h3>2 · Agentní vývoj</h3><p>Agent píše kód a testy v odděleném prostředí bez produkčních dat a bez práva zápisu.</p><span class="tag real">v ukázce</span></div>
+    <div class="s in"><h3>3 · Ověření</h3><p>Build a testy znovu, bez tajných údajů agenta. AI review jen zvyšuje riziko.</p><span class="tag real">v ukázce</span></div>
+    <div class="s in"><h3>4 · Brána</h3><p>Pravidla jako kód podle změněných souborů a kalendáře: sloučit samo, předat člověku, nebo vlastníkovi.</p><span class="tag real">v ukázce</span></div>
+    <div class="s out"><h3>5 · Nasazení a provoz</h3><p>Existující CD, postupné nasazení a cesta zpět. Incident založí novou změnu.</p><span class="tag plan">návrh</span></div>
+    <div class="s out"><h3>6 · Měření</h3><p>Lead Time, čekání na review, rework a chybovost změn podle podílu AI.</p><span class="tag plan">návrh</span></div>
+  </div>
+  <p class="loop-back">↺ Zpětné vazby: provoz → zadání · měření → brána a míra autonomie · ověření → kontext (opakované chyby se stávají pravidly).</p>
+
+  <h3>Co AI pustí samo</h3>
+  <p>Hranici posouvá hlavně ověřitelnost: testy, data z provozu a pravidla. Lepší model sám nestačí.</p>
+  <div class="bands">
+    <div class="band go"><h3>Hned</h3><ul>
+      <li>specifikace a akceptační kritéria, která potvrdí zadavatel</li>
+      <li>dokumentace pravidel ze starého kódu</li>
+      <li>malé změny v novém systému a na webu jako návrh k review</li>
+      <li>AI review a třídění zranitelností ze skenů</li></ul></div>
+    <div class="band cond"><h3>Omezeně, s podmínkou</h3><ul>
+      <li>drobné změny od byznysu (texty, UI) přes bránu</li>
+      <li>přepis jednoduchých čtecích procedur se srovnáním se starou cestou</li>
+      <li>automatické nasazení málo rizikových kategorií ověřených daty z provozu</li>
+      <li>oprava z provozu jako nová změna přes bránu</li></ul></div>
+    <div class="band no"><h3>Zatím ne, rozhoduje člověk</h3><ul>
+      <li>přepis složitých zápisových procedur</li>
+      <li>AI jako soudce, že nový kód dělá totéž co starý</li>
+      <li>peníze, oprávnění, přepnutí zápisu dat</li>
+      <li>zásah do produkce bez schválení</li></ul></div>
+  </div>
+
+  <h3>Brána a úrovně autonomie</h3>
+  <p>Brána posuzuje tři kritéria a platí nejpřísnější z nich: citlivost změny (peníze, zákaznická data, oprávnění a samotná pipeline jdou vždy k člověku), připravenost domény (testy chování, vlastník) a výsledky z provozu (reverty a incidenty AI změn). Ve špičce sezóny platí přísnější pravidla podle kalendáře změn.</p>
+  <div class="levels">
+    <div class="lvl"><b>L0 · číst a analyzovat</b>podmínka: mapa domény s přiznanými slepými místy</div>
+    <div class="lvl"><b>L1 · návrh změny pro vlastníka</b>podmínka: záměr, kontext a vlastník</div>
+    <div class="lvl"><b>L2 · nasadit po schválení člověkem</b>podmínka: testy a srovnání chování</div>
+    <div class="lvl"><b>L3 · nasadit automaticky ve vymezených kategoriích</b>podmínka: prahy z pilotu, nikdy peníze ani oprávnění</div>
+  </div>
+  <div class="lvl-arrows"><span class="up">→ nahoru pomalu: vlastník domény schválí, když doména splní prahy z pilotu</span><span class="down">← dolů hned: závažný incident nebo opakované reverty AI změn</span></div>
+  <p class="muted small">V ukázce brána rozhoduje o sloučení do hlavní větve a autonomii mění jen kalendář změn. Úrovně autonomie podle výsledků z provozu jsou návrh.</p>
+</section>
+
+<section id="dekompozice">
+  <h2>B · Dekompozice monolitu</h2>
+  <p>Postup vychází ze čtyř poučení z předchozích migrací:</p>
+  <ol class="theses">
+    <li><strong>Začít mapou toho, co opravdu běží.</strong> Procedury volá klient, plánovač i web. Závislosti v databázi ukazují jen část obrazu. <a href="#mapa">Ukázka: mapa</a></li>
+    <li><strong>Domény hledat podle procesů, ne podle entit.</strong> Hranice vede tam, kde se mění jazyk, pravidla, vlastník, tempo změn a potřeba společné transakce. Kandidáty nabídne mapa, hranici potvrdí workshop a vlastník.</li>
+    <li><strong>Chování dokazovat během starého systému.</strong> Logika se přesouvá první, data až po ní a po částech. V souběžném běhu spouští vnější účinky jen jedna strana: žádný druhý e-mail ani druhý pohyb ve skladu.</li>
+    <li><strong>Jeden doménový tým vlastní starý i nový kód až do vypnutí.</strong> Další vlna začíná až po stabilizaci té předchozí.</li>
+  </ol>
+
+  <h3>Jedna doména od mapy po vypnutí</h3>
+  <p>AI připravuje, běh starého systému ověřuje, vlastník rozhoduje.</p>
+  <div class="domain">
+    <div class="s in"><h3>1 · Mapa a úklid</h3><p class="how">závislosti z kódu i z běhu</p><p>AI: dokumentuje procedury, navrhne kandidáty k vypnutí</p><p><strong>Rozhoduje:</strong> vlastník podle běhu za celé období</p><span class="tag real">v ukázce: mapa</span></div>
+    <div class="s"><h3>2 · Hranice</h3><p class="how">event storming a mapa</p><p>AI: shrne procedury a tabulky domény</p><p><strong>Rozhoduje:</strong> vlastník domény</p></div>
+    <div class="s"><h3>3 · Testy chování</h3><p class="how">vstupy a výstupy z běhu starého systému</p><p>AI: navrhne scénáře a data</p><p><strong>Rozhoduje:</strong> výsledek zachytí běh, ne model</p></div>
+    <div class="s"><h3>4 · Přesměrování</h3><p class="how">strangler fig, branch by abstraction</p><p>AI: navrhne rozhraní a kód služby</p><p><strong>Rozhoduje:</strong> vlastník podle rizika změny</p></div>
+    <div class="s"><h3>5 · Souběžný běh</h3><p class="how">pravdu drží stará cesta</p><p>AI: vysvětlí rozdíly</p><p><strong>Rozhoduje:</strong> vlastník přepne až při shodě</p></div>
+    <div class="s"><h3>6 · Vypnutí</h3><p class="how">stará cesta se vypne, kód se smaže po běhu za celé období</p><p>AI: ověří v mapě, že ji nic nevolá</p><p><strong>Rozhoduje:</strong> vlastník po pozorovacím období</p></div>
+  </div>
+  <p class="muted small">Před převodem vlastnictví dat lze volání vrátit na starou cestu. Po převodu zápisů vyžaduje návrat také dorovnání dat a ověřený postup obnovy. Ukázka pokrývá krok 1, kroky 2–6 jsou návrh.</p>
+
+  <h3>Hlavní riziko a pojistky</h3>
+  <p>Největší riziko je, že se přechod nedokončí a starý i nový systém poběží napořád. Návrh proti tomu staví pět pojistek: vlna končí vypnutím staré cesty, volání se přesměrovávají po jednom, domény vznikají podle procesů, testy vycházejí z běhu starého systému a migrace má kapacitu schválenou byznysem a zapsanou v cílech firmy.</p>
+</section>
+
+<section id="roadmapa">
+  <h2>Roadmapa</h2>
+  <p>Obě části běží souběžně a potkávají se v první doméně. Po každé fázi rozhoduje vedení podle dat: pokračovat, upravit, nebo zastavit.</p>
+  <div class="road">
+    <div class="h"></div><div class="h">0–6 týdnů</div><div class="h">6 týdnů – 4 měsíce</div><div class="h">4–9 měsíců</div><div class="h">9–18 měsíců</div>
+    <div class="lab a">A · AI SDLC</div>
+    <div class="c a"><span class="m">A · 0–6 týdnů</span><p><strong>0 · Měřit a připravit:</strong> výchozí metriky, pravidla pro AI, kalendář změn, kandidáti na vlastníky domén</p><p class="cond">Dál, když: výchozí stav je změřený a pravidla schválená</p></div>
+    <div class="c a"><span class="m">A · 6 týdnů – 4 měsíce</span><p><strong>1 · Smyčka ve dvou týmech:</strong> každou změnu schvaluje člověk, v monolitu jen analýza a mapa</p><p class="cond">Dál, když: čekání na review se zkrátí a chybovost AI změn není horší než u lidských změn stejného typu</p></div>
+    <div class="c a"><span class="m">A · 4–9 měsíců</span><p><strong>2 · Platforma pro další týmy:</strong> izolovaná prostředí, jednotný přístup ke kontextu, automatické snižování autonomie; byznys zadává drobné změny; první doména monolitu na L1</p><p class="cond">Dál, když: výsledky jsou lepší než výchozí stav a náklad na změnu je známý</p></div>
+    <div class="c a"><span class="m">A · 9–18 měsíců</span><p><strong>3 · Core se otevírá:</strong> první doména monolitu na L2, úzké kategorie na L3; ušetřená kapacita jde do dekompozice</p><p class="cond">Dál, když: ušetřená kapacita je změřená na srovnatelných změnách a chybovost AI změn není horší</p></div>
+    <div class="lab b">B · Dekompozice</div>
+    <div class="c b"><span class="m">B · 0–6 týdnů</span><p>záznam běhu monolitu: 4–6 týdnů pro mapu, dál běží přes sezónu</p></div>
+    <div class="c b"><span class="m">B · 6 týdnů – 4 měsíce</span><p>vratné odpojení nepoužívaného kódu, event storming, výběr první domény</p></div>
+    <div class="c b"><span class="m">B · 4–9 měsíců</span><p>první doména: testy chování, přesměrování, souběžný běh</p></div>
+    <div class="c b"><span class="m">B · 9–18 měsíců</span><p>přepnutí mimo špičku, vypnutí staré cesty první domény, poučení do druhé vlny</p></div>
+  </div>
+  <div class="note">
+    <p><strong>Rozhodnutí na prvních šest týdnů:</strong> dva pilotní týmy, rámec kapacity pro migraci schválený byznysem, spuštění záznamu běhu monolitu a výchozí metriky.</p>
+    <p>První vlnu nese kapacita schválená byznysem. Od 9. měsíce k ní přibude naměřená úspora z AI. Když nevznikne, rozsah a termín znovu schválí vedení.</p>
+  </div>
+</section>
+
+<section id="vazba">
+  <h2>Vazba ukázky na prezentaci</h2>
+  <p>Ukázka dokládá mechanismy, na kterých návrh stojí. Rozsah, pořadí a čísla pro skutečnou firmu návrh potvrdí až po měření.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Teze v prezentaci</th><th>Co ukázka dokládá</th><th>Kde to najdete</th></tr></thead>
+    <tbody>
+      <tr><td>O sloučení rozhoduje riziko, ne autor</td><td>Brána počítá riziko ze skutečně změněných souborů, velikosti, testů a AI review. Sama sloučí jen <code>low</code>.</td><td><a href="zaznam-dema.html">Záznam ukázky</a>, <a href="#zmena">průběh změny</a></td></tr>
+      <tr><td>Ve špičce platí přísnější pravidla podle kalendáře</td><td>Stejná změna šablony je v běžném provozu 🟢 a v sezóně 🟡.</td><td><a href="#obdobi">Pravidla podle období</a></td></tr>
+      <tr><td>Agent nesmí měnit pravidla, podle kterých se kontroluje</td><td>Změna pravidel, kalendáře, workflow nebo instrukcí agentů je vždy <code>high</code> a agentovi se zahodí.</td><td><a href="#skutecne">Skutečné a simulované</a></td></tr>
+      <tr><td>Začít mapou toho, co opravdu běží</td><td>47 % používaných procedur nemá volajícího v katalogu databáze. 25 procedur se za 6 týdnů simulovaného běhu nezavolalo.</td><td><a href="mapa/">Mapa</a> › Blind spots, Objekty</td></tr>
+      <tr><td>Kandidáty domén nabídne mapa, rozhodne vlastník</td><td>Skóre seřadí kandidáty domén. Reklamace vycházejí první.</td><td><a href="mapa/">Mapa</a> › Domény a pořadí</td></tr>
+      <tr><td>Autonomie AI v doméně podle důkazu</td><td>Reklamace a Katalog smějí dostat jen návrh PR (L1), protože chybí ověřené testy chování.</td><td><a href="mapa/">Mapa</a> › Core lane</td></tr>
+      <tr><td>Nasazení, měření a snižování autonomie podle provozu</td><td>Ukázka je nemá. Končí sloučením do hlavní větve.</td><td><a href="#hranice">Kde má ukázka hranice</a></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="zmena">
   <h2>Jedna změna od souboru po mapu</h2>
   <p>Skutečný průběh z 3. 11. 2026 (<a href="zaznam-dema.html">záznam</a>): nová šablona zákaznické zprávy „v sezóně to potrvá déle“ a její test.</p>
   <div class="path">
@@ -32,7 +209,7 @@
   <p>Pak člověk ručně spustil přepočet s profilem <code>normal</code>. Brána změnu sloučila a do komentáře zapsala, kdo profil přepsal a co by platilo podle kalendáře. Je to <strong>simulovaná výjimka</strong>: v produkci by přepnutí profilu schvaloval druhý člověk.</p>
 </section>
 
-<section>
+<section id="skutecne">
   <h2>Co je skutečné a co simulované</h2>
   <div class="table-wrap"><table>
     <thead><tr><th>Část</th><th>Stav</th><th>Poznámka</th></tr></thead>
@@ -40,6 +217,7 @@
       <tr><td>Agentní implementace a AI review</td><td><span class="tag real">skutečné</span></td><td>Historické běhy, hlavně PR #13. Při živé ukázce se agent nespouští.</td></tr>
       <tr><td>Opakovatelná ukázka</td><td><span class="tag real">skutečné</span></td><td>Skutečný workflow; změnu připraví skript bez modelu a AI review je připravený záznam.</td></tr>
       <tr><td>Výpočet brány, testy a přepočet</td><td><span class="tag real">skutečné</span></td><td>CI při každé změně ověřuje 24 regresních scénářů (18 změn, 6 hranic kalendáře).</td></tr>
+      <tr><td>Ochrana pravidel před agentem</td><td><span class="tag real">skutečné</span></td><td>Změnu pravidel, kalendáře, workflow a instrukcí agentů pipeline agentovi zahodí. Pro člověka jsou tyto soubory v nejvyšším riziku.</td></tr>
       <tr><td>Merge u výsledku <code>low</code></td><td><span class="tag real">skutečné</span></td><td>PR sloučí skript brány pod identitou GitHub Actions.</td></tr>
       <tr><td>Zákaz sloučit změnu proti bráně</td><td><span class="tag plan">částečně</span></td><td>Ruleset na hlavní větvi vyžaduje zelenou kontrolu brány. Bot ani běžný přispěvatel změnu se 🟡 nesloučí; vlastník repozitáře ruleset obejít může.</td></tr>
       <tr><td>Povinné lidské schválení u <code>medium</code> a <code>high</code></td><td><span class="tag not">nevynucené</span></td><td>Brána požádá o review a počet schválení zapíše; ruleset ho nekontroluje.</td></tr>
@@ -52,11 +230,11 @@
   </table></div>
 </section>
 
-<section>
+<section id="obdobi">
   <h2>Pravidla podle období</h2>
   <p>Pravidla i kalendář jsou kód v repozitáři. Mění se přes PR a samy patří do nejvyššího rizika.</p>
   <div class="table-wrap"><table>
-    <thead><tr><th></th><th>normal</th><th>peak (30. 10.–30. 11.)</th><th>freeze (26.–30. 11.)</th></tr></thead>
+    <thead><tr><th></th><th>normal</th><th>peak (30. 10.–30. 11. a 14.–23. 12.)</th><th>freeze (26.–30. 11.)</th></tr></thead>
     <tbody>
       <tr><td>Brána sloučí sama</td><td>dokumentace, testy, šablony zpráv</td><td>jen dokumentace</td><td>nic</td></tr>
       <tr><td>Kód</td><td>šablony low, ostatní medium, vrácení peněz high</td><td>každá změna kódu aspoň medium</td><td>vše blokované, hotfix high</td></tr>
@@ -64,15 +242,16 @@
       <tr><td>Schválení pro high</td><td>1</td><td>2</td><td>2</td></tr>
     </tbody>
   </table></div>
+  <p class="muted small">Okna kalendáře jsou fiktivní a odpovídají typické sezóně e-shopu. Mimo okna platí <code>normal</code>. Když se okna překrývají, platí přísnější profil.</p>
 </section>
 
-<section>
+<section id="hranice">
   <h2>Kde má ukázka hranice</h2>
   <div class="table-wrap"><table>
     <thead><tr><th>Oblast</th><th>V ukázce</th><th>V produkci by bylo potřeba</th></tr></thead>
     <tbody>
       <tr><td>Merge</td><td>Brána sama slučuje jen low. Ruleset vyžaduje zelenou kontrolu brány, vlastník repozitáře ho ale obejít může.</td><td>Ruleset bez výjimek pro jednotlivce; obejití jen schváleným a zaznamenaným postupem.</td></tr>
-      <tr><td>Schválení</td><td>Počet schválení brána zapíše, ale nevynutí. Owning team je jeden člověk.</td><td>Schválení vlastníky kódu, počet podle profilu.</td></tr>
+      <tr><td>Schválení</td><td>Počet schválení brána zapíše, ale nevynutí. Owning team (tým, který oblast vlastní) je jeden člověk.</td><td>Schválení vlastníky kódu, počet podle profilu.</td></tr>
       <tr><td>Výjimka z kalendáře</td><td>Spustí ji kdokoli s právem zápisu; komentář v PR ji zaznamená.</td><td>Chráněné prostředí se schvalovateli a auditní log mimo PR.</td></tr>
       <tr><td>Izolace agenta</td><td>Agent nemá token se zápisem a testy běží znovu bez secrets. Běží ale na runneru se sítí.</td><td>Sandbox bez odchozí sítě a krátkodobá pověření.</td></tr>
       <tr><td>Data mapy</td><td>Syntetická databáze a simulovaný běh; parser T-SQL na regulárních výrazech.</td><td>4–6 týdnů záznamu běhu nad kopií databáze a oficiální parser T-SQL.</td></tr>
@@ -80,21 +259,32 @@
   </table></div>
 </section>
 
-<section>
-  <h2>Mapa monolitu</h2>
-  <p>Mapa skládá závislosti ze čtyř zdrojů: kód procedur, desktopový klient, plánovač úloh a záznam běhu. Na syntetických datech ukazuje:</p>
+<section id="mapa">
+  <h2>Mapa monolitu: jak ji číst</h2>
+  <p>Mapa skládá závislosti ze čtyř zdrojů: kód procedur, desktopový klient, plánovač úloh a záznam běhu. Výsledek slouží ke třem rozhodnutím: co vypnout místo přepisu, kterou doménu vytáhnout první a kde AI zatím smí jen navrhovat. Na syntetických datech ukazuje:</p>
   <ul>
     <li><strong>119 z 252 živých procedur (47 %)</strong> nemá v katalogu databáze žádného volajícího. Volá je klient, plánovač, web nebo dynamické SQL. Jde o výsledek syntetické databáze, ne měření skutečné firmy.</li>
     <li><strong>25 procedur</strong> za 6 týdnů nikdo nezavolal: kandidáti k prověření, ne důkaz nepotřebnosti.</li>
+    <li><strong>11 sdílených tabulek</strong> (mimo jiné objednávky, zákazník, produkt) by slepilo všechno dohromady. Mapa je proto vynechává ze shlukování a u každé ukáže, kdo do ní nejvíc zapisuje.</li>
     <li><strong>Reklamace</strong> vycházejí jako první doména. Skóre slouží jako filtr kandidátů, rozhoduje vlastník.</li>
   </ul>
-  <p>Stránka mapy má pět pohledů: <strong>Domény a pořadí</strong>, <strong>Core lane</strong>, <strong>Graf</strong>, <strong>Blind spots</strong> a <strong>Objekty</strong>. Funguje i offline: stačí ji uložit a otevřít z disku.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Pohled</th><th>Co ukazuje</th><th>Čeho si všimnout</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Domény a pořadí</strong></td><td>Kandidáti domén se skóre 0–100: čím víc, tím snáz jde doména vytáhnout jako první. Posuvníky mění váhy, klik na řádek otevře důvody.</td><td>Reklamace 83,2 a Katalog 81,6 vedou. Skupiny „úklid“ jsou kandidáti na vypnutí místo přepisu.</td></tr>
+      <tr><td><strong>Core lane</strong></td><td>Kdo smí měnit kód domény a v jaké podobě: <code>closed</code>, <code>draft-only</code> (jen návrh PR, L1), <code>open</code>.</td><td>Žádná doména není otevřená, protože testy chování procedur zatím nikdo nespustil. Je to očekávaný výsledek.</td></tr>
+      <tr><td><strong>Graf</strong></td><td>Závislosti mezi procedurami a tabulkami. Kolečka jsou procedury a funkce, čtverce tabulky, barva hrany říká, který zdroj vazbu viděl.</td><td>Filtr na jednu doménu, například D:Claim (Reklamace).</td></tr>
+      <tr><td><strong>Blind spots</strong></td><td>Co statický katalog databáze nevidí: volání zvenku, dynamické SQL, odkazy do jiných databází.</td><td>Procedury, o kterých ví jen záznam běhu webu.</td></tr>
+      <tr><td><strong>Objekty</strong></td><td>Všechny procedury, funkce, triggery a tabulky s doménou, stavem a počtem volání.</td><td>Sloupec Stav odliší živé procedury od mrtvých.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted small">Názvy kandidátů domén vznikají automaticky podle nejpropojenější tabulky shluku. D:Claim jsou reklamace, D:Category katalog, D:OrderNote objednávky a D:GatewayLog platby. Lidský název domény určí workshop s vlastníkem. Mapa funguje i offline: stačí ji uložit a otevřít z disku.</p>
   <div class="links"><a class="primary" href="mapa/">Otevřít mapu monolitu</a></div>
 </section>
 
 <section>
-  <h2>Jak ukázku ověřit bez GitHubu</h2>
-  <p>Pravidla brány jdou spustit lokálně na 24 scénářích, bez sítě a bez modelu:</p>
+  <h2>Ověření s přístupem do repozitáře</h2>
+  <p>Kdo má přístup do repozitáře, spustí pravidla brány na 24 scénářích a analyzátor mapy lokálně, bez sítě a bez modelu:</p>
 <pre>pip install pyyaml==6.0.2
 python3 .github/scripts/run_gate_evals.py
 cd mapa-monolitu &amp;&amp; python3 analyze.py &amp;&amp; python3 -m unittest discover -s tests</pre>

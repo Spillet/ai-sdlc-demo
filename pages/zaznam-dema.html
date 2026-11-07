@@ -10,9 +10,12 @@
 <body>
 <main>
 <header class="top">
-  <p class="eyebrow"><a href="./">← Ukázka</a> · Záznam, ne živý běh</p>
+  <p class="eyebrow"><a href="./">← Přehled case study</a> · Záznam, ne živý běh</p>
   <h1>Záznam ukázky brány: PR #16, 3. 11. 2026</h1>
-  <p class="lead">Záloha pro případ, že GitHub Actions nebo síť nejsou k dispozici. Obsah je převzatý z komentáře brány u <a href="https://github.com/Spillet/ai-sdlc-demo/pull/16">PR #16</a>. Celý běh přípravy trval 95 s, přepočet 29 s.</p>
+  <p class="lead">Jedna malá změna prošla bránou dvakrát. V sezóně Black Friday ji brána podržela pro člověka. Po ručním přepočtu s běžným profilem ji sloučila sama. Záznam dokládá tezi, že o sloučení rozhoduje riziko změny a období, ne autor.</p>
+  <div class="note">
+    <p><strong>Proč záznam:</strong> je to záloha pro případ, že při prezentaci nejsou k dispozici GitHub Actions nebo síť, a zároveň jediný pohled na průběh pro hodnotitele bez přístupu do soukromého repozitáře. Obsah je převzatý z komentáře brány u PR #16. Celý běh přípravy trval 95 s, přepočet 29 s.</p>
+  </div>
 </header>
 
 <section>
@@ -44,7 +47,7 @@ tests/Claims.Tests/Content/ClaimPeakDelayTemplateTests.cs    +23
       <tr><td>3. 11. 22:14</td><td>gate-reevaluate, ručně</td><td><code>normal</code> (ruční přepsání)</td><td><span class="tag t-low">🟢 low</span> brána PR sloučila</td></tr>
     </tbody>
   </table></div>
-  <p>Obě rozhodnutí počítala se stejnou verzí pravidel (<code>risk-policy.yml@456d36b</code>, <code>change-calendar.yml@4eb238a</code>).</p>
+  <p>Obě rozhodnutí počítala se stejnou verzí pravidel (<code>risk-policy.yml@456d36b</code>, <code>change-calendar.yml@4eb238a</code>). Časy jsou středoevropské.</p>
 </section>
 
 <section>
@@ -59,7 +62,7 @@ tests/Claims.Tests/Content/ClaimPeakDelayTemplateTests.cs    +23
       <tr><td>testy</td><td>prošly</td><td><span class="tag t-low">low</span></td><td>Ověření v čistém jobu bez secrets: guardrails a <code>dotnet test</code>.</td></tr>
     </tbody>
   </table></div>
-  <p>Výsledný risk tier je nejvyšší ze všech signálů. Komentář brány navíc uvádí, kdo profil přepsal a že bez přepsání by platil <code>peak</code>.</p>
+  <p>Výsledný risk tier (úroveň rizika změny) je nejvyšší ze všech signálů. Komentář brány navíc uvádí, kdo profil přepsal a že bez přepsání by platil <code>peak</code>.</p>
 </section>
 
 <section>
@@ -68,7 +71,11 @@ tests/Claims.Tests/Content/ClaimPeakDelayTemplateTests.cs    +23
     <p><strong>Ruční přepsání profilu je simulovaná výjimka.</strong> Ukazuje, že výjimka zanechá stopu: kdo, kdy, jaký profil a co by platilo podle kalendáře. Nechrání ji druhé schválení a komentář v PR není neměnný auditní záznam. V produkci by přepnutí profilu spouštělo chráněné prostředí se schvalovateli.</p>
     <p><strong>Ukázka končí sloučením do hlavní větve.</strong> Nasazení do produkce je v návrhu úkolem existujícího CD.</p>
   </div>
-  <p>Stejný průběh se skutečným agentem a AI review je v <a href="https://github.com/Spillet/ai-sdlc-demo/pull/13">PR #13</a>.</p>
+  <p>Od 7. 11. 2026 drží výsledek brány i ruleset na hlavní větvi: při 🟡 GitHub sloučení zablokuje. Ověřeno na <a href="https://github.com/Spillet/ai-sdlc-demo/pull/19">PR #19</a>. Stejný průběh se skutečným agentem a AI review je v <a href="https://github.com/Spillet/ai-sdlc-demo/pull/13">PR #13</a>, původní komentář brány v <a href="https://github.com/Spillet/ai-sdlc-demo/pull/16">PR #16</a>. Odkazy na PR fungují jen s přístupem do repozitáře.</p>
+  <div class="links">
+    <a class="primary" href="./#skutecne">Co je skutečné a co simulované</a>
+    <a href="mapa/">Mapa monolitu</a>
+  </div>
 </section>
 
 <footer>
