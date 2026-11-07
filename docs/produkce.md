@@ -1,6 +1,6 @@
 # Návrh nastavení pro produkci
 
-Ukázka běží v soukromém repu na plánu bez ochrany větví, takže rozhodnutí risk gate tu nikdo nevynucuje. Štítek `risk:*` a stav kontroly `risk-gate` jsou doporučení a kdo má právo zápisu, může PR sloučit ručně, i ve freeze. V produkci by rozhodnutí brány drželo nastavení repozitáře, ne skript. Tento dokument popisuje, co by se nastavilo a co v ukázce chybí.
+V ukázce nemá hlavní větev `main` ochranu ani ruleset, takže rozhodnutí risk gate tu nikdo nevynucuje. Štítek `risk:*` a stav kontroly `risk-gate` jsou doporučení a kdo má právo zápisu, může PR sloučit ručně, i ve freeze. V produkci by rozhodnutí brány drželo nastavení repozitáře, ne skript. Tento dokument popisuje, co by se nastavilo a co v ukázce chybí.
 
 ## Vynucení rozhodnutí brány
 
