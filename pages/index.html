@@ -189,9 +189,9 @@
       <tr><td>O sloučení rozhoduje riziko, ne autor</td><td>Brána počítá riziko ze skutečně změněných souborů, velikosti, testů a AI review. Sama sloučí jen <code>low</code>.</td><td><a href="zaznam-dema.html">Záznam ukázky</a>, <a href="#zmena">průběh změny</a></td></tr>
       <tr><td>Ve špičce platí přísnější pravidla podle kalendáře</td><td>Stejná změna šablony je v běžném provozu 🟢 a v sezóně 🟡.</td><td><a href="#obdobi">Pravidla podle období</a></td></tr>
       <tr><td>Agent nesmí měnit pravidla, podle kterých se kontroluje</td><td>Změna pravidel, kalendáře, workflow nebo instrukcí agentů je vždy <code>high</code> a agentovi se zahodí.</td><td><a href="#skutecne">Skutečné a simulované</a></td></tr>
-      <tr><td>Začít mapou toho, co opravdu běží</td><td>47 % používaných procedur nemá volajícího v katalogu databáze. 25 procedur se za 6 týdnů simulovaného běhu nezavolalo.</td><td><a href="mapa/">Mapa</a> › Blind spots, Objekty</td></tr>
+      <tr><td>Začít mapou toho, co opravdu běží</td><td>47 % používaných procedur nemá volajícího v katalogu databáze. 25 procedur se za 6 týdnů simulovaného běhu nezavolalo.</td><td><a href="mapa/#pohled-blind">Mapa</a> › Blind spots, Objekty</td></tr>
       <tr><td>Kandidáty domén nabídne mapa, rozhodne vlastník</td><td>Skóre seřadí kandidáty domén. Reklamace vycházejí první.</td><td><a href="mapa/">Mapa</a> › Domény a pořadí</td></tr>
-      <tr><td>Autonomie AI v doméně podle důkazu</td><td>Reklamace a Katalog smějí dostat jen návrh PR (L1), protože chybí ověřené testy chování.</td><td><a href="mapa/">Mapa</a> › Core lane</td></tr>
+      <tr><td>Autonomie AI v doméně podle důkazu</td><td>Reklamace a Katalog smějí dostat jen návrh PR (L1), protože chybí ověřené testy chování.</td><td><a href="mapa/#pohled-lane">Mapa</a> › Core lane</td></tr>
       <tr><td>Nasazení, měření a snižování autonomie podle provozu</td><td>Ukázka je nemá. Končí sloučením do hlavní větve.</td><td><a href="#hranice">Kde má ukázka hranice</a></td></tr>
     </tbody>
   </table></div>
@@ -271,14 +271,14 @@
   <div class="table-wrap"><table>
     <thead><tr><th>Pohled</th><th>Co ukazuje</th><th>Čeho si všimnout</th></tr></thead>
     <tbody>
-      <tr><td><strong>Domény a pořadí</strong></td><td>Kandidáti domén se skóre 0–100: čím víc, tím snáz jde doména vytáhnout jako první. Posuvníky mění váhy, klik na řádek otevře důvody.</td><td>Reklamace 83,2 a Katalog 81,6 vedou. Skupiny „úklid“ jsou kandidáti na vypnutí místo přepisu.</td></tr>
-      <tr><td><strong>Core lane</strong></td><td>Kdo smí měnit kód domény a v jaké podobě: <code>closed</code>, <code>draft-only</code> (jen návrh PR, L1), <code>open</code>.</td><td>Žádná doména není otevřená, protože testy chování procedur zatím nikdo nespustil. Je to očekávaný výsledek.</td></tr>
-      <tr><td><strong>Graf</strong></td><td>Závislosti mezi procedurami a tabulkami. Kolečka jsou procedury a funkce, čtverce tabulky, barva hrany říká, který zdroj vazbu viděl.</td><td>Filtr na jednu doménu, například D:Claim (Reklamace).</td></tr>
-      <tr><td><strong>Blind spots</strong></td><td>Co statický katalog databáze nevidí: volání zvenku, dynamické SQL, odkazy do jiných databází.</td><td>Procedury, o kterých ví jen záznam běhu webu.</td></tr>
-      <tr><td><strong>Objekty</strong></td><td>Všechny procedury, funkce, triggery a tabulky s doménou, stavem a počtem volání.</td><td>Sloupec Stav odliší živé procedury od mrtvých.</td></tr>
+      <tr><td><strong><a href="mapa/#pohled-domeny">Domény a pořadí</a></strong></td><td>Kandidáti domén se skóre 0–100: čím víc, tím snáz jde doména vytáhnout jako první. Táhla mění váhy kritérií a sloupec Posun ukáže, jak se pořadí změnilo. Klik na řádek otevře složky skóre. Pod tabulkou je citlivost pořadí na váhy.</td><td>Reklamace 83,2 a Katalog 81,6 vedou. Skupiny „úklid“ jsou kandidáti na vypnutí místo přepisu.</td></tr>
+      <tr><td><strong><a href="mapa/#pohled-lane">Core lane</a></strong></td><td>Kdo smí měnit kód domény a v jaké podobě: <code>closed</code>, <code>draft-only</code> (jen návrh PR, L1), <code>open</code>. Kontrakt pro bránu je připravený, brána ho zatím nečte.</td><td>Žádná doména není otevřená, protože testy chování procedur zatím nikdo nespustil. Je to očekávaný výsledek.</td></tr>
+      <tr><td><strong><a href="mapa/#pohled-graf">Graf</a></strong></td><td>Závislosti mezi procedurami a tabulkami. Kolečka jsou procedury a funkce, čtverce tabulky, barva čáry říká, který zdroj vazbu viděl. Klik na bod zvýrazní sousedy, objekt jde najít hledáním.</td><td>Filtr na jednu doménu, například D:Claim (Reklamace).</td></tr>
+      <tr><td><strong><a href="mapa/#pohled-blind">Blind spots</a></strong></td><td>Co statický katalog databáze nevidí: volání zvenku, dynamické SQL, odkazy do jiných databází.</td><td>Procedury, o kterých ví jen záznam běhu webu.</td></tr>
+      <tr><td><strong><a href="mapa/#pohled-objekty">Objekty</a></strong></td><td>Všechny procedury, funkce, triggery, tabulky a pohledy s doménou, stavem a počtem volání. Detail ukáže vazby i kód.</td><td>Sloupec Stav odliší živé procedury od mrtvých.</td></tr>
     </tbody>
   </table></div>
-  <p class="muted small">Názvy kandidátů domén vznikají automaticky podle nejpropojenější tabulky shluku. D:Claim jsou reklamace, D:Category katalog, D:OrderNote objednávky a D:GatewayLog platby. Lidský název domény určí workshop s vlastníkem. Mapa funguje i offline: stačí ji uložit a otevřít z disku.</p>
+  <p class="muted small">Názvy kandidátů domén vznikají automaticky podle nejpropojenější tabulky shluku. D:Claim jsou reklamace, D:Category katalog, D:OrderNote objednávky a D:GatewayLog platby. Lidský název domény určí workshop s vlastníkem. Každý pohled v mapě začíná krátkým návodem, jak ho číst, a nahoře je slovník pojmů. Mapa funguje i offline: stačí ji uložit a otevřít z disku.</p>
   <div class="links"><a class="primary" href="mapa/">Otevřít mapu monolitu</a></div>
 </section>
 

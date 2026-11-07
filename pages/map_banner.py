@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Doplní do vygenerované mapy na Pages český titulek a lištu s odkazem zpět na přehled.
+"""Doplní do vygenerované mapy na Pages lištu s odkazem zpět na přehled.
 
 Použití: map_banner.py _site/mapa/index.html
 
@@ -18,9 +18,8 @@ BANNER = (
     '</div></div>\n'
 )
 
+# Český titulek a nadpis má mapa přímo ze šablony (mapa-monolitu/mapa/template.html), skript doplní jen lištu.
 REPLACEMENTS = [
-    ("<title>Monolith Map</title>", "<title>Mapa monolitu · ukázka</title>"),
-    ("<h1>Monolith Map</h1>", "<h1>Mapa monolitu (Monolith Map)</h1>"),
     ("<body>\n", "<body>\n" + BANNER),
 ]
 
