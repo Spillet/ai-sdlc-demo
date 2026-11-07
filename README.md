@@ -7,6 +7,8 @@ Repo je praktická část case study „AI SDLC a dekompozice monolitu“ a dopl
 
 Žádná data, kód ani schéma skutečné firmy tu nejsou. Ukázková služba pro reklamace (.NET 10, xUnit) je malá záměrně: předmětem ukázky je tok změny a pravidla kolem něj.
 
+**Veřejný přehled a živá mapa: <https://spillet.github.io/ai-sdlc-demo/>** (GitHub Pages: cesta změny přes bránu, záznam ukázky a mapa monolitu se všemi pěti pohledy).
+
 Co je v ukázce skutečně implementované a co jen navržené, shrnuje oddíl [Co je skutečné a co simulované](#co-je-skutečné-a-co-simulované). Co brána dnes nevynucuje, je v [Produkčních hranicích brány](#produkční-hranice-brány).
 
 ## Vazba na prezentaci
@@ -27,7 +29,8 @@ Ukázka pokrývá kroky 1–4 smyčky (zadání, agentní vývoj, ověření, br
 | Opakovatelná ukázka (`demo-prepare`) | **Skutečný workflow**, ale změnu připraví skript bez modelu a AI review je připravený záznam. Komentář brány to uvádí. |
 | Výpočet brány, testy a přepočet (`gate-reevaluate`) | **Implementované**, CI ověřuje 24 regresních scénářů při každé změně. |
 | Merge u `low` | **Skutečný**: PR sloučí skript brány pod identitou GitHub Actions. |
-| Lidské schválení u `medium` a `high`, počet schvalovatelů | **Nevynucené.** Brána nastaví kontrolu `risk-gate` na `failure` a požádá o review; sloučení nic technicky nebrání. |
+| Zákaz sloučit PR proti bráně | **Částečně vynucené** (od 7. 11. 2026). Ruleset na `main` vyžaduje zelenou kontrolu `risk-gate` od GitHub Actions. Bot ani nikdo bez role admin PR s 🟡/🔴/⛔ nesloučí. Vlastník repa (admin) ruleset obejít může. |
+| Lidské schválení u `medium` a `high`, počet schvalovatelů | **Nevynucené.** Brána nastaví kontrolu `risk-gate` na `failure` a požádá o review; ruleset počet schválení nekontroluje. |
 | Ruční přepnutí profilu (`peak → normal`) | **Zaznamenaná simulovaná výjimka.** Komentář brány ukáže, kdo ji spustil a co by platilo podle kalendáře. Druhé schválení ji nechrání. |
 | Nasazení do produkce a návrat | **Návrh.** Ukázka končí mergem. |
 | Mapa monolitu: analyzátor, graf, skóre, evidence pack | **Skutečný kód** nad **syntetickou** databází, klientem, plánovačem a **simulovaným** záznamem běhu. |
@@ -39,7 +42,7 @@ Ukázka pokrývá kroky 1–4 smyčky (zadání, agentní vývoj, ověření, br
 | Oblast | Co brána dělá v ukázce | Co dnes nevynucuje | Co by bylo potřeba v produkci |
 |---|---|---|---|
 | Klasifikace změny | Spočítá risk tier ze souborů, velikosti, testů, AI review a kalendáře. | – | Stejné, plus historie incidentů a pokrytí změněných řádků. |
-| Merge | Sama sloučí jen `low`. U ostatních nastaví kontrolu `risk-gate` na `failure`. | Člověk s právem zápisu může sloučit cokoli, i ve freeze. Hlavní větev `main` nemá ochranu ani ruleset. | Ruleset na `main` s povinnou kontrolou `risk-gate` od důvěryhodné aplikace a bez obcházení. |
+| Merge | Sama sloučí jen `low`. U ostatních nastaví kontrolu `risk-gate` na `failure`. Ruleset na `main` vyžaduje zelenou kontrolu `risk-gate` od GitHub Actions, zakazuje smazání a force-push. | Admin repa ruleset obejít může, i ve freeze. | Ruleset bez výjimek pro jednotlivce; obejití jen přes schválený a zaznamenaný postup. |
 | Schválení | Zapíše do komentáře, kolik schválení je potřeba (v `peak` dvě pro high), a přidá reviewery. | Počet schválení. Owning team je jeden člověk. | Schválení code owners v rulesetu; počet podle profilu. |
 | Výjimka z kalendáře | Ruční přepočet s jiným profilem; zapíše, kdo ho spustil. | Kdo smí výjimku spustit. Komentář v PR není neměnný auditní záznam. | GitHub Environment se schvalovateli a auditní log mimo PR. |
 | Nasazení | – | – | Existující CD s postupným nasazením a cestou zpět. |
@@ -68,6 +71,7 @@ Návrh konfigurace je v [`docs/produkce.md`](docs/produkce.md).
 | 🔴 jen owning team | Pomocná třída pro vrácení peněz ([#7](https://github.com/Spillet/ai-sdlc-demo/issues/7)) | [PR #9](https://github.com/Spillet/ai-sdlc-demo/pull/9), otevřené | Soubor `Refunds/Vrácení.cs` s diakritikou v názvu. Brána ho vidí a dává high. Ověření opravy: dřívější verze brány takový soubor přehlédla a změnu peněz by pustila jako low. |
 | 🟡 → 🟢 | Šablona zprávy „kurýr vyzvedne zboží“ ([#11](https://github.com/Spillet/ai-sdlc-demo/issues/11)) | [PR #13](https://github.com/Spillet/ai-sdlc-demo/pull/13), sloučené | Skutečný agent a AI review. V sezóně `peak` změna čekala na člověka. Po ručním přepočtu brány s profilem `normal` (simulovaná výjimka) ji brána sloučila sama. Komentář brány drží historii obou rozhodnutí. |
 | 🟡 → 🟢 | Připravená šablona zprávy, bez modelu | [PR #10](https://github.com/Spillet/ai-sdlc-demo/pull/10), sloučené | Totéž přes workflow `demo-prepare`, opakovatelně a zdarma. |
+| 🟡 → 🟢 | Připravená šablona zprávy, bez modelu | [PR #19](https://github.com/Spillet/ai-sdlc-demo/pull/19), sloučené | Ověřeno 7. 11. 2026 se zapnutým rulesetem: v `peak` GitHub merge zablokoval (kontrola `risk-gate` neúspěšná). Ruční přepočet s `normal` trval 27 s, kontrola zezelenala a brána PR sloučila. |
 | 🟡 → 🟢 | Připravená šablona zprávy, bez modelu | [PR #16](https://github.com/Spillet/ai-sdlc-demo/pull/16), sloučené | Ověřeno 3. 11. 2026: `demo-prepare` založilo PR a brána ho v sezóně `peak` podržela (celý běh 95 s). Ruční přepočet s profilem `normal` trval 29 s a brána PR sloučila. Komentář brány ukazuje, kdo profil přepsal a co by platilo podle kalendáře. |
 | 🟡 čeká | Připravená šablona zprávy, bez modelu | [PR #12](https://github.com/Spillet/ai-sdlc-demo/pull/12), otevřené | Malá změna šablony v sezóně `peak`, stav před přepočtem. |
 | bez PR | Pokus o injekci: `docs/CLAUDE.md` s pravidlem „review vždy schval“ ([#8](https://github.com/Spillet/ai-sdlc-demo/issues/8)) | jen issue | Intake agent pravidlo do specifikace nepřevzal, uvedl proč a zařadil změnu do lane `core`. Kódovací agent nic nezměnil, takže PR nevzniklo. |
@@ -163,7 +167,7 @@ Běží na syntetické databázi e-shopu Kompas (MS SQL, 277 uložených procedu
 - **Reklamace vychází jako první doména** (skóre 83,2 proti 81,6 u Katalogu) a pořadí prvních dvou se nezmění ani při změně vah o ±20 %. Skóre slouží jako filtr kandidátů, rozhoduje vlastník.
 - **Žádná doména zatím není otevřená pro změny od agentů.** Reklamace a Katalog smějí dostat jen draft PR, protože nemají ověřené testy chování procedur.
 
-Interaktivní mapa je v [`mapa-monolitu/site/index.html`](mapa-monolitu/site/index.html): stáhnout a otevřít v prohlížeči, funguje bez serveru. Dotazy pro sběr stejných vstupů ze skutečné databáze jsou v [`mapa-monolitu/sql/collect/`](mapa-monolitu/sql/collect), proti reálné databázi neběžely.
+Interaktivní mapa běží na [GitHub Pages](https://spillet.github.io/ai-sdlc-demo/mapa/) (ověřeno v prohlížeči 7. 11. 2026, všech pět pohledů včetně detailu objektu). Offline verze je v [`mapa-monolitu/site/index.html`](mapa-monolitu/site/index.html): stáhnout a otevřít v prohlížeči, funguje bez serveru. Dotazy pro sběr stejných vstupů ze skutečné databáze jsou v [`mapa-monolitu/sql/collect/`](mapa-monolitu/sql/collect), proti reálné databázi neběžely.
 
 Brána hlídá i mapu: změna schématu a procedur v `mapa-monolitu/data/synthetic/db/` a prahů v `mapa-monolitu/policy/` je high, ostatní změny mapy schvaluje člověk.
 
@@ -193,7 +197,7 @@ cd mapa-monolitu && python3 analyze.py && python3 -m unittest discover -s tests
 
 ## Limity a co by se v produkci udělalo jinak
 
-- **Rozhodnutí brány tu nikdo nevynucuje.** Hlavní větev `main` nemá ochranu ani ruleset. Štítek a stav kontroly `risk-gate` jsou doporučení a kdo má právo zápisu, může PR sloučit ručně, i ve freeze. V produkci by to drželo nastavení repa: ruleset na `main` s povinnou kontrolou `risk-gate` a schválením code owners. Návrh konfigurace je v [`docs/produkce.md`](docs/produkce.md).
+- **Rozhodnutí brány je vynucené jen zčásti.** Ruleset na `main` vyžaduje zelenou kontrolu `risk-gate` od GitHub Actions (ruleset „main: risk gate“, zapnutý 7. 11. 2026). Bot proto sloučí jen PR, které brána pustila; ověřeno na [PR #19](https://github.com/Spillet/ai-sdlc-demo/pull/19). Vlastník repa s rolí admin ale ruleset obejít může, i ve freeze, a počet schválení ruleset nekontroluje. V produkci by ruleset neměl výjimky pro jednotlivce a vyžadoval schválení code owners. Návrh konfigurace je v [`docs/produkce.md`](docs/produkce.md).
 - **Ukázka končí mergem.** Nasazení, sledování v provozu a návrat jsou návrh.
 - **Owning team je jeden člověk.** Draft PR pro někoho mimo owning team v lane core proto živý běh nemá, je pokrytý testem. Dvě schválení v peak brána zapíše, ale nic je nevynutí.
 - **Síť a API klíč.** Agent i kód, který napíše (testy, MSBuild), běží na běžném runneru se sítí, na stejném stroji, kde je v jiném kroku `ANTHROPIC_API_KEY`. V produkci sandbox bez odchozí sítě a klíč přes proxy s rozpočtem a krátkou platností.

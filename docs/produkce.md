@@ -1,6 +1,6 @@
 # Návrh nastavení pro produkci
 
-V ukázce nemá hlavní větev `main` ochranu ani ruleset, takže rozhodnutí risk gate tu nikdo nevynucuje. Štítek `risk:*` a stav kontroly `risk-gate` jsou doporučení a kdo má právo zápisu, může PR sloučit ručně, i ve freeze. V produkci by rozhodnutí brány drželo nastavení repozitáře, ne skript. Tento dokument popisuje, co by se nastavilo a co v ukázce chybí.
+Od 7. 11. 2026 má ukázka na `main` ruleset „main: risk gate“: povinná kontrola `risk-gate` od GitHub Actions (`integration_id` 15368), zákaz smazání a force-push, změny jen přes PR. Bot proto sloučí jen PR, které brána pustila. Ruleset má ale výjimku pro roli admin (vlastník repa) a nevyžaduje schválení, takže vlastník může bránu obejít, i ve freeze. V produkci by rozhodnutí brány drželo nastavení repozitáře, ne skript. Tento dokument popisuje, co by se nastavilo a co v ukázce chybí.
 
 ## Vynucení rozhodnutí brány
 
@@ -39,7 +39,7 @@ Ve firmě totéž umí GitHub Enterprise rulesety nebo branch policies v Azure D
 
 ## Počet schválení podle profilu
 
-V profilu `peak` a `freeze` brána pro high požaduje dvě schválení. Zapíše je do komentáře a do reviewerů, ale v ukázce je owning team jeden člověk a repo nemá ruleset, takže je nic nevynutí. V produkci by přepnutí profilu přepínalo i ruleset (`required_approving_review_count: 2` pro code owners), nebo by počet schválení kontrolovala povinná kontrola `risk-gate` sama.
+V profilu `peak` a `freeze` brána pro high požaduje dvě schválení. Zapíše je do komentáře a do reviewerů, ale v ukázce je owning team jeden člověk a ruleset schválení nevyžaduje, takže je nic nevynutí. V produkci by přepnutí profilu přepínalo i ruleset (`required_approving_review_count: 2` pro code owners), nebo by počet schválení kontrolovala povinná kontrola `risk-gate` sama.
 
 ## Další rozdíly proti ukázce
 

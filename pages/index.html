@@ -41,7 +41,8 @@
       <tr><td>Opakovatelná ukázka</td><td><span class="tag real">skutečné</span></td><td>Skutečný workflow; změnu připraví skript bez modelu a AI review je připravený záznam.</td></tr>
       <tr><td>Výpočet brány, testy a přepočet</td><td><span class="tag real">skutečné</span></td><td>CI při každé změně ověřuje 24 regresních scénářů (18 změn, 6 hranic kalendáře).</td></tr>
       <tr><td>Merge u výsledku <code>low</code></td><td><span class="tag real">skutečné</span></td><td>PR sloučí skript brány pod identitou GitHub Actions.</td></tr>
-      <tr><td>Povinné lidské schválení u <code>medium</code> a <code>high</code></td><td><span class="tag not">nevynucené</span></td><td>Brána nastaví kontrolu na neúspěch a požádá o review. Sloučení technicky nebrání.</td></tr>
+      <tr><td>Zákaz sloučit změnu proti bráně</td><td><span class="tag plan">částečně</span></td><td>Ruleset na hlavní větvi vyžaduje zelenou kontrolu brány. Bot ani běžný přispěvatel změnu se 🟡 nesloučí; vlastník repozitáře ruleset obejít může.</td></tr>
+      <tr><td>Povinné lidské schválení u <code>medium</code> a <code>high</code></td><td><span class="tag not">nevynucené</span></td><td>Brána požádá o review a počet schválení zapíše; ruleset ho nekontroluje.</td></tr>
       <tr><td>Ruční přepnutí <code>peak → normal</code></td><td><span class="tag sim">simulované</span></td><td>Zaznamenaná výjimka bez druhého schválení.</td></tr>
       <tr><td>Nasazení do produkce a návrat</td><td><span class="tag plan">návrh</span></td><td>Ukázka končí sloučením do hlavní větve.</td></tr>
       <tr><td>Mapa monolitu</td><td><span class="tag real">skutečný kód</span> <span class="tag sim">syntetická data</span></td><td>Analyzátor nad syntetickou databází (277 procedur, 92 tabulek), klientem, plánovačem a simulovaným záznamem běhu.</td></tr>
@@ -70,7 +71,7 @@
   <div class="table-wrap"><table>
     <thead><tr><th>Oblast</th><th>V ukázce</th><th>V produkci by bylo potřeba</th></tr></thead>
     <tbody>
-      <tr><td>Merge</td><td>Brána sama slučuje jen low. Člověk s právem zápisu může sloučit cokoli.</td><td>Ruleset na hlavní větvi s povinnou kontrolou brány a bez obcházení.</td></tr>
+      <tr><td>Merge</td><td>Brána sama slučuje jen low. Ruleset vyžaduje zelenou kontrolu brány, vlastník repozitáře ho ale obejít může.</td><td>Ruleset bez výjimek pro jednotlivce; obejití jen schváleným a zaznamenaným postupem.</td></tr>
       <tr><td>Schválení</td><td>Počet schválení brána zapíše, ale nevynutí. Owning team je jeden člověk.</td><td>Schválení vlastníky kódu, počet podle profilu.</td></tr>
       <tr><td>Výjimka z kalendáře</td><td>Spustí ji kdokoli s právem zápisu; komentář v PR ji zaznamená.</td><td>Chráněné prostředí se schvalovateli a auditní log mimo PR.</td></tr>
       <tr><td>Izolace agenta</td><td>Agent nemá token se zápisem a testy běží znovu bez secrets. Běží ale na runneru se sítí.</td><td>Sandbox bez odchozí sítě a krátkodobá pověření.</td></tr>
