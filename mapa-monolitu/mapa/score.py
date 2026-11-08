@@ -167,7 +167,7 @@ def score_domains(mono, status, cl):
             inbound_writers=dict(sorted(inbound_from.items(), key=lambda kv: -kv[1])),
             external=dict(ext_detail), cpu_ms=cpu, dead_share=round(len(dead) / max(1, len(procs)), 2),
         ))
-    # úklidové shluky (většina mrtvá) dát stranou: vypnout, nepřepisovat
+    # úklidové shluky (většina mrtvá) dát stranou: kandidáti na vypnutí po ověření
     for r in results:
         r["cleanup_only"] = r["dead_share"] >= 0.6
         r["too_small"] = not r["cleanup_only"] and r["n_live"] < MIN_LIVE
@@ -205,7 +205,7 @@ def explain(r):
         if v >= 1:
             out.append("%s +%.0f b." % (LABELS[k], v))
     if r.get("cleanup_only"):
-        out.insert(0, "většina procedur je mrtvá: vypnout a smazat, nepřepisovat")
+        out.insert(0, "většina procedur je mrtvá: kandidát na vypnutí po ověření sezónnosti, výjimečných běhů a schválení vlastníkem")
     elif r.get("too_small"):
         out.insert(0, "méně než %d živých procedur: spíš součást sousední domény nebo infrastruktury, posoudit ručně" % MIN_LIVE)
     if r.get("own_shared"):

@@ -76,11 +76,11 @@ Sdílené procedury (fan-in ≥ 8): usp_Audit_Write (114), usp_JobRun_Start (40)
 | malý | D:SysParam | 66.2 | 2 (2/0) | 1 | 0.02 TB | méně než 5 živých procedur: spíš součást sousední domény nebo infrastruktury, posoudit ručně; zápisy do cizích tabulek -12 b. (AuditLog); cizí čtení tabulek domény -8 b.; volání zvenku -7 b. |
 | malý | D:Users | 87.6 | 2 (2/0) | 2 | 0.02 TB | méně než 5 živých procedur: spíš součást sousední domény nebo infrastruktury, posoudit ručně; cizí čtení tabulek domény -8 b.; volání zvenku -7 b.; velikost dat -3 b. (0.0 TB); čtecí cesty (levné ověření) +5 b. |
 | malý | D:Translation | 97.2 | 1 (1/0) | 1 | 0.00 TB | méně než 5 živých procedur: spíš součást sousední domény nebo infrastruktury, posoudit ručně; volání zvenku -7 b.; cizí čtení tabulek domény -5 b.; čtecí cesty (levné ověření) +10 b. |
-| úklid | D:Product_bak2019 | 100.0 | 6 (0/6) | 1 | 0.03 TB | většina procedur je mrtvá: vypnout a smazat, nepřepisovat; velikost dat -4 b. (0.0 TB); mrtvý kód k vypnutí +5 b. |
-| úklid | D:TmpRecalc | 100.0 | 2 (0/2) | 1 | 0.09 TB | většina procedur je mrtvá: vypnout a smazat, nepřepisovat; velikost dat -5 b. (0.1 TB); mrtvý kód k vypnutí +5 b. |
-| úklid | D:ImportProduct | 100.0 | 1 (0/1) | 1 | 0.02 TB | většina procedur je mrtvá: vypnout a smazat, nepřepisovat; velikost dat -3 b. (0.0 TB); mrtvý kód k vypnutí +5 b. |
-| úklid | D:OldOrders | 100.0 | 1 (0/1) | 1 | 0.08 TB | většina procedur je mrtvá: vypnout a smazat, nepřepisovat; velikost dat -5 b. (0.1 TB); mrtvý kód k vypnutí +5 b. |
-| úklid | D:X_Migr_Customer | 100.0 | 1 (0/1) | 1 | 0.06 TB | většina procedur je mrtvá: vypnout a smazat, nepřepisovat; velikost dat -4 b. (0.1 TB); mrtvý kód k vypnutí +5 b. |
+| úklid | D:Product_bak2019 | 100.0 | 6 (0/6) | 1 | 0.03 TB | většina procedur je mrtvá: kandidát na vypnutí po ověření sezónnosti, výjimečných běhů a schválení vlastníkem; velikost dat -4 b. (0.0 TB); mrtvý kód k vypnutí +5 b. |
+| úklid | D:TmpRecalc | 100.0 | 2 (0/2) | 1 | 0.09 TB | většina procedur je mrtvá: kandidát na vypnutí po ověření sezónnosti, výjimečných běhů a schválení vlastníkem; velikost dat -5 b. (0.1 TB); mrtvý kód k vypnutí +5 b. |
+| úklid | D:ImportProduct | 100.0 | 1 (0/1) | 1 | 0.02 TB | většina procedur je mrtvá: kandidát na vypnutí po ověření sezónnosti, výjimečných běhů a schválení vlastníkem; velikost dat -3 b. (0.0 TB); mrtvý kód k vypnutí +5 b. |
+| úklid | D:OldOrders | 100.0 | 1 (0/1) | 1 | 0.08 TB | většina procedur je mrtvá: kandidát na vypnutí po ověření sezónnosti, výjimečných běhů a schválení vlastníkem; velikost dat -5 b. (0.1 TB); mrtvý kód k vypnutí +5 b. |
+| úklid | D:X_Migr_Customer | 100.0 | 1 (0/1) | 1 | 0.06 TB | většina procedur je mrtvá: kandidát na vypnutí po ověření sezónnosti, výjimečných běhů a schválení vlastníkem; velikost dat -4 b. (0.1 TB); mrtvý kód k vypnutí +5 b. |
 
 ## Jak se analyzátor trefil (proti pravdě generátoru)
 

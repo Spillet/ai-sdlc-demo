@@ -26,8 +26,8 @@
     </a>
     <a class="card" href="https://github.com/Spillet/ai-sdlc-demo">
       <span class="k">Repozitář na GitHubu →</span>
-      <p>Kód brány, pravidla, workflow a analyzátor mapy. Repozitář je soukromý: bez pozvánky GitHub ukáže chybu 404.</p>
-      <span class="meta">Pro hodnotitele s přístupem · obsah shrnuje tato stránka</span>
+      <p>Kód brány, pravidla, workflow a analyzátor mapy. Repozitář je veřejný, včetně historie PR.</p>
+      <span class="meta">Pro hodnotitele, kteří chtějí jít do kódu · obsah shrnuje tato stránka</span>
     </a>
   </div>
   <p class="toc">Na stránce: <a href="#shrnuti">Shrnutí</a> · <a href="#ai-sdlc">A · AI SDLC</a> · <a href="#dekompozice">B · Dekompozice</a> · <a href="#roadmapa">Roadmapa</a> · <a href="#vazba">Vazba na prezentaci</a> · <a href="#zmena">Průběh změny</a> · <a href="#skutecne">Skutečné a simulované</a> · <a href="#mapa">Jak číst mapu</a></p>
@@ -283,8 +283,8 @@
 </section>
 
 <section>
-  <h2>Ověření s přístupem do repozitáře</h2>
-  <p>Kdo má přístup do repozitáře, spustí pravidla brány na 24 scénářích a analyzátor mapy lokálně, bez sítě a bez modelu:</p>
+  <h2>Jak si ukázku ověřit lokálně</h2>
+  <p>Po naklonování repozitáře spustíš pravidla brány na 24 scénářích a analyzátor mapy lokálně, bez modelu:</p>
 <pre>pip install pyyaml==6.0.2
 python3 .github/scripts/run_gate_evals.py
 cd mapa-monolitu &amp;&amp; python3 analyze.py &amp;&amp; python3 -m unittest discover -s tests</pre>
