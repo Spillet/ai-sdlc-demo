@@ -95,7 +95,7 @@ Na konkrétní pohled vede adresa s kotvou, například `site/index.html#pohled-
 2. **Místa 3–7 jsou fakticky remíza.** Fakturace, Platby, Reporting, Adresy a Ceníky mají skóre 71,9–73,0 a při ±20 % se mezi sebou přeskupují v rozsahu 3.–7. (Reporting až 8.). Pořadí v tomhle pásmu nic neříká, rozhodnou jiná kritéria.
 3. **Mezi Reklamací a Katalogem nerozhodlo skóre.** Rozhodla věc, kterou skóre nevidí: jádro katalogu `Product` je sdílená tabulka a nejvíc do ní zapisuje sklad, takže Katalog nejde vytáhnout bez rozhodnutí o vlastnictví `Product`. Reklamace takovou překážku nemají a jde o stejnou doménu jako ukázková služba reklamací v části A. Skóre slouží jako filtr („tyhle dvě jsou nejlepší kandidáti“), ne jako rozhodčí.
 
-Pět shluků je „úklid“ (většina procedur mrtvá: vypnout a smazat) a tři jsou příliš malé na doménu (infrastruktura). Názvy shluků jsou automatické podle nejcentrálnější tabulky, lidský název doplňuju v závorce.
+Pět shluků je „úklid“ (většina procedur mrtvá: kandidáti na vypnutí po ověření sezónnosti, výjimečných běhů a schválení vlastníkem) a tři jsou příliš malé na doménu (infrastruktura). Názvy shluků jsou automatické podle nejcentrálnější tabulky, lidský název doplňuju v závorce.
 
 **Jak se analyzátor trefil.** Generátor si pamatuje, kam co zamýšlel. Proti tomu: čistota shluků 88 %, 18 shluků proti 13 zamýšleným doménám (legacy a infrastruktura se rozpadly na malé kousky, nákup se spojil se skladem). Mrtvé procedury 26 z 26, dynamické SQL 30 z 30. **Tahle čísla nic nedokazují o reálné DB**: data i analyzátor psal stejný autor, takže analyzátor zná pasti, které generátor klade. Ukazují jen, že logika vrstev funguje tak, jak je popsaná.
 
